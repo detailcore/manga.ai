@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // The mode Property: https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-mode
-  ssr: false,
+  ssr: true,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - Manga.ai.Frontend',
@@ -24,7 +24,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/echo.js', ssr: false }
+    // { src: '~/plugins/echo.js', ssr: false }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -35,11 +35,11 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
+    '@nuxtjs/vuetify'
     // https://github.com/nuxt-community/laravel-echo-module
     // ['@nuxtjs/laravel-echo'],
     // https://github.com/nuxt-community/dotenv-module
-    ['@nuxtjs/dotenv']
+    // ['@nuxtjs/dotenv']
   ],
 
   // echo: {
@@ -66,15 +66,11 @@ export default {
     }
   },
 
-  io: {
-    // Options
-  },
-
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
