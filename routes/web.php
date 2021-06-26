@@ -21,3 +21,5 @@ Route::get('/', function () {
 Route::get('/broadcast', function () {
     broadcast(new Hello());
 });
+
+Route::get('/{any}', 'SpaController@index')->where('any', '^((?!admin|api|oauth).)*$');
