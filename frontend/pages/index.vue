@@ -1,89 +1,210 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
+  <div class="container">
+    <line-popular />
+    <div class="main__content">
+      <div class="content">
+        <div class="block__title">Новые главы</div>
+        <widgets-card-latest v-for="(item, index) in dataLatest" :key="index"
+          :id="item.id"
+          :rank="item.ageRank"
+          :category="item.category"
+          :chapter="item.chapter"
+          :more="item.more"
+          :cover="item.cover"
+          :rating="item.rating"
+          :title="item.title"
+          :update="item.update" />
       </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+      <region-side />
+    </div>
+
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  }
+  data() {
+    return {
+      
+    }
+  },
+
+  computed: {
+    dataLatest() {
+      return [
+        {
+          id: 1,
+          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
+          chapter: {
+              v: 1,
+              c: 161,
+              title: 'Название 161 главы',
+            },
+          more: 1,
+          category: 'Манга',
+          ageRank: 18,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 4.98,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 2,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 16,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+        {
+          id: 3,
+          title: 'Другое произведение',
+          chapter: {
+              v: 24,
+              c: 256,
+              title: 'Название 256 главы',
+            },
+          more: 0,
+          category: 'Веб-манхва',
+          ageRank: 0,
+          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
+          rating: 3.67,
+          cover: '/_nuxt/assets/images/mid_cover.jpg'
+        },
+      ]
+    },
+  },
 }
 </script>
+
+<style lang="scss">
+.main__content {
+  display: flex;
+  margin: 0 auto;
+  padding: 0 15px;
+  max-width: 1320px;
+  justify-content: space-between;
+  .content {
+    padding: 4px;
+    width: 66.666667%;
+    max-width: 66.666667%;
+  }
+  .side {
+    padding: 4px;
+    width: 33.333333%;
+    max-width: 33.333333%;
+  }
+}
+
+</style>

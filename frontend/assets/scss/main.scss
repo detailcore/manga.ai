@@ -1,0 +1,152 @@
+@import '~/assets/scss/_mixins.scss' ;
+// @import '~/assets/scss/_normalize.scss' ;
+@import '~/assets/scss/_variables.scss' ;
+
+html {
+  font-family: Roboto;
+  font-size: 0.875rem;
+  word-spacing: 1px;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  color: #ffffff;
+  font-weight: 400;
+  background-color: #121212;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+input {
+  outline: none;
+  border-style: none;
+}
+
+//*  mdi иконки
+.material-design-icon {
+  font-size: 1.5rem;
+  display: inline-flex;
+  align-self: center;
+  position: relative;
+  height: 1em;
+  width: 1em;
+}
+.material-design-icon > .material-design-icon__svg {
+  height: 1em;
+  width: 1em;
+  fill: currentColor;
+  position: absolute;
+  // bottom: -0.125em;
+}
+
+
+
+#__nuxt {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+//* Сетка / Grid
+#__nuxt {
+    @media (min-width: 1201px) {
+      .container {
+        max-width: 1140px;
+        padding-left: 50px;
+        padding-right: 50px;
+        margin: 0 auto;
+        min-width: 320px;
+        width: 100%;
+      }
+      .header,
+      .footer,
+      .manga_block {
+        max-width: 1320px;
+        margin: 0 auto;
+      }
+      .btn {
+        margin: 0 12px;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .btn {
+        margin: 0 8px;
+      }
+    }
+
+    @media (max-width: 860px) {
+    }
+
+    @media (max-width: 600px) {
+    }
+
+    @media (max-width: 500px) {
+    }
+}
+
+
+//* Кнопки / Buttons
+.btn {
+  @include flex_center_center;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  position: relative;
+  border-radius: 50%;
+  outline: 0;
+  text-decoration: none;
+  transition-duration: .28s;
+  transition-property: box-shadow,transform,opacity;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  &:hover {
+    &:before {
+      opacity: 0.1;
+    }
+  }
+  &:before {
+    @include before;
+  }
+}
+
+.block__title {
+  font-weight: 600;
+  font-size: 1.6rem;
+  padding: 20px 0px 6px 0px;
+}
+
+
+  //* Фон, затемнение, автозакрытие
+  .background__close {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    position: fixed;
+    background-color: rgb(0 0 0 / 60%);
+  }
