@@ -1,16 +1,32 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: note
+ * Date: 26.12.2020
+ * Time: 10:41
+ */
 
 namespace App\Modules\Admin\User\Services;
 
 
-use App\Modules\Admin\Role\Requests\RoleRequest;
-use Illuminate\Database\Eloquent\Model;
+use App\Modules\Admin\Role\Models\Role;
+use App\Modules\Admin\User\Models\User;
+use App\Modules\Admin\User\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    public function getUsers()
+
+    public function getUsers($status = false)
     {
-        $users = User::with('roles')->get();
+
+        $usersBulder = User::with('roles');
+
+        if($status) {
+            $usersBulder->where('status',(string)$status);
+        }
+
+        $users = $usersBulder->get();
         $users->transform(function($item) {
             $item->rolename = '';
             if(isset($item->roles)) {
@@ -21,5 +37,22 @@ class UserService
         });
 
         return $users;
+    }
+
+    public function save(UserRequest $request, User $user)
+    {
+        $user->fill($request->only($user->getFillable()));
+
+        $user->password = Hash::make($request->password);
+        $user->status = '1';
+
+        $user->save();
+
+        $role = Role::findOrFail($request->role_id);
+        $user->roles()->sync($role->id);
+
+        $user->rolename = $role->title;
+
+        return $user;
     }
 }
