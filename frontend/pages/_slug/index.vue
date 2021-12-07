@@ -3,7 +3,7 @@
     <div class="parallax_cover" :style="styleCover">
     </div>
 
-    <div class="manga_block">
+    <div class="manga_block" v-if="data.rating">
       <div class="block__cover">
         <div class="cover">
           <img src="" alt="cover item" :srcset="urlCover">
@@ -31,10 +31,10 @@
           </div>
           <div class="cover__translation">
             <div class="block__title">Переводчики</div>
-              <widgets-card-short v-for="(item, index) in dataTranslators" :key="index"
+              <widgets-card-short v-for="(item, index) in data.teams" :key="index"
                 :id="item.id"
                 :cover="item.cover"
-                :title="item.title"
+                :title="item.name"
                 :description="item.description"
                 type="translator" />
           </div>
@@ -42,51 +42,55 @@
       </div>
       <div class="block__information">
         <div class="release_name">
-          <h1 class="rus">Я перевоплотился в 7-го принца, так что я буду совершенствовать свою магию</h1>
-          <span class="eng">I was reincarnated as the 7th Prince so I will perfect my magic as I please</span>
+          <h1 class="rus" v-show="data.title_rus"> {{ data.title_rus }} </h1>
+          <span class="eng" v-show="data.title_eng"> {{ data.title_eng }} </span>
           <span class="alt">
-            I was reincarnated as the 7th Prince so I will perfect my magic as I please / Я перевоплотился в 7-го принца, так что я буду совершенствовать свою магию, как захочу / Tensei Shitara dai Nana Ouji dattanode, Kimamani Majutsu o Kiwamemasu
+            <span v-show="data.title_alt"> {{ data.title_alt }} / </span> {{ data.title_orig }}
           </span>
         </div>
         <div class="description" v-show="page === ''">
-          10 лет назад, после того, как «Врата», соединившие реальный мир с параллельным, открылись, некоторые из людей получили силу охотиться на монстров внутри "Врат".Они известны как «Охотники». Однако не все Охотники сильные. Меня зовут Сун Цзинь-Ву, охотник E-ранга. Я тот, кто рискует своей жизнью в самых низких уровнях подземелья. Не имея никаких сверхсильных навыков, я едва зарабатывал необходимые деньги, сражаясь в низкоуровневых подземельях ... по крайней мере, пока я не нашел скрытое подземелье с самыми трудными проблемами в подземельях D-ранга! В конце концов, когда я умер, я внезапно получил странную силу, журнал квестов, который мог видеть только я, секрет для поднятия уровня, о котором знаю только я! Если бы я тренировался в соответствии с моими квестами и охотился на монстров, мой уровень повышался. Переход от самого слабого Охотника к самому сильному, Охотнику S-ранга!
+          {{ data.description }}
         </div>
         
         <div class="stat">
           <div class="item rating">
             <mdi-Star title="" />
-            <span class="count">9.46</span>
-            <span class="vote">9813</span>
+            <span class="count">{{ data.rating.avg }}</span>
+            <span class="vote">{{ data.rating.amount }}</span>
           </div>
           <div class="item">
             <mdi-CardsHeart title="" />
-            <span class="count">2579</span>
+            <span class="count">XXXXX</span>
           </div>
           <div class="item">
             <mdi-Eye title="" />
-            <span class="count">1050907</span>
+            <span class="count">{{ data.views }}</span>
           </div>
           <div class="item">
             <mdi-BookmarkMultiple title="" />
-            <span class="count">98654</span>
+            <span class="count">XXXXX</span>
           </div>
         </div>
 
         <div class="btn_action">
-          <Nuxt-link class="item" to="/manga/title_manga" :class="{ 'nuxt-link-exact-active' : page===''}">
+          <Nuxt-link class="item" to="" :class="{ 'nuxt-link-exact-active' : page===''}">
             <mdi-ImageText title="" />
             <span>Информация</span>
           </Nuxt-link>
-          <Nuxt-link class="item" to="/manga/title_manga?page=chapters">
+          <Nuxt-link class="item" to="?page=chapters">
             <mdi-FormatListNumbered title="" />
             <span>Главы</span>
           </Nuxt-link>
-          <Nuxt-link class="item" to="/manga/title_manga?page=comments">
+          <Nuxt-link class="item" to="?page=related">
+            <mdi-FormatListText title="" />
+            <span>Связанные</span>
+          </Nuxt-link>
+          <Nuxt-link class="item" to="?page=comments">
             <mdi-CommentMultiple title="" />
             <span>Комментарии</span>
           </Nuxt-link>
           <span v-if="0">
-            <Nuxt-link class="item" to="/manga/title_manga?page=covers">
+            <Nuxt-link class="item" to="?page=covers">
               <mdi-Image title="" />
               <span>Обложки</span>
             </Nuxt-link>
@@ -95,58 +99,27 @@
 
         <div class="information" v-if="page === ''">
           <div class="line">
-            <span class="item">манга</span>
-            <span class="item">2021</span>
-            <span class="item ongoing">онгоинг</span>
-            <span class="item">перевод продолжается</span>
+            <span class="item">{{ data.type.name }}</span>
+            <span class="item">{{ data.year }}</span>
           </div>
-          <div class="line tags">
-            <div class="item">Веб</div>
-            <div class="item">В цвете</div>
-            <div class="item">Реинкарнация</div>
-            <div class="item">Культивация</div>
-            <div class="item">Путешествия во времени</div>
-            <div class="item">Артефакты</div>
-            <div class="item">Будущее</div>
-            <div class="item">Воспоминания из другого мира</div>
-            <div class="item">ГГ мужчина</div>
-            <div class="item">Ранги силы</div>
-            <div class="item">Космос</div>
-            <div class="item">Скрытие личности</div>
-            <div class="item">Спасение мира</div>
-            <div class="item">Прокачка</div>
-            <div class="item">Боевые искусства</div>
-            <div class="item">Гарем</div>
-            <div class="item">Научная фантастика</div>
-            <div class="item">Романтика</div>
-            <div class="item">Фэнтези</div>
-            <div class="item">Школа</div>
+          <div class="line">
+            <span class="item ongoing">{{ data.status_of_releases.name }}</span>
+            <span class="item">перевод: {{ data.status_of_translation.name }}</span>
           </div>
-
-          <div class="block__title">Связанные произведения</div>
-          <div class="line_card">
-            <widgets-card-short v-for="(item, index) in dataRelated" :key="index"
-              :id="item.id"
-              :cover="item.cover"
-              :title="item.title"
-              :category="item.category"
-              :year="item.year"
-              type="top" />
-          </div>
-          <div class="block__title">Похожие тайтлы</div>
-          <div class="line_card">
-            <widgets-card-short v-for="(item, index) in dataRelated" :key="index"
-              :id="item.id"
-              :cover="item.cover"
-              :title="item.title"
-              :category="item.category"
-              :year="item.year"
-              type="top" />
+          <div class="line tags" v-show="data.genres.length > 0">
+            <div class="item" v-for="genre of data.genres">
+              {{ genre.name }}
+            </div>
+            <div class="item" v-for="tag of data.tags">
+              {{ tag.name }}
+            </div>
           </div>
         </div>
 
 
         <list-chapters class="chapters_list" v-if="page === 'chapters'" />
+
+        <list-relateds class="relateds_list" v-if="page === 'related'" />
 
         <list-comments class="comments" v-if="page === 'comments'" />
 
@@ -159,96 +132,49 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+// import { postGetById } from '@/services/api'
+
 export default {
+  async asyncData({ store, route, params }) {
+    await store.dispatch('post/FETCH_POST', +params.title)
+
+    // let id = route.params.title
+    // const data = await postGetById(id)
+    // return { data }
+  },
+
   data() {
     return {
       showBookmarkList: false,
-      dataRelated: [
-        {
-          id: 1,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          year: 1999,
-          category: 'Манга',
-        },
-        {
-          id: 2,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          year: 2021,
-          category: 'Веб-манхва',
-        },
-        {
-          id: 3,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          year: 2019,
-          category: 'маньхуа',
-        },
-        {
-          id: 4,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          year: 2019,
-          category: 'маньхуа',
-        },
-        {
-          id: 5,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          year: 2019,
-          category: 'маньхуа',
-        },
-      ],
     }
   },
 
   computed: {
+    ...mapGetters( 'post', { data: 'GET_POST' }),
+
     page(){
-      if(this.$route.query.page) {
-        return this.$route.query.page
-      }
-      return ''
+      // определяет какая закладка отображается
+      return (this.$route.query.page) ? this.$route.query.page : ''
     },
     urlCover() {
-      return '/_nuxt/assets/images/cover_manga.jpg'
+      return this.data.cover
     },
     styleCover() {
       return {
         fontSize: 0,
-        backgroundImage: `url('${this.urlCover}')`
+        backgroundImage: `url('${this.data.cover}')`
       }
-    },
-    dataTranslators() {
-      return [
-        {
-          id: 0,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Team Translation 1',
-          description: 'Description team. Only one little team...'
-        },
-        {
-          id: 1,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Team Translation 2',
-          description: 'Description team. Only one little team...'
-        },
-        {
-          id: 2,
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Team Translation 3',
-          description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione placeat vel maxime nulla expedita earum, ad optio labore quibusdam beatae! Ex commodi placeat ipsam ipsum soluta eos tempore at hic.'
-        },
-      ]
     },
   },
 
   methods: {
-    openBookmark() {
+    async openBookmark() {
       this.showBookmarkList = !this.showBookmarkList
       console.log(
         'qwe qwe qwe'
       );
+      // const testData = await this.$axios.$get(`post`)
     },
 
     close() {
@@ -409,12 +335,13 @@ export default {
         }
 
         .information {
+          margin-top: 10px;
           display: flex;
           flex-direction: column;
           .line {
             display: flex;
             width: 100%;
-            margin: 20px 0;
+            margin: 10px 0;
             .item {
               display: flex;
               flex-direction: column;
@@ -425,7 +352,7 @@ export default {
               border-radius: 6px;
               border: thin solid rgba(255, 255, 255, 0.12);
               &:last-child {
-                margin: 0;
+                // margin: 0;
               }
               &:first-child {
                 margin: 0;
@@ -441,7 +368,7 @@ export default {
             //   margin-top: -10px;
             // }
             &.tags {
-              margin-top: -10px;
+              // margin-top: -10px;
               display: flex;
               flex-wrap: wrap;
               flex-direction: row;
@@ -454,6 +381,7 @@ export default {
                 font-weight: 300;
                 margin-right: 6px;
                 margin-bottom: 6px;
+                text-transform: capitalize;
               }
             }
           }

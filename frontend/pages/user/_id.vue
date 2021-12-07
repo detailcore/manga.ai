@@ -198,8 +198,24 @@ export default {
         },
       ]
     },
+    test() {
+      console.log(
+        this.$store
+      );
+      return this.$store.state.auth.user
+    },
   },
+
+  async created() {
+    await this.testUser()
+  },
+
   methods: {
+    async testUser() {
+      const test = await this.$axios.$get(`user/${this.$route.params.id}`)
+      console.log(test)
+    },
+
     settingsOpen() {
       this.settingsShow = true
     },

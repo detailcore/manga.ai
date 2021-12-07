@@ -4,18 +4,17 @@
     <div class="main__content">
       <div class="content">
         <div class="block__title">Новые главы</div>
-        <widgets-card-latest v-for="(item, index) in dataLatest" :key="index"
+        <widgets-card-latest v-for="(item, index) in dataResult" :key="index"
           :id="item.id"
-          :rank="item.ageRank"
-          :category="item.category"
-          :chapter="item.chapter"
-          :more="item.more"
-          :cover="item.cover"
-          :rating="item.rating"
-          :title="item.title"
-          :update="item.update" />
+          :rank="item.adult_rank.name"
+          :category="item.type.name"
+          :chapter="item.new_chapter[0]"
+          :more="4"
+          :cover="item.cover.low"
+          :rating="item.rating[0]"
+          :title="item.title_rus" />
       </div>
-      <region-side />
+      <region-side :newReleases='newReleases' :topReleases='topReleases' />
     </div>
 
   </div>
@@ -23,166 +22,16 @@
 
 <script>
 export default {
-  data() {
-    return {
-      
-    }
+  async asyncData({ $axios }) {
+    const latestData = await $axios.$get('/home')
+    const newReleases = await $axios.$get('/home/releases/new')
+    const topReleases = await $axios.$get('/home/releases/top')
+    return { latestData, newReleases, topReleases }
   },
 
   computed: {
-    dataLatest() {
-      return [
-        {
-          id: 1,
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          chapter: {
-              v: 1,
-              c: 161,
-              title: 'Название 161 главы',
-            },
-          more: 1,
-          category: 'Манга',
-          ageRank: 18,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 4.98,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 2,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 16,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-        {
-          id: 3,
-          title: 'Другое произведение',
-          chapter: {
-              v: 24,
-              c: 256,
-              title: 'Название 256 главы',
-            },
-          more: 0,
-          category: 'Веб-манхва',
-          ageRank: 0,
-          update: new Date().toLocaleString('en-GB', { timeZone: 'Europe/Samara' }),
-          rating: 3.67,
-          cover: '/_nuxt/assets/images/mid_cover.jpg'
-        },
-      ]
+    dataResult() {
+      return this.latestData.data
     },
   },
 }

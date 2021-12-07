@@ -1,17 +1,17 @@
 <template>
   <nuxt-link :to="'/manga/'+id" class="chapter item">
     <div class="cover" :style="styleCover">
-      <div class="rank" v-show="rank > 0"> +{{ rank }} </div>
+      <div class="rank" v-show="rank !== 'Нет'"> {{ rank }} </div>
       <div class="cat"> {{ category }} </div>
     </div>    
     <div class="info">
       <div class="title"> {{ title }} </div>
       <div class="chapter">
-        Том {{ chapter.v }}. Глава {{ chapter.c }}. {{ chapter.title }}
+        Том {{ chapter.volume }}. Глава {{ chapter.chapter }}. {{ chapter.name }}
         <span v-show="more">+ еще {{ more }}</span>
       </div>
-      <div class="update"> {{ update }} </div>
-      <div class="rating"> {{ rating }} </div>
+      <div class="update"> {{ updateTime }} </div>
+      <div class="rating"> {{ ratingFixed }} </div>
     </div>
   </nuxt-link>
 </template>
@@ -20,22 +20,30 @@
 export default {
   props: {
     id: { type: Number, required: true },
-    rank: { type: Number, default: 0 },
+    rank: { type: String, default: '' },
     category: { type: String, default: '' },
     chapter: { type: Object, required: true },
     more: { type: Number, required: true },
     cover: { type: String, required: true },
-    rating: { type: Number, default: 0 },
-    title: { type: String, required: true },
-    update: { type: String, default: '' }
+    rating: { type: Object, default: { avg: '0', amount: 0 } },
+    title: { type: String, required: true }
   },
 
   computed: {
-    styleCover() {
+    styleCover({ $config: { urlCoverTitle } }) {
       return {
-        backgroundImage: `url(${this.cover})`
+        backgroundImage: `url(${urlCoverTitle + this.id +'/'+ this.cover})`
       }
-    }
+    },
+    ratingFixed() {
+      let rat = this.rating.avg
+      return Number(rat).toFixed(2)
+    },
+    updateTime() {
+      let time = this.chapter.updated_at,
+          timeReplace = time.replace('.000000Z', '')
+      return this.$moment(timeReplace).fromNow()
+    },
   },
 }
 </script>

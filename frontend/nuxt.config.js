@@ -1,4 +1,5 @@
 export default {
+  // loading: false,
   ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -33,6 +34,8 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     '@nuxtjs/style-resources',
+    // https://www.npmjs.com/package/@nuxtjs/moment
+    ['@nuxtjs/moment', { timezone: true, defaultTimezone: 'Europe/Samara', defaultLocale: 'ru', locales: ['ru'], }]
   ],
 
   styleResources: {
@@ -49,12 +52,75 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    // https://auth.nuxtjs.org/
+    '@nuxtjs/auth-next',
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  // Axios module configuration: https://github.com/nuxt-community/moment-module
+  axios: {
+    baseURL: process.env.API_DOMAIN,
+    credentials: true,
+    headers: {
+      'Accept': 'application/json',
+    },
+    // retry: { retries: 2 }
+  },
+
+  // "Auth-next" module
+  auth: {
+    strategies: {
+      local: {
+          endpoints: {
+              login: { 
+                  url: 'login', 
+                  method: 'post',
+                  withCredentials: true, 
+                  headers: {
+                    'Accept': 'application/json',
+                  } 
+              },
+              user: { 
+                  url: 'user', 
+                  method: 'get', 
+                  propertyName: false,
+                  withCredentials: true, 
+                  headers: {
+                    'Accept': 'application/json',
+                  }
+              }
+          },
+          user: {
+            property: false
+          },
+          tokenRequired: false,
+          tokenType: false
+      },
+      localStorage: false
+    },
+    // strategies: {
+    //   'local': {
+    //     endpoints: {
+    //       login: { url: '/api/login', method: 'post', propertyName: false },
+    //       user: { url: '/api/user', method: 'get', propertyName: false }
+    //     },
+    //     tokenRequired: false,
+    //     tokenType: false
+    //   }
+    // },
+    // localStorage: false
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+
+  // .env config
+  publicRuntimeConfig: {
+    urlCoverTeam: process.env.FILES_DOMAIN + 'teams/',
+    urlCoverTitle: process.env.FILES_DOMAIN + 'titles/',
+    apiDomain: process.env.API_DOMAIN,
+  },
+  privateRuntimeConfig: {
+    // apiSecret: process.env.TEST
   }
 }

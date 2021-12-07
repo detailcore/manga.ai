@@ -1,5 +1,5 @@
 <template>
-  <div class="short">
+  <nuxt-link :to="dataResult.url+id"  class="short">
     <div class="cover" :style="dataResult.cover"></div>
     <div class="info">
       <div class="title"> {{ dataResult.title }} </div>
@@ -7,7 +7,7 @@
       <div class="category description" v-if="dataResult.description"> {{ dataResult.description }} </div>
       <div class="category" v-if="dataResult.count">Кол-во глав: {{ dataResult.count }} </div>
     </div>
-  </div>
+  </nuxt-link>
 </template>
 
 <script>
@@ -24,40 +24,61 @@ export default {
   },
 
   computed: {
-    dataResult() {
-      if(this.type === 'translator') {
-        return {
-          id: this.id,
-          cover: { backgroundImage: `url(${this.cover})` },
-          title: this.title,
-          description: this.description
-        }
-      }
-      if(this.type === 'top') {
-        return {
-          id: this.id,
-          year: this.year,
-          cover: { backgroundImage: `url(${this.cover})` },
-          title: this.title,
-          category: this.category
-        }
-      }
-      if(this.type === 'branch') {
-        return {
-          id: this.id,
-          cover: {
-            backgroundImage: `url(${this.cover})`,
-            height: '60px',
-            borderRadius: '50%',
-            margin: '8px',
-            marginRight: '0',
-          },
-          title: this.title,
-          count: this.count,
-        }
+    dataResult({ $config: { urlCoverTitle, urlCoverTeam } }) {
+      switch (this.type) {
+        case 'translator':
+          return {
+            id: this.id,
+            url: '/team/',
+            cover: this.isCover(urlCoverTeam),
+            title: this.title,
+            description: this.description
+          }
+          break;
+
+        case 'top':
+          return {
+            id: this.id,
+            url: '/manga/',
+            year: this.year,
+            cover: this.isCover(urlCoverTitle),
+            title: this.title,
+            category: this.category
+          }
+          break;
+
+        case 'branch':
+          return {
+            id: this.id,
+            url: '/manga/',
+            cover: {
+              backgroundImage: `url(${urlCoverTeam + this.id +'/'+ this.cover})`,
+              height: '60px',
+              borderRadius: '50%',
+              margin: '8px',
+              marginRight: '0',
+            },
+            title: this.title,
+            count: this.count,
+          }
+          break;
+      
+        default:
+          break;
       }
     },
-  }
+  },
+
+  methods: {
+    isCover(typeUrl) {
+      return this.cover ? 
+        { backgroundImage: `url(${typeUrl + this.id +'/'+ this.cover})` } : 
+        { 
+          backgroundImage: 'url(http://api.manga.ai/uploads/no-image.png)',
+          backgroundSize: 'auto'
+        }
+    }
+  },
 };
 </script>
 
@@ -71,6 +92,7 @@ export default {
   border-radius: 6px;
   border: thin solid rgba(255, 255, 255, 0.12);
     &:hover {
+      text-decoration: none;
       &:before {
         opacity: 0.1;
       }

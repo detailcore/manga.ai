@@ -32,7 +32,7 @@
       <div class="block__title modal__title">
         Войти в аккаунт
       </div>
-      <div class="modal__social">
+      <!-- <div class="modal__social">
         <div class="item">
           <mdi-At title="Mail.ru" />
           Mail.ru
@@ -49,13 +49,13 @@
           <mdi-YCombinator title="Yandex" />
           Яндекс
         </div>
-      </div>
+      </div> -->
       <div class="modal__input">
-        <input type="text" v-model.trim="auth.login" placeholder="Логин">
+        <input type="text" v-model.trim="auth.login" placeholder="E-mail">
         <input type="password" v-model.trim="auth.password" placeholder="Пароль">
       </div>
       <div class="modal__btn">
-        <div class="item"> Вход </div>
+        <div class="item" @click.prevent="login"> Вход </div>
       </div>
       <div class="modal__recovery">
         <div class="item" @click="isOpenRecovery = true, isOpenLogin = false"> Забыл пароль? </div>
@@ -109,10 +109,10 @@
         </div>
       </div>
       <div class="modal__input">
-        <input type="text" v-model.trim="auth.login" placeholder="Логин">
-        <input type="email" v-model.trim="auth.email" placeholder="Почта">
-        <input type="password" v-model.trim="auth.password" placeholder="Пароль">
-        <input type="password" v-model.trim="auth.repassword" placeholder="Еще раз пароль">
+        <input type="text" v-model.trim="reg.login" placeholder="Логин">
+        <input type="email" v-model.trim="reg.email" placeholder="Почта">
+        <input type="password" v-model.trim="reg.password" placeholder="Пароль">
+        <input type="password" v-model.trim="reg.repassword" placeholder="Еще раз пароль">
       </div>
 
       <div class="modal__recovery_text">
@@ -183,7 +183,20 @@ export default {
     }
   },
 
+  // mounted() {
+  //   this.$axios.$get('/sanctum/csrf-cookie');
+  // },
+
   methods: {
+    async login() {
+      await this.$auth.loginWith('local', {
+        data: {
+          email: this.auth.login,
+          password: this.auth.password,
+        },
+      })
+    },
+
     openLogin() {
       this.isOpenLogin = !this.isOpenLogin
     },

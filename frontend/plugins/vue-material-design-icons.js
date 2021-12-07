@@ -31,12 +31,13 @@ import ThumbUp from 'vue-material-design-icons/ThumbUp.vue';
 import ThumbDown from 'vue-material-design-icons/ThumbDown.vue';
 import Login from 'vue-material-design-icons/Login.vue';
 import At from 'vue-material-design-icons/At.vue';
-import Vk from 'vue-material-design-icons/Vk.vue';
+// import Vk from 'vue-material-design-icons/Vk.vue';
 import Google from 'vue-material-design-icons/Google.vue';
-import YCombinator from 'vue-material-design-icons/YCombinator.vue';
+// import YCombinator from 'vue-material-design-icons/YCombinator.vue';
 import Plus from 'vue-material-design-icons/Plus.vue';
 import Cog from 'vue-material-design-icons/Cog.vue';
 import Earth from 'vue-material-design-icons/Earth.vue';
+import FormatListText from 'vue-material-design-icons/FormatListText.vue';
 
 
 // import DominoMask from 'vue-material-design-icons/DominoMask.vue';
@@ -74,12 +75,13 @@ export default function materialIcons() {
   Vue.component('MdiThumbDown', ThumbDown);
   Vue.component('MdiLogin', Login);
   Vue.component('MdiAt', At);
-  Vue.component('MdiVk', Vk);
+  // Vue.component('MdiVk', Vk);
   Vue.component('MdiGoogle', Google);
-  Vue.component('MdiYCombinator', YCombinator);
+  // Vue.component('MdiYCombinator', YCombinator);
   Vue.component('MdiPlus', Plus);
   Vue.component('MdiCog', Cog);
   Vue.component('MdiEarth', Earth);
+  Vue.component('MdiFormatListText', FormatListText);
 
 
 

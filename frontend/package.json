@@ -9,14 +9,16 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/auth-next": "5.0.0-1624817847.21691f1",
     "@nuxtjs/axios": "^5.13.1",
-    "core-js": "^3.9.1",
-    "nuxt": "^2.15.3",
-    "vue-material-design-icons": "^4.12.1"
+    "core-js": "^3.19.2",
+    "nuxt": "^2.15.8",
+    "vue-material-design-icons": "^4.13.0"
   },
   "devDependencies": {
-    "@nuxtjs/style-resources": "^1.2.0",
-    "sass": "^1.35.1",
+    "@nuxtjs/moment": "^1.6.1",
+    "@nuxtjs/style-resources": "^1.2.1",
+    "sass": "^1.44.0",
     "sass-loader": "^10.2.0"
   }
 }
