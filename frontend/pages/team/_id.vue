@@ -1,12 +1,12 @@
 <template>
   <div class="profile">
     <div class="profile__header team">
-      <div class="cover" :style="{ backgroundImage: `url(/_nuxt/assets/images/b1254rai.jpg)` }">
+      <div class="cover" :style="{ backgroundImage: `url(${team.cover.bg})` }">
         <div class="shadow"></div>
         <div class="container user_info">
-          <div class="cover__avatar" :style="{ backgroundImage: `url(/_nuxt/assets/images/mid_cover.jpg)` }"></div>
+          <div class="cover__avatar" :style="{ backgroundImage: `url(${team.cover.avatar})` }"></div>
           <div class="user_line">
-            <span class="login">Team_name</span>
+            <span class="login">{{ team.name }}</span>
             <mdi-Cog class="btn settings" @click="settingsOpen" />
           </div>
         </div>
@@ -18,12 +18,15 @@
         <div class="inner">
           <div class="block__title">Контакты</div>
           <div class="links">
-            <a href="https://vk.com/" target="_blank" rel="noopener nofollow noreferrer" class="btn"><mdi-Vk title="Vk" /></a>
-            <a href="https://vk.com/" target="_blank" rel="noopener nofollow noreferrer" class="btn"><mdi-Earth title="Сайт" /></a>
+            <a :href="team.link_vk" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_vk"> VK </a>
+            <a :href="team.link_site" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_site"> <mdi-Earth title="Сайт" /> </a>
+            <a :href="team.link_discord" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_discord"> <mdi-Discord title="Дискорд" /> </a>
+            <span v-show="(team.link_vk == null && team.link_site == null && team.link_discord == null)"> Контакты не указаны </span>
           </div>
           <div class="block__title">Состав</div>
           <div class="people_team">
-            <Nuxt-link class="people" to="/user/260">
+            <span class="no_users" v-show="users.length == 0"> Список пуст </span>
+            <!-- <Nuxt-link class="people" to="/user/260">
               <div class="cover" :style="{ backgroundImage: `url(/_nuxt/assets/images/mid_cover.jpg)` }"></div>
               <div class="info">
                 <span class="login">User_login_1</span>
@@ -34,10 +37,9 @@
               <div class="cover" :style="{ backgroundImage: `url(/_nuxt/assets/images/mid_cover.jpg)` }"></div>
               <div class="info">
                 <span class="login">User_login_2</span>
-                
                 <span class="role">Аплодер</span>
               </div>
-            </Nuxt-link>
+            </Nuxt-link> -->
           </div>
         </div>
       </div>
@@ -46,32 +48,50 @@
           <div class="item">Информация</div>
           <div class="item">Обновления</div>
         </div> -->
-        <div class="description">
+
+        <div class="btn__line">
+          <Nuxt-link class="btn__line__button" to="" :class="{ 'nuxt-link-exact-active' : page===''}">
+            <mdi-ImageText title="Описание" />
+            <span>Описание</span>
+          </Nuxt-link>
+          <Nuxt-link class="btn__line__button" to="?page=posts">
+            <mdi-FormatListText title="Переводы" />
+            <span>Наши переводы ({{ team.titles }})</span>
+          </Nuxt-link>
+          <Nuxt-link class="btn__line__button" to="?page=settings">
+            <mdi-FormatListText title="Дополнительные настройки" />
+            <span>Доп. настройки</span>
+          </Nuxt-link>
+        </div>
+
+        <div class="description" v-if="page === ''">
           <div class="block__title">Описание</div>
           <div class="description__text">
-            {{ descTeam }}
+            {{ team.description }}
           </div>
           <div class="stat">
             <div class="item">
-              <div class="count">701459</div>
+              <div class="count">{{ team.likes }}</div>
               <div class="item__text">лукасов</div>
             </div>
             <div class="item">
-              <div class="count">34</div>
+              <div class="count">{{ team.titles }}</div>
               <div class="item__text">тайтлов</div>
             </div>
             <div class="item">
-              <div class="count">9846</div>
+              <div class="count">{{ team.chapters }}</div>
               <div class="item__text">глав</div>
             </div>
           </div>
         </div>
-        <div class="posts">
-          <widgets-card-popular
-            :cover="item.cover" 
-            :title="item.title" 
-            :like="item.like" 
-            v-for="(item, index) in dataBookmarks" :key="index" />
+
+        <Team-Posts v-if="page === 'posts'" :page="page" />
+
+        <div class="description" v-if="page === 'settings'">
+          <div class="block__title">Дополнительные настройки</div>
+          <div class="description__text">
+            Страница пустая
+          </div>
         </div>
       </div>
     </div>
@@ -122,9 +142,16 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+  async asyncData({store, params}) {
+    await store.dispatch('team/FETCH_TEAM', params.id)
+  },
+
   data() {
     return {
+      users: [],
       descTeam: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad eveniet ullam at, est obcaecati dolor dolorem quae totam fugiat. Quibusdam repudiandae beatae exercitationem veniam maiores modi nostrum alias facilis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad eveniet ullam at, est obcaecati dolor dolorem quae totam fugiat. Quibusdam repudiandae beatae exercitationem veniam maiores modi nostrum alias facilis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad e...',
       maxText: 512,
       settingsShow: false,
@@ -137,6 +164,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('team', { team: 'GET_TEAM' }),
+
+    page(){
+      return (this.$route.query.page) ? this.$route.query.page : ''
+    },
+
     lengthText() {
       return this.descTeam.length
     },
@@ -316,12 +349,16 @@ export default {
         position: sticky;
         .links {
           display: flex;
+          justify-content: center;
         }
       }
 
       .people_team {
         display: flex;
         flex-direction: column;
+        .no_users {
+          text-align: center;
+        }
         .people {
           display: flex;
           padding: 4px;
@@ -371,6 +408,7 @@ export default {
       }
     }
     &__inner {
+      width: 100%;
       .block__title {
         padding: 4px 8px;
         background-color: #252525;
@@ -401,6 +439,10 @@ export default {
             }
           }
         }
+      }
+
+      .btn__line {
+        @include btn_line_full;
       }
 
       .posts {

@@ -212,8 +212,8 @@ export default {
 
   methods: {
     async testUser() {
-      const test = await this.$axios.$get(`user/${this.$route.params.id}`)
-      console.log(test)
+      // const test = await this.$axios.$get(`user/${this.$route.params.id}`)
+      // console.log(test)
     },
 
     settingsOpen() {

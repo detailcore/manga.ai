@@ -1,31 +1,46 @@
 import { 
-  postGetById, 
+  postGetByAlias, 
   relatedGetById,
+  chaptersGetById,
 } from '~/services/api'
 
 export const state = () => ({
-  id: 0,
   post: [],
-  relateds: [],
+  chapters: [],
   similars: [],
+  idByRelated: 0,
+  idByChapter: 0,
+  relatedsAndSimilars: [],
 })
   
 export const mutations = {
   SET_POST(state, payload) {
     state.post = payload
   },
+  SET_CHAPTERS(state, payload) {
+    state.idByChapter = payload.id
+    state.chapters = payload.res
+  },
   SET_RELATED(state, payload) {
-    state.id = payload.id
-    state.relateds = payload.data
+    state.idByRelated = payload.id
+    state.relatedsAndSimilars = payload.data
   },
 }
 
 export const actions = {
   async FETCH_POST({ commit }, params) {
     try {
-      console.log(753)
-      const res = await postGetById(params)
+      const res = await postGetByAlias(params)
       commit('SET_POST', res)
+
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  async FETCH_CHAPTERS({ commit }, { id, sort, page }) {
+    try {
+      const res = await chaptersGetById(id, sort, page)
+      commit('SET_CHAPTERS', {res, id})
 
     } catch (err) {
       console.log(err)
@@ -47,7 +62,10 @@ export const getters = {
   GET_POST(state) {
     return state.post
   },
+  GET_CHAPTERS(state) {
+    return state.chapters
+  },
   GET_RELATED(state) {
-    return state.relateds
+    return state.relatedsAndSimilars
   },
 }

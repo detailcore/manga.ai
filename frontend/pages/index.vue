@@ -6,6 +6,7 @@
         <div class="block__title">Новые главы</div>
         <widgets-card-latest v-for="(item, index) in dataResult" :key="index"
           :id="item.id"
+          :alias="item.alias"
           :rank="item.adult_rank.name"
           :category="item.type.name"
           :chapter="item.new_chapter[0]"

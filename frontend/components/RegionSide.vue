@@ -4,6 +4,7 @@
       <div class="block__title">Топ дня</div>
       <widgets-card-short v-for="item in dataTopReleases" :key="item.id"
         :id="item.id"
+        :alias="item.alias"
         :cover="item.cover"
         :title="item.title"
         :year="item.year"
@@ -15,6 +16,7 @@
       <div class="block__title">Новые тайтлы</div>
       <widgets-card-short v-for="item in dataNewReleases" :key="item.id"
         :id="item.id"
+        :alias="item.alias"
         :cover="item.cover"
         :title="item.title"
         :year="item.year"

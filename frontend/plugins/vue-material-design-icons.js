@@ -4,6 +4,7 @@ import Vue from 'vue';
 
 import Account from 'vue-material-design-icons/Account.vue';
 import AccountDetails from 'vue-material-design-icons/AccountDetails.vue';
+import AccountGroupOutline from 'vue-material-design-icons/AccountGroupOutline.vue';
 import Home from 'vue-material-design-icons/Home.vue';
 import Bell from 'vue-material-design-icons/Bell.vue';
 import Close from 'vue-material-design-icons/Close.vue';
@@ -19,9 +20,12 @@ import Star from 'vue-material-design-icons/Star.vue';
 import BookOpenPageVariantOutline from 'vue-material-design-icons/BookOpenPageVariantOutline.vue';
 import MenuDown from 'vue-material-design-icons/MenuDown.vue';
 import BookmarkPlus from 'vue-material-design-icons/BookmarkPlus.vue';
+import BookmarkPlusOutline from 'vue-material-design-icons/BookmarkPlusOutline.vue';
+import BookmarkMinus from 'vue-material-design-icons/BookmarkMinus.vue';
 import ImageText from 'vue-material-design-icons/ImageText.vue';
 import FormatListNumbered from 'vue-material-design-icons/FormatListNumbered.vue';
 import Image from 'vue-material-design-icons/Image.vue';
+import ImageEdit from 'vue-material-design-icons/ImageEdit.vue';
 import Eye from 'vue-material-design-icons/Eye.vue';
 import CommentMultiple from 'vue-material-design-icons/CommentMultiple.vue';
 import SortNumericAscending from 'vue-material-design-icons/SortNumericAscending.vue';
@@ -33,11 +37,19 @@ import Login from 'vue-material-design-icons/Login.vue';
 import At from 'vue-material-design-icons/At.vue';
 // import Vk from 'vue-material-design-icons/Vk.vue';
 import Google from 'vue-material-design-icons/Google.vue';
+import Discord from 'vue-material-design-icons/Discord.vue';
 // import YCombinator from 'vue-material-design-icons/YCombinator.vue';
 import Plus from 'vue-material-design-icons/Plus.vue';
 import Cog from 'vue-material-design-icons/Cog.vue';
 import Earth from 'vue-material-design-icons/Earth.vue';
 import FormatListText from 'vue-material-design-icons/FormatListText.vue';
+import ClockOutline from 'vue-material-design-icons/ClockOutline.vue';
+import ArrowRightBottom from 'vue-material-design-icons/ArrowRightBottom.vue';
+import ExclamationThick from 'vue-material-design-icons/ExclamationThick.vue';
+import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue';
+import ChevronRight from 'vue-material-design-icons/ChevronRight.vue';
+import MenuLeft from 'vue-material-design-icons/MenuLeft.vue';
+import MenuRight from 'vue-material-design-icons/MenuRight.vue';
 
 
 // import DominoMask from 'vue-material-design-icons/DominoMask.vue';
@@ -48,6 +60,7 @@ import FormatListText from 'vue-material-design-icons/FormatListText.vue';
 export default function materialIcons() {
   Vue.component('MdiAccount', Account);
   Vue.component('MdiAccountDetails', AccountDetails);
+  Vue.component('MdiAccountGroupOutline', AccountGroupOutline);
   Vue.component('MdiHome', Home);
   Vue.component('MdiBell', Bell);
   Vue.component('MdiClose', Close);
@@ -63,9 +76,12 @@ export default function materialIcons() {
   Vue.component('MdiBookOpenPage', BookOpenPageVariantOutline);
   Vue.component('MdiMenuDown', MenuDown);
   Vue.component('MdiBookmarkPlus', BookmarkPlus);
+  Vue.component('MdiBookmarkPlusOutline', BookmarkPlusOutline);
+  Vue.component('MdiBookmarkMinus', BookmarkMinus);
   Vue.component('MdiImageText', ImageText);
   Vue.component('MdiFormatListNumbered', FormatListNumbered);
   Vue.component('MdiImage', Image);
+  Vue.component('MdiImageEdit', ImageEdit);
   Vue.component('MdiEye', Eye);
   Vue.component('MdiCommentMultiple', CommentMultiple);
   Vue.component('MdiSortNumericAscending', SortNumericAscending);
@@ -77,11 +93,19 @@ export default function materialIcons() {
   Vue.component('MdiAt', At);
   // Vue.component('MdiVk', Vk);
   Vue.component('MdiGoogle', Google);
+  Vue.component('MdiDiscord', Discord);
   // Vue.component('MdiYCombinator', YCombinator);
   Vue.component('MdiPlus', Plus);
   Vue.component('MdiCog', Cog);
   Vue.component('MdiEarth', Earth);
   Vue.component('MdiFormatListText', FormatListText);
+  Vue.component('MdiClockOutline', ClockOutline);
+  Vue.component('MdiArrowRightBottom', ArrowRightBottom);
+  Vue.component('MdiExclamationThick', ExclamationThick);
+  Vue.component('MdiChevronLeft', ChevronLeft);
+  Vue.component('MdiChevronRight', ChevronRight);
+  Vue.component('MdiMenuLeft', MenuLeft);
+  Vue.component('MdiMenuRight', MenuRight);
 
 
 

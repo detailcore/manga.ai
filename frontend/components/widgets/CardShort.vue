@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="dataResult.url+id"  class="short">
+  <nuxt-link :to="urlResult"  class="short">
     <div class="cover" :style="dataResult.cover"></div>
     <div class="info">
       <div class="title"> {{ dataResult.title }} </div>
@@ -14,6 +14,7 @@
 export default {
   props: {
     id: { type: Number, required: true },
+    alias: { type: String, default: '' },
     type: { type: String, default: '' },
     cover: { type: String, default: '' },
     title: { type: String, default: '' },
@@ -24,6 +25,9 @@ export default {
   },
 
   computed: {
+    urlResult() {
+      return (this.alias === '') ? this.dataResult.url + this.id : this.dataResult.url + this.alias
+    },
     dataResult({ $config: { urlCoverTitle, urlCoverTeam } }) {
       switch (this.type) {
         case 'translator':
@@ -39,7 +43,7 @@ export default {
         case 'top':
           return {
             id: this.id,
-            url: '/manga/',
+            url: '/',
             year: this.year,
             cover: this.isCover(urlCoverTitle),
             title: this.title,
@@ -50,7 +54,7 @@ export default {
         case 'branch':
           return {
             id: this.id,
-            url: '/manga/',
+            url: '/',
             cover: {
               backgroundImage: `url(${urlCoverTeam + this.id +'/'+ this.cover})`,
               height: '60px',
@@ -74,7 +78,7 @@ export default {
       return this.cover ? 
         { backgroundImage: `url(${typeUrl + this.id +'/'+ this.cover})` } : 
         { 
-          backgroundImage: 'url(http://api.manga.ai/uploads/no-image.png)',
+          backgroundImage: 'url(http://api.manga.ai/uploads/no-image.png)', //! ХАРДКОД
           backgroundSize: 'auto'
         }
     }

@@ -25,7 +25,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/click-outside', ssr: false },
-    { src: '~/plugins/vue-material-design-icons', ssr: false },
+    { src: '~/plugins/vue-material-design-icons', ssr: true },
+    { src: '~/plugins/vue-headroom', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

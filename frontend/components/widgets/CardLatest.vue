@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="'/manga/'+id" class="chapter item">
+  <nuxt-link :to="'/'+alias" class="chapter item">
     <div class="cover" :style="styleCover">
       <div class="rank" v-show="rank !== 'Нет'"> {{ rank }} </div>
       <div class="cat"> {{ category }} </div>
@@ -20,6 +20,7 @@
 export default {
   props: {
     id: { type: Number, required: true },
+    alias: { type: String, required: true },
     rank: { type: String, default: '' },
     category: { type: String, default: '' },
     chapter: { type: Object, required: true },
@@ -40,9 +41,12 @@ export default {
       return Number(rat).toFixed(2)
     },
     updateTime() {
-      let time = this.chapter.updated_at,
-          timeReplace = time.replace('.000000Z', '')
-      return this.$moment(timeReplace).fromNow()
+      let time = this.chapter.updated_at
+      if(time != null) {
+        let timeReplace = time.replace('.000000Z', '')
+        return this.$moment(timeReplace).fromNow()
+      }
+      return 'Когда-то...'
     },
   },
 }
