@@ -45,4 +45,8 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.values {
+  @include scroll_bar;
+}
+</style>

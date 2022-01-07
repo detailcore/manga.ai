@@ -16,7 +16,7 @@
         <mdi-CardsHeart title="Вы уже поставили лайк" v-else />
       </button>
       <div class="text">
-        <span> Благодарностей: XXX </span>
+        <span> Благодарностей: {{ likes }} </span>
       </div>
     </div>
   </div>
@@ -26,6 +26,10 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  props: {
+    likes: { type: Number, defualt: 0 }
+  },
+
   computed: {
     ...mapGetters('reader', { teams: 'GET_TEAMS_CURREN' }),
   },

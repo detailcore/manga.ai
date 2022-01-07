@@ -137,10 +137,6 @@ import { mapGetters } from 'vuex'
 export default {
   async asyncData({ store, params }) {
     await store.dispatch('post/FETCH_POST', params.slug)
-
-    // let id = route.params.title
-    // const data = await postGetById(id)
-    // return { data }
   },
 
   data() {

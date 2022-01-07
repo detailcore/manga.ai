@@ -119,6 +119,7 @@ export default {
   publicRuntimeConfig: {
     urlCoverTeam: process.env.FILES_DOMAIN + 'teams/',
     urlCoverTitle: process.env.FILES_DOMAIN + 'titles/',
+    urlMangaReader: process.env.FILES_DOMAIN + 'manga/',
     apiDomain: process.env.API_DOMAIN,
   },
   privateRuntimeConfig: {

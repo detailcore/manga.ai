@@ -1,11 +1,14 @@
 import { 
     chapterGetById,
+    chapterListGetById,
   } from '~/services/api'
   
   export const state = () => ({
+    alias: null,
     chapter: [],
-    pageCurrent: 1,
     pageMax: 0,
+    pageCurrent: 1,
+    chapterList: [],
   })
     
   export const mutations = {
@@ -25,6 +28,12 @@ import {
     SET_PAGE_MAX(state, payload) {
       state.pageMax = payload
     },
+    SET_CHAPTER_LIST(state, payload) {
+      state.chapterList = payload
+    },
+    SET_ALIAS(state, payload) {
+      state.alias = payload
+    },
   }
   
   export const actions = {
@@ -32,6 +41,14 @@ import {
       try {
         const res = await chapterGetById(params)
         commit('SET_CHAPTER', res)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async FETCH_CHAPTER_LIST({ commit }, params) {
+      try {
+        const res = await chapterListGetById(params)
+        commit('SET_CHAPTER_LIST', res)
   
       } catch (err) {
         console.log(err)
@@ -41,13 +58,23 @@ import {
   
   export const getters = {
     GET_POST(state) {
-      return state.chapter.post
+      if(state.chapter.post) return state.chapter.post
+      return null
     },
     GET_CHAPTER_NAME(state) {
-      return state.chapter.name
+      if(state.chapter.name) return state.chapter.name
+      return null
     },
     GET_CHAPTER(state) {
       return state.chapter
+    },
+    GET_ID_POST(state) {
+      if(state.chapter.post) return state.chapter.post.id
+      return null
+    },
+    GET_ID_CHAPTER(state) {
+      if(state.chapter.id) return state.chapter.id
+      return null
     },
     GET_PAGE_CURRENT(state) {
       return state.pageCurrent
@@ -56,6 +83,17 @@ import {
       return state.pageMax
     },
     GET_TEAMS_CURREN(state) {
-      return state.chapter.teams
+      if(state.chapter.teams) return state.chapter.teams
+      return null
+    },
+    GET_CHAPTER_CURRENT(state) {
+      return { 
+        id: state.chapter.id,
+        volume: state.chapter.volume,
+        chapter: state.chapter.chapter,
+      }
+    },
+    GET_CHAPTER_LIST(state) {
+      return state.chapterList
     },
   }

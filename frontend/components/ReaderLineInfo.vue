@@ -7,13 +7,11 @@
       </div>
     </div>
     <div class="btn-line">
-      <button>
+      <button @click="prevChapter">
         <mdi-MenuLeft title="Предыдущая глава" />
       </button>
-      <div class="btn-select">
-        Глава {{ chapterNum }}
-      </div>
-      <button>
+      <WidgetsSelectChapter />
+      <button @click="nextChapter">
         <mdi-MenuRight title="Слудующая глава" />
       </button>
     </div>
@@ -21,14 +19,6 @@
       <button @click="prevPage">
         <mdi-ChevronLeft title="Предыдущая страница" />
       </button>
-      <!-- <div class="btn-select">
-        Страница {{ pageCur }}/{{ pageMax }}
-      </div> -->
-      <!-- <select v-model="pageCur">
-        <option v-for="item in pageMax" :value="item" :key="item">
-          Страница {{ pageCur }}/{{ pageMax }}
-        </option>
-      </select> -->
       <WidgetsSelect :type="'Страница'" />
       <button @click="nextPage">
         <mdi-ChevronRight title="Слудующая страница" />
@@ -43,7 +33,6 @@ import { mapGetters } from 'vuex'
 export default {
   props: {
     idChapter: { type: Number, defualt: 0 },
-    chapterNum: { type: String, defualt: '' },
   },
 
   data() {
@@ -53,11 +42,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { pageMax: 'GET_PAGE_MAX' }),
+    ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
+    // ...mapGetters( 'reader', { chapterCur: 'GET_CHAPTER_CURRENT' }),
+    // ...mapGetters( 'reader', { listChapter: 'GET_CHAPTER_LIST' }),
   },
 
   methods: {
+    prevChapter() {},
+    nextChapter() {},
     nextPage() {
       if(this.pageCur < this.pageMax) {
         this.count = +this.pageCur

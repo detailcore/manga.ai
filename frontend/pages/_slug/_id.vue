@@ -1,10 +1,9 @@
 <template>
   <div class="reader">
     <ReaderLineInfo
-      :idChapter="chapter.id" 
-      :chapterNum="chapter.chapter" />
+      :idChapter="chapter.id" />
     <ReaderImage :pages="chapter.pages" />
-    <ReaderLineTeam />
+    <ReaderLineTeam :likes="chapter.likes" />
 
 
     
@@ -65,7 +64,7 @@ export default {
 
   async asyncData({ store, route }) {
     const idChapter = +route.params.id.replace('ch', '')
-    await store.dispatch('reader/FETCH_CHAPTER', idChapter)
+    await store.dispatch('reader/FETCH_CHAPTER', idChapter) // получить текущую главу
   },
 
   mounted() {
