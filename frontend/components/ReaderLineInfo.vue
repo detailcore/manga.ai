@@ -7,15 +7,6 @@
       </div>
     </div>
     <div class="btn-line">
-      <button @click="prevChapter">
-        <mdi-MenuLeft title="Предыдущая глава" />
-      </button>
-      <WidgetsSelectChapter />
-      <button @click="nextChapter">
-        <mdi-MenuRight title="Слудующая глава" />
-      </button>
-    </div>
-    <div class="btn-line">
       <button @click="prevPage">
         <mdi-ChevronLeft title="Предыдущая страница" />
       </button>
@@ -24,6 +15,9 @@
         <mdi-ChevronRight title="Слудующая страница" />
       </button>
     </div>
+    
+    <WidgetsReaderSetting v-if="isOpenSetting" />
+    <WidgetsComplaint v-if="1" />
   </div>
 </template>
 
@@ -44,13 +38,12 @@ export default {
   computed: {
     ...mapGetters( 'reader', { pageMax: 'GET_PAGE_MAX' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
+    ...mapGetters( 'reader', { isOpenSetting: 'GET_OPEN_SETTING' }),
     // ...mapGetters( 'reader', { chapterCur: 'GET_CHAPTER_CURRENT' }),
     // ...mapGetters( 'reader', { listChapter: 'GET_CHAPTER_LIST' }),
   },
 
   methods: {
-    prevChapter() {},
-    nextChapter() {},
     nextPage() {
       if(this.pageCur < this.pageMax) {
         this.count = +this.pageCur
@@ -73,8 +66,8 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    .btn-line {
-      @include btn_line;
-    }
+  }
+  .btn-line {
+    @include btn_line;
   }
 </style>

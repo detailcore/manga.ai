@@ -9,6 +9,10 @@ import {
     pageMax: 0,
     pageCurrent: 1,
     chapterList: [],
+    readerSetting: {
+      isOpen: false,
+      mode: '',
+    },
   })
     
   export const mutations = {
@@ -33,6 +37,12 @@ import {
     },
     SET_ALIAS(state, payload) {
       state.alias = payload
+    },
+    SET_MODE(state, payload) {
+      state.readerSetting.mode = String(payload)
+    },
+    SET_OPEN_SETTING(state, payload) {
+      state.readerSetting.isOpen = payload
     },
   }
   
@@ -95,5 +105,11 @@ import {
     },
     GET_CHAPTER_LIST(state) {
       return state.chapterList
+    },
+    GET_MODE(state) {
+      return state.readerSetting.mode
+    },
+    GET_OPEN_SETTING(state) {
+      return state.readerSetting.isOpen
     },
   }

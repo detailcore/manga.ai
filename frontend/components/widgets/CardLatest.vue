@@ -26,7 +26,7 @@ export default {
     chapter: { type: Object, required: true },
     more: { type: Number, required: true },
     cover: { type: String, required: true },
-    rating: { type: Object, default: { avg: '0', amount: 0 } },
+    rating: { type: String, default: '0' },
     title: { type: String, required: true }
   },
 
@@ -37,7 +37,7 @@ export default {
       }
     },
     ratingFixed() {
-      let rat = this.rating.avg
+      let rat = this.rating
       return Number(rat).toFixed(2)
     },
     updateTime() {

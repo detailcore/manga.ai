@@ -10,9 +10,9 @@
           :rank="item.adult_rank.name"
           :category="item.type.name"
           :chapter="item.new_chapter[0]"
-          :more="4"
+          :more="item.amount_chapters.amount-1"
           :cover="item.cover.low"
-          :rating="item.rating[0]"
+          :rating="item.rating.avg"
           :title="item.title_rus" />
       </div>
       <region-side :newReleases='newReleases' :topReleases='topReleases' />

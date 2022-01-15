@@ -139,6 +139,8 @@
 </template>
 
 <script>
+import { csrf } from '~/services/api'
+
 export default {
   data() {
     return {
@@ -189,11 +191,22 @@ export default {
 
   methods: {
     async login() {
-      await this.$auth.loginWith('local', {
+      // let qwe = await csrf()
+      // console.log(qwe)
+
+      await this.$auth.loginWith('laravelSanctum', {
         data: {
           email: this.auth.login,
           password: this.auth.password,
         },
+      })
+      .then((result) => {
+        console.log(
+          'result => ', result,
+        )
+        this.auth.login = ''  //обнуление введунных данных
+        this.auth.password = '' //обнуление введунных данных
+        this.isOpenLogin = false
       })
     },
 

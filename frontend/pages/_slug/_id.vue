@@ -69,9 +69,11 @@ export default {
 
   mounted() {
     this.setMaxPage()
+    this.initLocalStorage()
   },
 
   computed: {
+    ...mapGetters( 'reader', { mode: 'GET_MODE' }),
     ...mapGetters( 'reader', { chapter: 'GET_CHAPTER' }),
     ...mapGetters( 'reader', { pageMax: 'GET_PAGE_MAX' }),
   },
@@ -81,6 +83,14 @@ export default {
       let index = (this.chapter) ? this.chapter.pages.length-1 : 0
       let count = this.chapter.pages[index].page
       this.$store.commit('reader/SET_PAGE_MAX', count)
+    },
+    initLocalStorage() {
+      let mode = localStorage.getItem('mode')
+      if(!mode) {
+        localStorage.setItem('mode', 'horizontally')
+      } else {
+        this.$store.commit('reader/SET_MODE', mode)
+      }
     },
   },
 }

@@ -3,11 +3,21 @@
     <div class="header">
       <div class="header__home">
         <Nuxt-link to="/" class="btn"><mdi-Home title="Главная страница" /></Nuxt-link>
-        <Nuxt-link to="/test" class="btn"><mdi-Bookshelf title="Каталог" /></Nuxt-link>
         <div class="info">
           <div class="name">{{ name }}</div>
           <Nuxt-link :to="alias" class="title">{{ title }}</Nuxt-link>
         </div>
+      </div>
+
+      
+      <div class="btn-line">
+        <button @click="prevChapter">
+          <mdi-MenuLeft title="Предыдущая глава" />
+        </button>
+        <WidgetsSelectChapter />
+        <button @click="nextChapter">
+          <mdi-MenuRight title="Слудующая глава" />
+        </button>
       </div>
 
       <div class="header__control">
@@ -24,7 +34,7 @@
           <mdi-Account title="Пользователь" />
         </div>
         <span> | </span>
-        <div class="btn">
+        <div class="btn" @click="openHideSetting">
           <mdi-Cog title="Настройки" />
         </div>
         
@@ -40,6 +50,7 @@ export default {
   computed: {
     ...mapGetters( 'reader', { post: 'GET_POST' }),
     ...mapGetters( 'reader', { name: 'GET_CHAPTER_NAME' }),
+    ...mapGetters( 'reader', { isOpen: 'GET_OPEN_SETTING' }),
 
     alias() {
       return (this.post.alias) ? '/'+this.post.alias : '/'
@@ -47,6 +58,14 @@ export default {
 
     title() {
       return (this.post.title_rus) ? this.post.title_rus : this.post.title_eng
+    },
+  },
+
+  methods: {
+    prevChapter() {},
+    nextChapter() {},
+    openHideSetting() {
+      this.$store.commit('reader/SET_OPEN_SETTING', !this.isOpen)
     },
   },
 }
@@ -75,4 +94,7 @@ export default {
       }
     }
   }
+  // .btn-line {
+  //   @include btn_line;
+  // }
 </style>

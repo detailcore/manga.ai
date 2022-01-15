@@ -84,10 +84,10 @@ export default {
 .modal-values {
   @include modal;
   @include scroll_bar;
-  top: 50%;
+  top: 100%;
   left: 50%;
   position: fixed;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
   overflow-y: auto;
   overflow-x: hidden;
   list-style-type: none;
