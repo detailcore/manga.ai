@@ -51,15 +51,16 @@ export default {
 
   methods: {
     async send() {
+      let user = this.$auth.loggedIn ? { id: this.$store.state.auth.user.id, name: this.$store.state.auth.user.name } : false
       if( this.cause && this.text.length > 1 ) {
         await this.$store.dispatch('post/FETCH_COMPLAINT', {
           text: this.text.substring(0, this.maxText),
           cause: this.cause,
           route: this.$route.fullPath,
-          user: '',
+          user: user,
+          type: 'reader',
         })
       }
-      
     }
   },
 }

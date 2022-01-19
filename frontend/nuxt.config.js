@@ -76,61 +76,61 @@ export default {
 
   // "Auth-next" module
   auth: {
-    // strategies: {
-    //   laravelSanctum: {
-    //     provider: 'laravel/sanctum',
-    //     url: process.env.API_DOMAIN,
-    //     endpoints: {
-    //       login: {
-    //         url: '/api/login'
-    //       },
-    //       logout: {
-    //         url: '/api/logout'
-    //       },
-    //       user: {
-    //         url: '/api/user'
-    //       }
-    //     },
-    //     user: {
-    //       property: false
-    //     },
-    //   }
-    // },
-    // redirect: {
-    //   login: '/login',
-    //   logout: '/',
-    //   home: false,
-    // }
-
     strategies: {
-      local: {
+      laravelSanctum: {
+        provider: 'laravel/sanctum',
+        url: process.env.API_DOMAIN,
         endpoints: {
           login: {
-            url: 'login', 
-            method: 'post',
-            withCredentials: true, 
-            headers: {
-              'Accept': 'application/json',
-            } 
+            url: '/api/login'
+          },
+          logout: {
+            url: '/api/logout'
           },
           user: {
-            url: 'user', 
-            method: 'get', 
-            propertyName: false,
-            withCredentials: true, 
-            headers: {
-              'Accept': 'application/json',
-            }
+            url: '/api/user'
           }
         },
         user: {
           property: false
         },
-        // tokenRequired: false,
-        // tokenType: false
-      },
-      // localStorage: false
+      }
     },
+    redirect: {
+      login: '/login',
+      logout: '/',
+      home: false,
+    },
+
+    // strategies: {
+    //   local: {
+    //     scheme: 'refresh',
+    //     token: {
+    //       property: 'token',
+    //       maxAge: 1800, // 30 min
+    //       global: true,
+    //     },
+    //     refreshToken: {
+    //       property: 'refresh_token',
+    //       data: 'refresh_token',
+    //       maxAge: 60 * 60 * 24 * 30 // 30 day
+    //     },
+    //     user: {
+    //       property: false
+    //     },
+    //     endpoints: {
+    //       login: {
+    //         url: '/login'
+    //       },
+    //       logout: {
+    //         url: '/logout'
+    //       },
+    //       user: {
+    //         url: '/user'
+    //       }
+    //     },
+    //   },
+    // },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

@@ -4,7 +4,7 @@
       Том {{ volume }} Глава {{ chapter }}
     </div>
     <div class="body" v-for="item in chapters" :key="item.id">
-      <nuxt-link :to="urlChapter" class="name">
+      <nuxt-link :to="urlChapter+item.id" class="name">
         <mdi-ArrowRightBottom title="" />
         <span v-if="item.name">
           {{ item.name }}
@@ -42,7 +42,7 @@ export default {
 
   computed: {
     urlChapter() {
-      return this.$route.path + '/ch' + this.chapters[0].id
+      return this.$route.path + '/ch'
     },
     volume() {
       return this.chapters[0].volume

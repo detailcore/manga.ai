@@ -1,27 +1,27 @@
 <template>
   <div class="btn__user">
-    <div class="btn" @click="openUser" v-if="0" >
+    <div class="btn" @click="openUser" v-if="loggedIn" >
       <mdi-Account title="Аккаунт" />
     </div>
 
-    <div class="btn" @click="openLogin" v-if="1" >
+    <div class="btn" @click="openLogin" v-if="!loggedIn" >
       <mdi-Login title="Вход" />
     </div>
 
     <div class="user__modal" v-if="isOpen">
       <div class="info">
         <div class="avatar" :style="styleAvatar">N/A</div>
-        <Nuxt-link to="test" class="login"> {{ userData.login }} </Nuxt-link>
+        <Nuxt-link :to="`user/${userData.id}`" class="login"> {{ userData.login }} </Nuxt-link>
       </div>
       <div class="links">
-        <Nuxt-link to="test" class="link">
+        <a class="link" href="#" @click.prevent="logout">
           <div class="link_text">Выход</div>
           <mdi-Logout title="Выход" />
-        </Nuxt-link>
-        <Nuxt-link to="test" class="link">
+        </a>
+        <!-- <Nuxt-link to="test" class="link">
           <div class="link_text">Выход</div>
           <mdi-Logout title="Выход" />
-        </Nuxt-link>
+        </Nuxt-link> -->
       </div>
     </div>
 
@@ -59,7 +59,7 @@
       </div>
       <div class="modal__recovery">
         <div class="item" @click="isOpenRecovery = true, isOpenLogin = false"> Забыл пароль? </div>
-        <div class="item" @click="isOpenRegistry = true"> Регистрация </div>
+        <div class="item" @click="isOpenRegistry = true, isOpenLogin = false"> Регистрация </div>
       </div>
     </div>
 
@@ -90,7 +90,7 @@
       <div class="block__title modal__title">
         Регистрация
       </div>
-      <div class="modal__social">
+      <!-- <div class="modal__social">
         <div class="item">
           <mdi-At title="Mail.ru" />
           Mail.ru
@@ -107,12 +107,12 @@
           <mdi-YCombinator title="Yandex" />
           Яндекс
         </div>
-      </div>
+      </div> -->
       <div class="modal__input">
-        <input type="text" v-model.trim="reg.login" placeholder="Логин">
+        <input type="text" v-model.trim="reg.name" placeholder="Ваш ник">
         <input type="email" v-model.trim="reg.email" placeholder="Почта">
         <input type="password" v-model.trim="reg.password" placeholder="Пароль">
-        <input type="password" v-model.trim="reg.repassword" placeholder="Еще раз пароль">
+        <input type="password" v-model.trim="reg.password_confirmation" placeholder="Еще раз пароль">
       </div>
 
       <div class="modal__recovery_text">
@@ -120,7 +120,7 @@
       </div>
       
       <div class="modal__btn">
-        <div class="item"> Зарегистрироваться </div>
+        <div class="item" @click.prevent="registration"> Зарегистрироваться </div>
       </div>
     </div>
 
@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { csrf } from '~/services/api'
+import { register } from '~/services/api'
 
 export default {
   data() {
@@ -154,26 +154,33 @@ export default {
         password: ''
       },
       reg: {
-        login: '',
+        name: '',
         email: '',
         password: '',
-        repassword: '',
+        password_confirmation: '',
       },
       recoveryMail: '',
     }
   },
 
   computed: {
+    loggedIn() {
+      return this.$store.state.auth.loggedIn
+    },
     userData() {
+      // return this.$store.state.auth.user
+      let { id, name, cover } = this.$store.state.auth.user
       return {
-        login: 'User_ligin',
-        avatar: '/_nuxt/assets/images/mid_cover.jpg',
+        id: id,
+        login: name,
+        avatar: cover,
       }
     },
     styleAvatar() {
       if(this.userData.avatar) {
         return {
           fontSize: 0,
+          backgroundSize: 'cover',
           backgroundImage: 'url('+this.userData.avatar+')'
         }
       } else {
@@ -185,29 +192,47 @@ export default {
     }
   },
 
-  // mounted() {
-  //   this.$axios.$get('/sanctum/csrf-cookie');
-  // },
-
   methods: {
     async login() {
-      // let qwe = await csrf()
-      // console.log(qwe)
-
       await this.$auth.loginWith('laravelSanctum', {
         data: {
           email: this.auth.login,
           password: this.auth.password,
         },
       })
-      .then((result) => {
-        console.log(
-          'result => ', result,
-        )
+      .then(() => {
         this.auth.login = ''  //обнуление введунных данных
         this.auth.password = '' //обнуление введунных данных
         this.isOpenLogin = false
       })
+      .catch((e) => {
+        console.log('ОШИБКА')
+        console.log(0, e);
+      })
+    },
+
+    async registration() {
+      await register( this.reg )
+        .then((res) => {
+          console.log('res =>', res)
+          this.isOpenLogin = false
+          this.isOpenRegistry = false
+        })
+        .catch((e) => {
+          console.log('ОШИБКА')
+          console.log(0, e);
+        })
+    },
+
+    async logout() {
+      await this.$auth.logout('laravelSanctum')
+        .then(() => {
+          this.isOpen = false
+        })
+        .catch((e) => {
+          console.log('ОШИБКА')
+          console.log(0, e);
+        })
     },
 
     openLogin() {
@@ -233,6 +258,7 @@ export default {
     position: relative;
     .user__modal {
       @include modal;
+      z-index: 2;
       right: 0;
       top: 36px;
       width: 256px;

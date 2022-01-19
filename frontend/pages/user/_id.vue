@@ -6,75 +6,20 @@
         <div class="container user_info">
           <div class="cover__avatar" :style="{ backgroundImage: `url(/_nuxt/assets/images/mid_cover.jpg)` }"></div>
           <div class="user_line">
-            <span class="login">User_login</span>
-            <mdi-Cog class="btn settings" @click="settingsOpen" />
+            <span class="login"> {{ user.name }} </span>
+            <div v-if="isOwner">
+              <mdi-Cog class="btn settings" @click="showSetting" v-if="tabBookmark" />
+              <mdi-BookmarkMultiple class="btn settings" @click="showBookmark" v-if="tabSetting" />
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="nav-line">
-        <div class="item">Всё <span class="count">287</span></div>
-        <div class="item">Читаю <span class="count">156</span></div>
-        <div class="item">В планах <span class="count">45</span></div>
-        <div class="item">Прочитано <span class="count">287</span></div>
-        <div class="item">Отложено <span class="count">75</span></div>
-        <div class="item">Брошено <span class="count">53</span></div>
-        <div class="item">Не интересно <span class="count">43</span></div>
-        <div class="btn"><mdi-Plus class="add_bookmark" /></div>
-      </div>
     </div>
 
-    <div class="container bookmarks">
-      <widgets-card-popular
-          :cover="item.cover" 
-          :title="item.title" 
-          :like="item.like" 
-          v-for="(item, index) in dataBookmarks" :key="index" />
-    </div>
+    <User-Bookmark v-show="tabBookmark" :tabBookmark="tabBookmark" />
 
-    <div class="modal_window modal__user_settings" v-if="settingsShow">
-      <div class="block__title">Настройки</div>
-      <div class="nav__tabs">
-        <span class="item" :class="{ active : !settingsPassword }" @click="settingsPassword = false">Фото</span>
-        <span class="item" :class="{ active : settingsPassword }" @click="settingsPassword = true">Сменить пароля</span>
-      </div>
-      <div class="tab" v-if="!settingsPassword">
-        <div class="block_avatar">
-          <div class="title">Аватарка</div>
-          <div class="download">
-            <input name="myAvatar" type="file">
-          </div>
-        </div>
-        <div class="block_background">
-          <div class="title">Фон профиля</div>
-          <div class="download">
-            <input name="myBackground" type="file">
-          </div>
-        </div>
-        <div class="action">
-          <div class="save">Сохранить</div>
-          <div class="cancel" @click="settingsShow = false">Отмена</div>
-        </div>
-      </div>
-      <div class="tab" v-else>
-        <div class="title">Текущий пароль</div>
-        <input class="password" type="password" v-model.trim="changePassword.current" placeholder="Текущий пароль">
-        <div class="title">Новый пароль</div>
-        <input class="password" type="password" v-model.trim="changePassword.new" placeholder="Новый пароль">
-        <div class="title">Повторите новый пароль</div>
-        <input class="password" type="password" v-model.trim="changePassword.reNew" placeholder="Повторите новый пароль">
-        <div class="action">
-          <div class="save">Сохранить</div>
-          <div class="cancel" @click="settingsShow = false">Отмена</div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="background__close" 
-          v-if="settingsShow == true"
-          @click="settingsShow = false">
-    </div>
+    <User-Setting v-if="tabSetting"  :settingsShow="tabSetting" />
+    
   </div>
 </template>
 
@@ -84,140 +29,27 @@
 export default {
   data() {
     return {
-      settingsShow: false,
-      settingsPassword: false,
-      changePassword: {
-        current: '',
-        new: '',
-        reNew: '',
-      }
+      tabSetting: false,
+      tabBookmark: true,
     }
   },
   computed: {
-    dataBookmarks() {
-      return [
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 10,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 159,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 17.5,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 150100,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 100800,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        },
-      ]
-    },
-    test() {
-      console.log(
-        this.$store
-      );
+    user() {
       return this.$store.state.auth.user
     },
-  },
-
-  async created() {
-    await this.testUser()
+    isOwner() {
+      return this.user ? (this.user.id === +this.$route.params.id) : false
+    },
   },
 
   methods: {
-    async testUser() {
-      // const test = await this.$axios.$get(`user/${this.$route.params.id}`)
-      // console.log(test)
+    showSetting() {
+      this.tabSetting = true
+      this.tabBookmark = false
     },
-
-    settingsOpen() {
-      this.settingsShow = true
+    showBookmark() {
+      this.tabBookmark = true
+      this.tabSetting = false
     },
   },
 };
@@ -255,7 +87,7 @@ export default {
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center;
-          border-radius: 6px 6px 0px 0px;
+          border-radius: 4px 4px 0px 0px;
         }
         .user_line {
           height: 60px;
@@ -274,132 +106,69 @@ export default {
         }
       }
     }
-    .nav-line {
-      display: flex;
-      min-height: 50px;
-      align-items: center;
-      flex-direction: row;
-      justify-content: center;
-      background-color: #252525;
-      .item {
-        margin: 0 6px;
-        cursor: pointer;
-        padding: 4px 6px;
-        border-radius: 6px;
-        border: thin solid rgba(255, 255, 255, 0.12);
-        // border-bottom: thin solid rgba(0, 255, 34, 0.25);
-        &:first-child {
-          border-bottom: thin solid rgba(0, 255, 34, 0.25);
-        }
-        &:hover {
-          border: thin solid rgba(0, 255, 34, 0.25);
-        }
-        .count {
-          color: #919191;
-          font-weight: 300;
-        }
+  }
+  .nav-line {
+    display: flex;
+    min-height: 50px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #252525;
+    .item {
+      margin: 0 6px;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: thin solid rgba(255, 255, 255, 0.12);
+      // border-bottom: thin solid rgba(0, 255, 34, 0.25);
+      &:hover {
+        border: thin solid rgba(0, 255, 34, 0.25);
       }
-      .add_bookmark {
-        cursor: pointer;
+      .count {
+        color: #919191;
+        font-weight: 300;
       }
     }
+    .item.active {
+      border-bottom: thin solid rgba(0, 255, 34, 0.25);
+    }
+    .add_bookmark {
+      cursor: pointer;
+    }
   }
-  .bookmarks {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-
-//* Settings
-.modal__user_settings {
-  width: 320px;
-  padding: 0 12px;
-  background-color: #1e1e1e;
-  border: thin solid rgba(255, 255, 255, 0.12);
-}
-.modal_window {
-  top: 50%;
-  left: 50%;
-  z-index: 10;
-  position: fixed;
-  margin-right: -50%;
-  border-radius: 6px;
-  transform: translate(-50%, -50%);
-  .block__title {
-    padding-top: 10px;
-  }
-  .nav__tabs {
+  .action {
     display: flex;
     align-items: center;
     flex-direction: row;
-    justify-content: space-around;
-    .item {
-      padding: 0;
-      margin: 12px 6px;
+    justify-content: space-evenly;
+    margin: 12px 0 24px 0;
+    .save {
+      border-bottom: thin solid rgba(0, 255, 34, 0.25);
+      &:hover {
+        border: thin solid rgba(0, 255, 34, 0.25);
+      }
+    }
+    .cancel {
+      border-bottom: thin solid rgba(255, 34, 0, 0.25);
+      &:hover {
+        border: thin solid rgba(255, 34, 0, 0.25);
+      }
+    }
+    .save,
+    .cancel {
       cursor: pointer;
+      padding: 4px 6px;
       position: relative;
-    }
-    .item.active {
+      border-radius: 4px;
+      &:hover {
+        &:before {
+          opacity: 0.1;
+        }
+      }
       &:before {
-        left: 0;
-        content: "";
-        width: 100%;
-        height: 3px;
-        bottom: -3px;
-        position: absolute;
-        background-color: rgba(255, 255, 255, 0.12);
+        @include before;
       }
     }
   }
-  .tab {
-    input.password {
-      width: 100%;
-      color: #fff;
-      height: 30px;
-      padding: 0 8px;
-      font-size: inherit;
-      margin-bottom: 6px;
-      border-radius: 6px;
-      background: #1e1e1e;
-      border: thin solid rgba(255, 255, 255, 0.12);
-    }
-    .title {
-      font-size: 1.1rem;
-    }
-    .block_avatar,
-    .block_background {
-      margin-bottom: 12px;
-    }
-    .download {
-    }
-    .action {
-      height: 40px;
-      display: flex;
-      align-items: center;
-      flex-direction: row;
-      justify-content: space-around;
-      .save,
-      .cancel {
-        cursor: pointer;
-        padding: 6px 8px;
-        border-radius: 6px;
-        border: thin solid rgba(255, 255, 255, 0.12);
-      }
-      .save {
-        border-bottom: thin solid rgba(0, 255, 34, 0.25);
-        &:hover {
-          border: thin solid rgba(0, 255, 34, 0.25);
-        }
-      }
-      .cancel {
-        &:hover {
-          border: thin solid rgba(255, 0, 0, 0.25);
-        }
-      }
-    }
-  }
-}
 }
 </style>
