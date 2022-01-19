@@ -33,6 +33,7 @@ export default {
     { src: '~/plugins/click-outside', ssr: false },
     { src: '~/plugins/vue-material-design-icons', ssr: true },
     { src: '~/plugins/vue-headroom', ssr: false },
+    { src: '~/plugins/filepond', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -75,57 +76,61 @@ export default {
 
   // "Auth-next" module
   auth: {
-    strategies: {
-      laravelSanctum: {
-        provider: 'laravel/sanctum',
-        url: process.env.API_DOMAIN,
-        endpoints: {
-          login: {
-            url: '/api/login'
-          },
-          user: {
-            url: '/api/user'
-          }
-        },
-        user: {
-          property: false
-        },
-      }
-    },
-    redirect: {
-      login: '/login',
-      home: '/'
-    }
-
     // strategies: {
-    //   local: {
+    //   laravelSanctum: {
+    //     provider: 'laravel/sanctum',
+    //     url: process.env.API_DOMAIN,
     //     endpoints: {
     //       login: {
-    //         url: 'login', 
-    //         method: 'post',
-    //         withCredentials: true, 
-    //         headers: {
-    //           'Accept': 'application/json',
-    //         } 
+    //         url: '/api/login'
+    //       },
+    //       logout: {
+    //         url: '/api/logout'
     //       },
     //       user: {
-    //         url: 'user', 
-    //         method: 'get', 
-    //         propertyName: false,
-    //         withCredentials: true, 
-    //         headers: {
-    //           'Accept': 'application/json',
-    //         }
+    //         url: '/api/user'
     //       }
     //     },
     //     user: {
     //       property: false
     //     },
-    //     tokenRequired: false,
-    //     tokenType: false
-    //   },
-    //   localStorage: false
+    //   }
     // },
+    // redirect: {
+    //   login: '/login',
+    //   logout: '/',
+    //   home: false,
+    // }
+
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: 'login', 
+            method: 'post',
+            withCredentials: true, 
+            headers: {
+              'Accept': 'application/json',
+            } 
+          },
+          user: {
+            url: 'user', 
+            method: 'get', 
+            propertyName: false,
+            withCredentials: true, 
+            headers: {
+              'Accept': 'application/json',
+            }
+          }
+        },
+        user: {
+          property: false
+        },
+        // tokenRequired: false,
+        // tokenType: false
+      },
+      // localStorage: false
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
