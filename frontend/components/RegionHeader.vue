@@ -26,9 +26,9 @@
           <mdi-ThemeLightDark title="Переключить цветовую тему сайта" />
         </div>
         <Nuxt-link to="/test" class="btn"><mdi-BookmarkMultiple title="Закладки" /></Nuxt-link>
-        <div class="btn">
+        <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />
-        </div>
+        </div> -->
         <region-user />
       </div>
     </div>

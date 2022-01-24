@@ -7,16 +7,24 @@ import vueFilePond from 'vue-filepond';
 import 'filepond/dist/filepond.min.css';
 
 // Import FilePond plugins
-// Please note that you need to install these plugins separately
+// import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
+// import FilePondPluginImageEdit from 'filepond-plugin-image-edit';
+// import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+// import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 
 // Import image preview plugin styles
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+// import 'filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css';
+// import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 
-// Import image preview and file type validation plugins
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 
 // Create component
-const FilePond = vueFilePond(FilePondPluginFileValidateType, FilePondPluginImagePreview);
+const FilePond = vueFilePond(
+  // FilePondPluginImageCrop,
+  // FilePondPluginImageEdit,
+  // FilePondPluginImagePreview,
+  // FilePondPluginImageTransform,
+  FilePondPluginFileValidateType,
+);
 
 Vue.component(FilePond)

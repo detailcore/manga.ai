@@ -6,6 +6,7 @@ const config = {
   baseURL: Config.baseUrlApi,
   timeout: 5 * 1000,
   crossDomain: true,
+  withCredentials: true,
   headers: {
     'Accept': 'application/json',
   },
@@ -15,6 +16,7 @@ const config = {
 }
 
 const _axios = axios.create(config)
+const newAxios = axios.create(config)
 
 _axios.interceptors.request.use(originConfig => {
   const reqConfig = { ...originConfig }
@@ -120,6 +122,15 @@ export function get(url, params = {}) {
 
 export function put(url, data = {}, params = {}) {
   return _axios({
+    method: 'put',
+    url,
+    params,
+    data
+  })
+}
+
+export function putNew(url, data = {}, params = {}) {
+  return newAxios({
     method: 'put',
     url,
     params,

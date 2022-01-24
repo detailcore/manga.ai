@@ -27,9 +27,9 @@
         </div>
         <span> | </span>
         <Nuxt-link to="/test" class="btn"><mdi-BookmarkMultiple title="Закладки" /></Nuxt-link>
-        <div class="btn">
+        <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />
-        </div>
+        </div> -->
         <div class="btn">
           <mdi-Account title="Пользователь" />
         </div>

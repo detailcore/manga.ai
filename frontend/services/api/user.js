@@ -1,15 +1,20 @@
-import { get } from '~/services/axios'
+import { get, post, put } from '~/services/axios'
 
 /**
  * Manga API service with backend
  */
 
-// Регистрация
-export async function register(params) {
-  return await get(`register`, params)
+// Получить информацию о пользователе
+export async function getUserById(id) {
+  return await get(`user/${id}`)
 }
 
-// Загрузка изображения
-export async function uploadCover(params) {
-  return await post(`user/upload_cover`, params)
+// Регистрация
+export async function register(params) {
+  return await post(`register`, params)
+}
+
+// Обновить информацию профиля
+export async function updateUser(params) {
+  return await put(`user/profile_information`, params)
 }

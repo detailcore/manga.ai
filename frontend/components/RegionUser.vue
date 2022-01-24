@@ -154,10 +154,10 @@ export default {
         password: ''
       },
       reg: {
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        name: 'Demo20',
+        email: 'demo20@mail.com',
+        password: '1020304050',
+        password_confirmation: '1020304050',
       },
       recoveryMail: '',
     }
@@ -176,12 +176,12 @@ export default {
         avatar: cover,
       }
     },
-    styleAvatar() {
+    styleAvatar({ $config }) {
       if(this.userData.avatar) {
         return {
           fontSize: 0,
           backgroundSize: 'cover',
-          backgroundImage: 'url('+this.userData.avatar+')'
+          backgroundImage: `url(${this.userData ? $config.urlCoverUser + this.userData.id +'/'+ this.userData.avatar : ''})`
         }
       } else {
         return {
@@ -198,6 +198,7 @@ export default {
         data: {
           email: this.auth.login,
           password: this.auth.password,
+          remember: true,
         },
       })
       .then(() => {
@@ -214,7 +215,6 @@ export default {
     async registration() {
       await register( this.reg )
         .then((res) => {
-          console.log('res =>', res)
           this.isOpenLogin = false
           this.isOpenRegistry = false
         })

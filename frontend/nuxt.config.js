@@ -34,6 +34,7 @@ export default {
     { src: '~/plugins/vue-material-design-icons', ssr: true },
     { src: '~/plugins/vue-headroom', ssr: false },
     { src: '~/plugins/filepond', ssr: false },
+    // { src: '~/plugins/tui-image-editor', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -82,13 +83,13 @@ export default {
         url: process.env.API_DOMAIN,
         endpoints: {
           login: {
-            url: '/api/login'
+            url: '/api/login' // зависит от Fortify
           },
           logout: {
-            url: '/api/logout'
+            url: '/api/logout' // зависит от Fortify
           },
           user: {
-            url: '/api/user'
+            url: '/api/user' // независимо от Fortify
           }
         },
         user: {
@@ -139,6 +140,7 @@ export default {
 
   // .env config
   publicRuntimeConfig: {
+    urlCoverUser: process.env.FILES_DOMAIN + 'users/',
     urlCoverTeam: process.env.FILES_DOMAIN + 'teams/',
     urlCoverTitle: process.env.FILES_DOMAIN + 'titles/',
     urlMangaReader: process.env.FILES_DOMAIN + 'manga/',

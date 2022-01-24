@@ -1,10 +1,10 @@
 <template>
   <div class="profile">
     <div class="profile__header user">
-      <div class="cover" :style="{ backgroundImage: `url(/_nuxt/assets/images/b1254rai.jpg)` }">
+      <div class="cover" :style="{ backgroundImage: `url(${coverBg})` }">
         <div class="shadow"></div>
         <div class="container user_info">
-          <div class="cover__avatar" :style="{ backgroundImage: `url(/_nuxt/assets/images/mid_cover.jpg)` }"></div>
+          <div class="cover__avatar" :style="{ backgroundImage: `url(${cover})` }"></div>
           <div class="user_line">
             <span class="login"> {{ user.name }} </span>
             <div v-if="isOwner">
@@ -26,6 +26,8 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
@@ -33,12 +35,23 @@ export default {
       tabBookmark: true,
     }
   },
+
+  async asyncData({ store, route }) {
+    const idUser = +route.params.id
+    await store.dispatch('user/FETCH_USER', idUser) // получить текущую главу
+  },
+
   computed: {
-    user() {
-      return this.$store.state.auth.user
+    ...mapGetters( 'user', { user: 'GET_USER' }),
+
+    cover({ $config }) {
+      return this.user.cover ? $config.urlCoverUser + this.user.id +'/'+ this.user.cover : ''
+    },
+    coverBg({ $config }) {
+      return this.user.cover_bg ? $config.urlCoverUser + this.user.id +'/'+ this.user.cover_bg : ''
     },
     isOwner() {
-      return this.user ? (this.user.id === +this.$route.params.id) : false
+      return this.user ? (+this.user.id === +this.$store.state.auth.user.id) : false
     },
   },
 

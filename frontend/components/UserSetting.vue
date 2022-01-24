@@ -12,31 +12,30 @@
         <div class="title">Аватарка</div>
         <file-pond
           name="cover"
-          ref="pond"
           class="filepond"
           label-idle="Нажмите или перетащите изображение для загрузки"
           :allow-multiple="false"
           credits="false"
           accepted-file-types="image/*"
-          :server="uploadServer"
+          :server="uploadCover()"
           instantUpload="false"
-          :files="info.cover"
-          v-on:init="handleFilePondInit"/>
+          :files="getCover" />
+        <div> Аватарка обрежется в размер 160x160 пикселей </div>
       </div>
-      <!-- <div class="value">
+      <div class="value">
         <div class="title">Фон профиля</div>
         <file-pond
           name="cover_bg"
-          ref="pond"
           class="filepond"
-          label-idle="Drop files here..."
-          :allow-multiple="true"
+          label-idle="Нажмите или перетащите изображение для загрузки"
+          :allow-multiple="false"
           credits="false"
           accepted-file-types="image/*"
-          server="/api"
-          :files="info.cover_bg"
-          v-on:init="handleFilePondInit"/>
-      </div> -->
+          :server="uploadCoverBg()"
+          instantUpload="false"
+          :files="getCoverBg" />
+        <div> Фоновое изображение обрежется по высоте в 330 пикселей и выровняется по центру </div>
+      </div>
     </div>
 
     <div class="container" v-show="showInformation">
@@ -51,11 +50,11 @@
       <div class="value">
         <div class="title">Пол:</div>
         <div class="values">
-          <input type="radio" id="notChosen" value="Не указан" v-model="info.sex">
+          <input type="radio" id="notChosen" value="0" v-model="info.gender">
           <label for="notChosen">Не указан</label>
-          <input type="radio" id="male" value="Мужской" v-model="info.sex">
+          <input type="radio" id="male" value="1" v-model="info.gender">
           <label for="male">Мужской</label>
-          <input type="radio" id="female" value="Женский" v-model="info.sex">
+          <input type="radio" id="female" value="2" v-model="info.gender">
           <label for="female">Женский</label>
         </div>
       </div>
@@ -72,7 +71,7 @@
         <textarea v-model="info.about" placeholder="Введите несколько строчек о себе"></textarea>
       </div>
       <div class="action">
-        <div class="save">Сохранить</div>
+        <div class="save" @click="updateInformation">Сохранить</div>
         <div class="cancel" @click="settingsShow = false">Отмена</div>
       </div>
     </div>
@@ -100,6 +99,9 @@
 </template>
 
 <script>
+import { updateUser } from '~/services/api'
+import { getCookie } from '~/services/getCookie'
+
 export default {
   props: {
     settingsShow: { type: Boolean, default: false },
@@ -116,15 +118,18 @@ export default {
       showSecurity: false,
       showInformation: false,
       info: {
+        id: 0,
         cover: '',
         cover_bg: '',
         name: '',
         email: '',
-        sex: '',
+        gender: 0,
         residence: '',
         site: '',
         about: '',
       },
+      cover: '',
+      cover_bg: '',
     }
   },
 
@@ -133,44 +138,87 @@ export default {
   },
 
   computed: {
-    uploadServer({ $config }) {
-      return {
-        url: $config.apiDomain + '/api/',
-        process: {
-          url: 'user/upload_cover',
-          headers: {
-            'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN'),
-          },
-          withCredentials: true,
-        },
-        revert: './revert',
-        restore: './restore/',
-        load: './load/',
-        fetch: './fetch/'
-      }
+    getToken() {
+      return getCookie('XSRF-TOKEN')
+    },
+    getApi({ $config }) {
+      return $config.apiDomain + '/api/'
+    },
+    getCover() {
+      return this.cover
+    },
+    getCoverBg() {
+      return this.cover_bg
     },
   },
 
   methods: {
-    getCookie(name) {
-      let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-      ));
-      return matches ? decodeURIComponent(matches[1]) : undefined;
+    async updateInformation() {
+      await updateUser({
+        name: this.info.name,
+        site: this.info.site,
+        about: this.info.about,
+        email: this.info.email,
+        gender: +this.info.gender,
+        residence: this.info.residence,
+      })
+    },
+    setCover(fileName) {
+      this.$store.commit('user/SET_COVER', fileName)
+    },
+    setCoverBg(fileName) {
+      this.$store.commit('user/SET_COVER_BG', fileName)
     },
     setUser() {
-      let { name, email, cover, cover_bg, gender } = this.$store.state.auth.user
-      this.info.cover = '/_nuxt/assets/images/mid_cover.jpg'
+      let { id, name, email, cover, cover_bg, gender, site } = this.$store.state.auth.user
+      this.info.id = id
+      this.info.cover = cover
       this.info.cover_bg = cover_bg
       this.info.name = name
+      this.info.site = site
       this.info.email = email
-      this.info.sex = gender
+      this.info.gender = +gender
     },
-    handleFilePondInit: function() {
-      console.log('FilePond has initialized');
-      // FilePond instance methods are available on `this.$refs.pond`
-      console.log(this.$refs.pond.getFiles())
-    }
+    uploadCover() {
+      return {
+        url: this.getApi,
+        process: {
+          url: 'user/upload_cover',
+          headers: {
+            'X-XSRF-TOKEN': this.getToken,
+            'UserId': this.info.id
+          },
+          withCredentials: true,
+          onload: (response) => {
+            this.setCover(response)
+          },
+        },
+        revert: null,
+        restore: null,
+        load: null,
+        fetch: null,
+      }
+    },
+    uploadCoverBg() {
+      return {
+        url: this.getApi,
+        process: {
+          url: 'user/upload_cover_bg',
+          headers: {
+            'X-XSRF-TOKEN': this.getToken,
+            'UserId': this.info.id
+          },
+          withCredentials: true,
+          onload: (response) => {
+            this.setCoverBg(response)
+          },
+        },
+        revert: null,
+        restore: null,
+        load: null,
+        fetch: null,
+      }
+    },
   },
 };
 </script>
