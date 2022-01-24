@@ -1,8 +1,8 @@
 import { 
-  setComplaint,
   postGetByAlias, 
   relatedGetById,
   chaptersGetById,
+  complaintCreate,
 } from '~/services/api'
 
 export const state = () => ({
@@ -12,11 +12,13 @@ export const state = () => ({
   idByRelated: 0,
   idByChapter: 0,
   relatedsAndSimilars: [],
+  complaintIsOpen: false,
   complaint: {
     text: '',
-    cause: 0, //причина
-    route: '',
-    isOpen: false,
+    cause: '',
+    link: '',
+    id_user: 0,
+    type: '',
   }
 })
   
@@ -36,7 +38,7 @@ export const mutations = {
     state.complaint = payload
   },
   SET_COMPLAINT_OPEN(state, payload) {
-    state.complaint.isOpen = payload
+    state.complaintIsOpen = payload
   },
 }
 
@@ -70,15 +72,16 @@ export const actions = {
     }
   },
   async FETCH_COMPLAINT({ commit }, params) {
-    console.log(871)
     console.log('params => ', params)
-    // const res = await setComplaint(params)
-    // console.log(res)
-    // commit('SET_COMPLAINT', {
-    //   text: res.text,
-    //   cause: res.cause,
-    //   route: res.route,
-    // })
+    const res = await complaintCreate(params)
+    console.log(res)
+    commit('SET_COMPLAINT', {
+      text: res.text,
+      cause: res.cause,
+      link: res.link,
+      type: res.type,
+      id_user: res.id_user,
+    })
   },
 }
 
@@ -93,6 +96,6 @@ export const getters = {
     return state.relatedsAndSimilars
   },
   GET_COMPLAINT_OPEN(state) {
-    return state.complaint.isOpen
+    return state.complaintIsOpen
   },
 }

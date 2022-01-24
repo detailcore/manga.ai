@@ -1,7 +1,7 @@
 <template>
   <div class="reader-chapter-line container">
     <div class="btn-line">
-      <div class="btn-text-action">
+      <div class="btn-text-action" @click="setComplaint(!isOpenComplaint)">
         <mdi-ExclamationThick title="Пожаловаться" />
         <span> Пожаловаться </span>
       </div>
@@ -17,7 +17,7 @@
     </div>
     
     <WidgetsReaderSetting v-if="isOpenSetting" />
-    <WidgetsComplaint v-if="1" />
+    <WidgetsComplaint v-if="isOpenComplaint" />
   </div>
 </template>
 
@@ -39,11 +39,15 @@ export default {
     ...mapGetters( 'reader', { pageMax: 'GET_PAGE_MAX' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { isOpenSetting: 'GET_OPEN_SETTING' }),
+    ...mapGetters( 'post', { isOpenComplaint: 'GET_COMPLAINT_OPEN' }),
     // ...mapGetters( 'reader', { chapterCur: 'GET_CHAPTER_CURRENT' }),
     // ...mapGetters( 'reader', { listChapter: 'GET_CHAPTER_LIST' }),
   },
 
   methods: {
+    setComplaint(value) {
+      this.$store.commit('post/SET_COMPLAINT_OPEN', value)
+    },
     nextPage() {
       if(this.pageCur < this.pageMax) {
         this.count = +this.pageCur
