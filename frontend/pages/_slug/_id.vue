@@ -7,7 +7,7 @@
 
 
     
-    <!-- <small>
+    <small>
       <mdi-Account />
       <mdi-AccountDetails />
       <mdi-AccountGroupOutline />
@@ -52,7 +52,9 @@
       <mdi-ChevronRight />
       <mdi-MenuLeft />
       <mdi-MenuRight />
-    </small> -->
+      <mdi-Pencil />
+      <mdi-TrashCan />
+    </small>
   </div>
 </template>
 

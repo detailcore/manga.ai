@@ -154,10 +154,10 @@ export default {
         password: ''
       },
       reg: {
-        name: 'Demo20',
-        email: 'demo20@mail.com',
-        password: '1020304050',
-        password_confirmation: '1020304050',
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
       },
       recoveryMail: '',
     }

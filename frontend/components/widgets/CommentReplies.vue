@@ -5,19 +5,10 @@
 			<div class="body">
 				<div class="header">
 					<Nuxt-link to="#"> {{ login }} </Nuxt-link>
-					<span class="date"> {{ date }} </span>
+					<span class="date"> {{ updateTime }} </span>
 				</div>
 				<div class="text">{{ text }}</div>
-				<div class="footer">
-					<span class="like">
-						<mdi-ThumbUp class="btn item" title="" />
-						<span class="score">{{ score }}</span>
-						<mdi-ThumbDown class="btn item" title="" />
-					</span>
-					<span class="btn reply">
-						<mdi-Reply title="" />
-					</span>
-				</div>
+				<Widgets-CommentButton :id="id" :id_user="id_user" :score="score" :id_root="id_root" :id_parent="id_parent" :text="text" />
 			</div>
 		</div>
 	</div>
@@ -28,18 +19,28 @@ export default {
   props: {
     id: { type: Number, required: true },
     id_user: { type: Number, required: true },
-    id_parent: { type: Number, required: true },
+    id_root: { type: Number, default: null },
+    id_parent: { type: Number, default: null },
     cover: { type: String, default: "" },
     login: { type: String, default: "" },
-    date: { type: Number, default: 0 },
+    date: { type: String, default: 0 },
     text: { type: String, default: "" },
     score: { type: Number, default: 0 },
-    replies: { type: Number, default: 0 },
+    replies: { type: Array, default: [] },
+    replies_count: { type: Number, default: 0 },
     type: { type: String, default: "" },
   },
 
   computed: {
-  }
+    updateTime() {
+      let time = this.date
+      if(time != null) {
+        let timeReplace = time.replace('.000000Z', '')
+        return this.$moment(timeReplace).fromNow()
+      }
+      return 'Когда-то...'
+    },
+  },
 }
 </script>
 

@@ -4,37 +4,27 @@
       <div class="cover" :style="{ backgroundImage: 'url(' + cover + ')' }"></div>
       <div class="body">
         <div class="header">
-          <Nuxt-link to="#"> {{ login }} </Nuxt-link>
-          <span class="date"> {{ date }} </span>
+          <Nuxt-link :to="`user/${id_user}`"> {{ login }} </Nuxt-link>
+          <span class="date"> {{ updateTime }} </span>
         </div>
         <div class="text">{{ text }}</div>
-        <div class="footer">
-          <span class="like">
-            <mdi-ThumbUp class="btn item" title="" />
-            <span class="score">{{ score }}</span>
-            <mdi-ThumbDown class="btn item" title="" />
-          </span>
-          <span class="btn reply">
-            <mdi-Reply title="" />
-          </span>
-          <div class="replies" v-show="replies">
-            Показать (+{{ replies }})
-          </div>
-        </div>
+        <Widgets-CommentButton :id="id" :id_user="id_user" :score="score" :id_root="id_root" :id_parent="id_parent" :text="text" />
       </div>
     </div>
 
-    <span v-for="(item, index) in dataReplies" :key="index">
-      <widgets-comment-replies v-if="id === item.id_parent"
+    <span v-for="(item, index) in replies" :key="index">
+      <Widgets-CommentReplies
         :id="item.id"
-        :id_user="item.user.id"
-        :id_parent="item.id_parent"
-        :cover="item.user.cover"
-        :login="item.user.login"
-        :date="item.date"
-        :text="item.text"
-        :score="item.score"
-        :replies="item.count_replies"
+        :id_root="item.root_id"
+        :id_user="item.user_id"
+        :id_parent="item.parent_id"
+        :cover="item.author_avatar"
+        :login="item.author_name"
+        :date="item.created_at"
+        :text="item.content"
+        :score="(item.upvotes + (-item.downvotes))"
+        :replies="item.replies"
+        :replies_count="item.replies.length"
         type="comment" />
     </span>
 
@@ -42,68 +32,43 @@
 </template>
 
 <script>
+import { setUpVoteComment, setDownVoteComment } from '~/services/api'
+
 export default {
   props: {
     id: { type: Number, required: true },
+    id_root: { type: Number, default: null },
     id_user: { type: Number, required: true },
-    id_parent: { type: Number, required: true },
+    id_parent: { type: Number, default: null },
     cover: { type: String, default: "" },
     login: { type: String, default: "" },
-    date: { type: Number, default: 0 },
+    date: { type: String, default: 0 },
     text: { type: String, default: "" },
     score: { type: Number, default: 0 },
-    replies: { type: Number, default: 0 },
+    replies: { type: Array, default: [] },
+    replies_count: { type: Number, default: 0 },
     type: { type: String, default: "" },
   },
 
   computed: {
-    dataReplies() {
-      return [
-        {
-          id: 3,
-          id_parent: 2,
-          count_replies: 1,
-          text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis beatae quis sint omnis officiis error culpa dolorum iure nostrum ipsa, magnam soluta accusantium impedit? Dolore et sit veniam aliquid ad.',
-          date: 133495772,
-          is_fixed: false,
-          score: 0,
-          user: {
-            id: 412,
-            cover: '/_nuxt/assets/images/mid_cover.jpg',
-            login: 'User_Login 412',
-          }
-        },
-        {
-          id: 10,
-          id_parent: 2,
-          count_replies: 0,
-          text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis beatae quis sint omnis officiis error culpa dolorum iure nostrum ipsa, magnam soluta accusantium impedit? Dolore et sit veniam aliquid ad.',
-          date: 133496717,
-          is_fixed: false,
-          score: 0,
-          user: {
-            id: 410,
-            cover: '/_nuxt/assets/images/mid_cover.jpg',
-            login: 'User_Login 410',
-          }
-        },
-        {
-          id: 11,
-          id_parent: 3,
-          count_replies: 0,
-          text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis beatae quis sint omnis officiis error culpa dolorum iure nostrum ipsa, magnam soluta accusantium impedit? Dolore et sit veniam aliquid ad.',
-          date: 133496717,
-          is_fixed: false,
-          score: 0,
-          user: {
-            id: 419,
-            cover: '/_nuxt/assets/images/mid_cover.jpg',
-            login: 'User_Login 419',
-          }
-        },
-      ]
-    }
-  }
+    updateTime() {
+      let time = this.date
+      if(time != null) {
+        let timeReplace = time.replace('.000000Z', '')
+        return this.$moment(timeReplace).fromNow()
+      }
+      return 'Когда-то...'
+    },
+  },
+
+  methods: {
+    async upVote() {
+      await setUpVoteComment(this.id)
+    },
+    async downVote() {
+      await setDownVoteComment(this.id)
+    },
+  },
 }
 </script>
 

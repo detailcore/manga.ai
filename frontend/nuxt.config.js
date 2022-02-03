@@ -144,6 +144,7 @@ export default {
     urlCoverTeam: process.env.FILES_DOMAIN + 'teams/',
     urlCoverTitle: process.env.FILES_DOMAIN + 'titles/',
     urlMangaReader: process.env.FILES_DOMAIN + 'manga/',
+    jsDomain: process.env.JS_DOMAIN,
     apiDomain: process.env.API_DOMAIN,
   },
   privateRuntimeConfig: {

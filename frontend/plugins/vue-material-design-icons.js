@@ -50,6 +50,8 @@ import ChevronLeft from 'vue-material-design-icons/ChevronLeft.vue';
 import ChevronRight from 'vue-material-design-icons/ChevronRight.vue';
 import MenuLeft from 'vue-material-design-icons/MenuLeft.vue';
 import MenuRight from 'vue-material-design-icons/MenuRight.vue';
+import Pencil from 'vue-material-design-icons/Pencil.vue';
+import TrashCan from 'vue-material-design-icons/TrashCan.vue';
 
 
 // import DominoMask from 'vue-material-design-icons/DominoMask.vue';
@@ -106,6 +108,8 @@ export default function materialIcons() {
   Vue.component('MdiChevronRight', ChevronRight);
   Vue.component('MdiMenuLeft', MenuLeft);
   Vue.component('MdiMenuRight', MenuRight);
+  Vue.component('MdiPencil', Pencil);
+  Vue.component('MdiTrashCan', TrashCan);
 
 
 

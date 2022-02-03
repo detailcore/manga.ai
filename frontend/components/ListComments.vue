@@ -1,43 +1,30 @@
 <template>
   <div>
-    <div class="comment__add">
-      <textarea v-model="addText" :maxlength="maxText" class="comment__add__text" placeholder="Введите ваш комментарий"></textarea>
-      <div class="comment__add__action">
-        <div class="limit">{{ lengthText }}/{{ maxText }} символов</div>
-        <div class="send">
-          <div class="send__spoiler">
-            <span :class="{ decorator: !spoiler }">спойлер</span>
-            <div class="switch">
-              <input id="switch-1" type="checkbox" class="switch-input" v-model="spoiler" />
-              <label for="switch-1" class="switch-label"></label>
-            </div>
-          </div>
-          <div class="btn__action">Отправить</div>
-        </div>
-      </div>
-    </div>
+    <Widgets-CommentWrite :type="'App.Post'" />
 
-
-    <div class="comments__sort">
+    <!-- Сортировка комментариев в РАЗРАБОТКЕ -->
+    <!-- <div class="comments__sort">
       <select v-model="selected">
         <option v-for="(item, index) in sort" :value="item.value" :key="index">
           {{ item.text }}
         </option>
       </select>
-    </div>
+    </div> -->
 
     
     <div class="comments__list">
-      <widgets-comment v-for="(item, index) in dataComments" :key="index"
+      <Widgets-Comment v-for="(item, index) in comments" :key="index"
         :id="item.id"
-        :id_user="item.user.id"
-        :id_parent="item.id_parent"
-        :cover="item.user.cover"
-        :login="item.user.login"
-        :date="item.date"
-        :text="item.text"
-        :score="item.score"
-        :replies="item.count_replies"
+        :id_root="item.root_id"
+        :id_user="item.user_id"
+        :id_parent="item.parent_id"
+        :cover="item.author_avatar"
+        :login="item.author_name"
+        :date="item.created_at"
+        :text="item.content"
+        :score="(item.upvotes + (-item.downvotes))"
+        :replies="item.replies"
+        :replies_count="item.replies.length"
         type="comment" />
     </div>
 
@@ -48,14 +35,18 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-  props:{
+  async fetch() {
+    await this.$store.dispatch('comments/FETCH_COMMENTS', { 
+      page_id: this.idPost, 
+      commentable_id: this.idPost
+      })
   },
+
   data() {
     return {
-      addText: '',
-      maxText: 512,
-      spoiler: false,
       selected: 'asc',
       sort: [
         { text: 'Сначала новые', value: 'asc' },
@@ -64,66 +55,21 @@ export default {
       ],
     }
   },
+
   computed: {
-    lengthText() {
-      return this.addText.length
-    },
-    dataComments() {
-      return [
-        {
-          id: 1,
-          id_parent: 0,
-          count_replies: 0,
-          text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis beatae quis sint omnis officiis error culpa dolorum iure nostrum ipsa, magnam soluta accusantium impedit? Dolore et sit veniam aliquid ad.',
-          date: 133495732,
-          is_fixed: false,
-          score: -2,
-          user: {
-            id: 867,
-            cover: '/_nuxt/assets/images/mid_cover.jpg',
-            login: 'User_Login 867',
-          }
-        },
-        {
-          id: 2,
-          id_parent: 0,
-          count_replies: 1,
-          text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis beatae quis sint omnis officiis error culpa dolorum iure nostrum ipsa, magnam soluta accusantium impedit? Dolore et sit veniam aliquid ad.',
-          date: 133495735,
-          is_fixed: false,
-          score: 3,
-          user: {
-            id: 869,
-            cover: '/_nuxt/assets/images/mid_cover.jpg',
-            login: 'User_Login 869',
-          }
-        },
-        {
-          id: 4,
-          id_parent: 0,
-          count_replies: 0,
-          text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis beatae quis sint omnis officiis error culpa dolorum iure nostrum ipsa, magnam soluta accusantium impedit? Dolore et sit veniam aliquid ad.',
-          date: 133495871,
-          is_fixed: false,
-          score: 982,
-          user: {
-            id: 19,
-            cover: '/_nuxt/assets/images/mid_cover.jpg',
-            login: 'User_Login 19',
-          }
-        },
-      ]
-    }
+    ...mapGetters( 'post', { post: 'GET_POST' }),
+    ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
+    ...mapGetters( 'comments', { comments: 'GET_COMMENTS' }),
   },
+
   methods: {
-    sendComment() {},
     loadMore() {},
 
-    filter(arr, str) {
-      return (arr || [])
-        .map(n => ({ ...n, children: this.filter(n.children, str) }))
-        .filter(n => n.name.includes(str) || n.children.length);
-    },
+    // filter(arr, str) {
+    //   return (arr || [])
+    //     .map(n => ({ ...n, children: this.filter(n.children, str) }))
+    //     .filter(n => n.name.includes(str) || n.children.length);
+    // },
   },
 };
 </script>
@@ -132,55 +78,6 @@ export default {
 <style lang="scss">
 .comments {
   margin-top: 16px;
-  .comment__add {
-    &__text {
-      width: 100%;
-      color: #fff;
-      background: #1e1e1e;
-      padding: 8px 12px;
-      font-size: inherit;
-      border-radius: 6px;
-      min-height: 104px;
-      outline: none;
-      border: thin solid rgba(255, 255, 255, 0.01);
-      &:hover,
-      &:focus {
-        outline: none;
-        border: thin solid rgba(255, 255, 255, 0.12);
-      }
-      &:focus {
-        box-shadow: inset 0 0 2px 0px #fff;
-      }
-    }
-    &__action {
-      display: flex;
-      align-items: center;
-      flex-direction: row;
-      justify-content: space-between;
-      .limit {
-        font-weight: 300;
-        font-size: 0.9rem;
-      }
-      .send {
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        &__spoiler {
-          display: flex;
-          align-items: center;
-          flex-direction: column;
-          margin-right: 16px;
-          span {
-            font-weight: 300;
-          }
-          @include btn_switcher;
-        }
-        .decorator {
-          text-decoration: line-through;
-        }
-      }
-    }
-  }
 
   .btn__action {
     max-height: 34px;
@@ -233,9 +130,11 @@ export default {
         min-width: 60px;
         min-height: 60px;
         border-radius: 50%;
+        background-size: cover;
         background-position: center;
       }
       .body {
+        width: 100%;
         margin-left: 12px;
         .header {
           font-weight: 600;
@@ -244,10 +143,6 @@ export default {
           padding-top: 8px;
         }
         .footer {
-          display: flex;
-          min-height: 30px;
-          align-items: center;
-          flex-direction: row;
         }
         .date {
           color: #919191;

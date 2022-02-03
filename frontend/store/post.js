@@ -89,6 +89,9 @@ export const getters = {
   GET_POST(state) {
     return state.post
   },
+  GET_POST_ID(state) {
+    return state.post.id
+  },
   GET_CHAPTERS(state) {
     return state.chapters
   },
