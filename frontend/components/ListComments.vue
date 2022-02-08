@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Widgets-CommentWrite :type="'App.Post'" />
+    <Widgets-CommentWrite :type="'post'" />
 
     <!-- Сортировка комментариев в РАЗРАБОТКЕ -->
     <!-- <div class="comments__sort">
@@ -12,24 +12,21 @@
     </div> -->
 
     
-    <div class="comments__list">
+    <div class="comment__list">
       <Widgets-Comment v-for="(item, index) in comments" :key="index"
         :id="item.id"
         :id_root="item.root_id"
         :id_user="item.user_id"
         :id_parent="item.parent_id"
         :cover="item.author_avatar"
-        :login="item.author_name"
+        :name="item.author_name"
         :date="item.created_at"
         :text="item.content"
         :score="(item.upvotes + (-item.downvotes))"
-        :replies="item.replies"
-        :replies_count="item.replies.length"
-        type="comment" />
+        :replies="item.replies" />
     </div>
-
     
-    <div class="btn__action comments__more" @click="loadMore">Показать еще комментарии</div>
+    <!-- <div class="btn__action comments__more" @click="loadMore">Показать еще комментарии</div> -->
   </div>
 </template>
 
@@ -45,16 +42,16 @@ export default {
       })
   },
 
-  data() {
-    return {
-      selected: 'asc',
-      sort: [
-        { text: 'Сначала новые', value: 'asc' },
-        { text: 'Сначала старые', value: 'desc' },
-        { text: 'Сначала залайканные', value: 'like' }
-      ],
-    }
-  },
+  // data() {
+  //   return {
+  //     selected: 'asc',
+  //     sort: [
+  //       { text: 'Сначала новые', value: 'asc' },
+  //       { text: 'Сначала старые', value: 'desc' },
+  //       { text: 'Сначала залайканные', value: 'like' }
+  //     ],
+  //   }
+  // },
 
   computed: {
     ...mapGetters( 'post', { post: 'GET_POST' }),
@@ -63,7 +60,7 @@ export default {
   },
 
   methods: {
-    loadMore() {},
+    // loadMore() {},
 
     // filter(arr, str) {
     //   return (arr || [])
@@ -118,9 +115,9 @@ export default {
 
 
 
-  .comments__list {
+  .comment__list {
     margin-top: 16px;
-    .comment {
+    .comment__content {
       padding: 8px 12px;
       display: flex;
       flex-direction: row;
@@ -149,10 +146,13 @@ export default {
           font-weight: 300;
         }
         .like {
+          .btn {
+            margin: 0;
+          }
           display: flex;
           align-items: center;
           .score {
-            margin: 0px 8px;
+            margin: 0px 4px;
           }
           .item {
             font-size: 1.3rem;
@@ -172,9 +172,6 @@ export default {
           }
         }
       }
-    }
-    .comment.reply {
-      margin-left: 60px;
     }
   }
 

@@ -99,6 +99,9 @@ input {
     }
 
     @media (max-width: 860px) {
+      .btn {
+        margin: 0;
+      }
     }
 
     @media (max-width: 600px) {
@@ -140,13 +143,53 @@ input {
 }
 
 
-  //* Фон, затемнение, автозакрытие
-  .background__close {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
-    position: fixed;
-    background-color: rgb(0 0 0 / 60%);
+//* Фон, затемнение, автозакрытие
+.background__close {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  position: fixed;
+  background-color: rgb(0 0 0 / 60%);
+}
+
+
+//* Отступ комментариев, древовидный
+.comments .comment__list {
+  @media (min-width: 576px) {
+    .comment__children {
+      margin-left: 40px;
+      .cover {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        min-height: 46px;
+      }
+    }
+    .comment__children
+    .comment__children {
+      margin-left: 40px;
+      .cover {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        min-height: 46px;
+      }
+    }
+    .comment__children {
+      .comment__children {
+        .comment__children {
+          margin-left: 0px;
+          .cover {
+            margin-left: 24px;
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            min-height: 36px;
+          }
+        }
+      }
+    }
   }
+}

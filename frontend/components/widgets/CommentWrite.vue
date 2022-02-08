@@ -26,7 +26,7 @@ export default {
     type: { type: String, required: true },
     id: { type: Number, default: null },
     id_root: { type: Number, default: null },
-    id_parent: { type: Number, default: null },
+    action: { type: Boolean, default: false },
   },
 
   data() {
@@ -47,14 +47,11 @@ export default {
     root() {
       return this.id_root === null ? (this.id === null ? '' : this.id) : this.id_root
     },
-    parent() {
-      return this.id_parent === null ? (this.id === null ? '' : this.id) : this.id_parent
-    },
   },
 
   methods: {
     async sendComment() {
-      await commentCreate({
+      let comment = {
         content: this.addText,
         commentable_type: this.type,
         commentable_id: this.idPost, 
@@ -62,8 +59,14 @@ export default {
         captcha: "",
         permalink: this.$config.jsDomain + this.$route.fullPath,
         root_id: this.root,
-        parent_id: this.parent,
-      })
+        parent_id: this.id === null ? '' : this.id,
+      }
+      let response = await commentCreate(comment)
+      this.$store.commit('comments/SET_ADD_COMMENT', response)
+      if(this.action) {
+        this.$store.commit('comments/SET_WRITE_COMMENT', { id: this.id, value: !this.action })
+      }
+      this.addText = ''
     },
   },
 }

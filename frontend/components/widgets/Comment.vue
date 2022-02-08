@@ -1,32 +1,34 @@
 <template>
-  <div>
-    <div class="comment">
+  <div class="comment__item">
+    <div class="comment__content">
       <div class="cover" :style="{ backgroundImage: 'url(' + cover + ')' }"></div>
       <div class="body">
         <div class="header">
-          <Nuxt-link :to="`user/${id_user}`"> {{ login }} </Nuxt-link>
+          <Nuxt-link :to="`user/${id_user}`"> {{ name }} </Nuxt-link>
           <span class="date"> {{ updateTime }} </span>
         </div>
-        <div class="text">{{ text }}</div>
+        <div class="text">
+          <span v-show="hasParentName">@{{ parentName }}, </span>
+          {{ text }}
+        </div>
         <Widgets-CommentButton :id="id" :id_user="id_user" :score="score" :id_root="id_root" :id_parent="id_parent" :text="text" />
       </div>
     </div>
 
-    <span v-for="(item, index) in replies" :key="index">
-      <Widgets-CommentReplies
+    <div class="comment__children" v-if="hasReplies">
+      <Widgets-Comment v-for="(item, index) in replies" :key="index"
         :id="item.id"
         :id_root="item.root_id"
         :id_user="item.user_id"
         :id_parent="item.parent_id"
         :cover="item.author_avatar"
-        :login="item.author_name"
+        :name="item.author_name"
         :date="item.created_at"
         :text="item.content"
         :score="(item.upvotes + (-item.downvotes))"
         :replies="item.replies"
-        :replies_count="item.replies.length"
-        type="comment" />
-    </span>
+        :parentName="name" />
+    </div>
 
   </div>
 </template>
@@ -41,13 +43,12 @@ export default {
     id_user: { type: Number, required: true },
     id_parent: { type: Number, default: null },
     cover: { type: String, default: "" },
-    login: { type: String, default: "" },
+    name: { type: String, default: "" },
     date: { type: String, default: 0 },
     text: { type: String, default: "" },
     score: { type: Number, default: 0 },
     replies: { type: Array, default: [] },
-    replies_count: { type: Number, default: 0 },
-    type: { type: String, default: "" },
+    parentName: { type: String, default: null },
   },
 
   computed: {
@@ -58,6 +59,12 @@ export default {
         return this.$moment(timeReplace).fromNow()
       }
       return 'Когда-то...'
+    },
+    hasReplies() {
+      return this.replies.length > 0
+    },
+    hasParentName() {
+      return this.parentName ? true : false
     },
   },
 

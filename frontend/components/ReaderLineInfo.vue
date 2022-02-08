@@ -1,7 +1,7 @@
 <template>
   <div class="reader-chapter-line container">
     <div class="btn-line">
-      <div class="btn-text-action" @click="setComplaint(!isOpenComplaint)">
+      <div class="btn-text-action" @click="setComplaint">
         <mdi-ExclamationThick title="Пожаловаться" />
         <span> Пожаловаться </span>
       </div>
@@ -17,7 +17,7 @@
     </div>
     
     <WidgetsReaderSetting v-if="isOpenSetting" />
-    <WidgetsComplaint v-if="isOpenComplaint" />
+    <WidgetsComplaint v-if="openComplaint.value" :id="idPost" :page="pageCur" :type="'reader'" />
   </div>
 </template>
 
@@ -36,17 +36,18 @@ export default {
   },
 
   computed: {
+    ...mapGetters( 'reader', { idPost: 'GET_ID_POST' }),
     ...mapGetters( 'reader', { pageMax: 'GET_PAGE_MAX' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { isOpenSetting: 'GET_OPEN_SETTING' }),
-    ...mapGetters( 'post', { isOpenComplaint: 'GET_COMPLAINT_OPEN' }),
+    ...mapGetters( 'complaint', { openComplaint: 'GET_COMPLAINT_OPEN' }),
     // ...mapGetters( 'reader', { chapterCur: 'GET_CHAPTER_CURRENT' }),
     // ...mapGetters( 'reader', { listChapter: 'GET_CHAPTER_LIST' }),
   },
 
   methods: {
-    setComplaint(value) {
-      this.$store.commit('post/SET_COMPLAINT_OPEN', value)
+    setComplaint() {
+      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: null, value: !this.openComplaint.value })
     },
     nextPage() {
       if(this.pageCur < this.pageMax) {
