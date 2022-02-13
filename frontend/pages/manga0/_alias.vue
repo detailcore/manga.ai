@@ -6,7 +6,7 @@
     <div class="manga_block" v-if="data.rating">
       <div class="block__cover">
         <div class="cover">
-          <img alt="cover item" :srcset="urlCover">
+          <img src="" alt="cover item" :srcset="urlCover">
           <div class="cover__btn">
             <div class="btn_action">
               <div class="item">
@@ -79,7 +79,7 @@
           </Nuxt-link>
           <Nuxt-link class="item" to="?page=chapters">
             <mdi-FormatListNumbered title="" />
-            <span>Главы ({{ data.chapter_count }})</span>
+            <span>Главы</span>
           </Nuxt-link>
           <Nuxt-link class="item" to="?page=related">
             <mdi-FormatListText title="" />
@@ -117,9 +117,9 @@
         </div>
 
 
-        <list-chapters v-if="page === 'chapters'" :id='data.id' />
+        <list-chapters class="chapters_list" v-if="page === 'chapters'" />
 
-        <list-relateds class="relateds_list" v-if="page === 'related'" :id='data.id' />
+        <list-relateds class="relateds_list" v-if="page === 'related'" />
 
         <list-comments class="comments" v-if="page === 'comments'" />
 
@@ -133,10 +133,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
+// import { postGetById } from '@/services/api'
 
 export default {
-  async asyncData({ store, params }) {
-    await store.dispatch('post/FETCH_POST', params.slug)
+  async asyncData({ store, route, params }) {
+    await store.dispatch('post/FETCH_POST', +params.title)
+
+    // let id = route.params.title
+    // const data = await postGetById(id)
+    // return { data }
   },
 
   data() {
@@ -152,13 +157,13 @@ export default {
       // определяет какая закладка отображается
       return (this.$route.query.page) ? this.$route.query.page : ''
     },
-    urlCover({ $config: { urlCoverTitle } }) {
-      return urlCoverTitle + this.data.id +'/'+ this.data.cover
+    urlCover() {
+      return this.data.cover
     },
     styleCover() {
       return {
         fontSize: 0,
-        backgroundImage: `url(${this.urlCover})`
+        backgroundImage: `url('${this.data.cover}')`
       }
     },
   },

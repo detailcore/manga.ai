@@ -6,7 +6,7 @@
     <div class="manga_block" v-if="data.rating">
       <div class="block__cover">
         <div class="cover">
-          <img src="" alt="cover item" :srcset="urlCover">
+          <img alt="cover item" :srcset="urlCover">
           <div class="cover__btn">
             <div class="btn_action">
               <div class="item">
@@ -79,7 +79,7 @@
           </Nuxt-link>
           <Nuxt-link class="item" to="?page=chapters">
             <mdi-FormatListNumbered title="" />
-            <span>Главы</span>
+            <span>Главы ({{ chapterCount }})</span>
           </Nuxt-link>
           <Nuxt-link class="item" to="?page=related">
             <mdi-FormatListText title="" />
@@ -107,19 +107,19 @@
             <span class="item">перевод: {{ data.status_of_translation.name }}</span>
           </div>
           <div class="line tags" v-show="data.genres.length > 0">
-            <div class="item" v-for="genre of data.genres">
+            <div class="item" v-for="genre of data.genres" :key="genre.name">
               {{ genre.name }}
             </div>
-            <div class="item" v-for="tag of data.tags">
+            <div class="item" v-for="tag of data.tags" :key="tag.name">
               {{ tag.name }}
             </div>
           </div>
         </div>
 
 
-        <list-chapters class="chapters_list" v-if="page === 'chapters'" />
+        <list-chapters v-if="page === 'chapters'" :id='data.id' />
 
-        <list-relateds class="relateds_list" v-if="page === 'related'" />
+        <list-relateds class="relateds_list" v-if="page === 'related'" :id='data.id' />
 
         <list-comments class="comments" v-if="page === 'comments'" />
 
@@ -133,15 +133,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import { postGetById } from '@/services/api'
 
 export default {
-  async asyncData({ store, route, params }) {
-    await store.dispatch('post/FETCH_POST', +params.title)
-
-    // let id = route.params.title
-    // const data = await postGetById(id)
-    // return { data }
+  async asyncData({ store, params }) {
+    await store.dispatch('post/FETCH_POST', params.alias)
   },
 
   data() {
@@ -157,15 +152,18 @@ export default {
       // определяет какая закладка отображается
       return (this.$route.query.page) ? this.$route.query.page : ''
     },
-    urlCover() {
-      return this.data.cover
+    urlCover({ $config: { urlCoverTitle } }) {
+      return urlCoverTitle + this.data.id +'/'+ this.data.cover
     },
     styleCover() {
       return {
         fontSize: 0,
-        backgroundImage: `url('${this.data.cover}')`
+        backgroundImage: `url(${this.urlCover})`
       }
     },
+    chapterCount() {
+      return this.data.chapter_count ? this.data.chapter_count : 0
+    }
   },
 
   methods: {

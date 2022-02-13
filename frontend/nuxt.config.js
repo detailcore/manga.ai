@@ -30,11 +30,14 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/click-outside', ssr: false },
-    { src: '~/plugins/vue-material-design-icons', ssr: true },
-    { src: '~/plugins/vue-headroom', ssr: false },
     { src: '~/plugins/filepond', ssr: false },
+    { src: '~/plugins/vue-headroom', ssr: false },
+    { src: '~/plugins/click-outside', ssr: false },
+    { src: '~/plugins/vue-multiselect', ssr: false },
     // { src: '~/plugins/tui-image-editor', ssr: false },
+    { src: '~/plugins/vue-material-design-icons', ssr: false },
+    { src: '~/plugins/notify-ssr', ssr: true },
+    { src: '~/plugins/notify-client', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -63,7 +66,27 @@ export default {
     '@nuxtjs/axios',
     // https://auth.nuxtjs.org/
     '@nuxtjs/auth-next',
+    // https://github.com/nuxt-community/laravel-echo-module
+    // '@nuxtjs/laravel-echo',
+    // https://nuxt-socket-io.netlify.app/installation
+    // 'nuxt-socket-io',
   ],
+
+  // echo: {
+  //   plugins: [ '~/plugins/echo.js' ],
+  // },
+
+  // io: {
+  //   sockets: [ // Required
+  //     { // At least one entry is required
+  //       name: 'home',
+  //       url: 'http://manga.ai:3000',
+  //       default: true,
+  //       vuex: { /* see section below */ },
+  //       namespaces: { /* see section below */ }
+  //     },
+  //   ]
+  // },
 
   // Axios module configuration: https://github.com/nuxt-community/moment-module
   axios: {

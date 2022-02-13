@@ -99,8 +99,8 @@
 </template>
 
 <script>
+import { getCookie } from '~/services/util'
 import { updateUser } from '~/services/api'
-import { getCookie } from '~/services/getCookie'
 
 export default {
   props: {
