@@ -1,4 +1,4 @@
-import { get } from '~/services/axios'
+import { get, post } from '~/services/axios'
 
 /**
  * Manga API service with backend
@@ -12,4 +12,9 @@ export async function teamGetById(id) {
 
 export async function teamPostsGetById(id) { 
     return await get(`team/${id}/posts`)
+}
+
+// Создать команду
+export async function teamCreate(data) { 
+    return await post(`team`, data)
 }

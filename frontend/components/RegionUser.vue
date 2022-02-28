@@ -11,9 +11,13 @@
     <div class="user__modal" v-if="isOpen">
       <div class="info">
         <div class="avatar" :style="styleAvatar">N/A</div>
-        <Nuxt-link :to="`user/${userData.id}`" class="login"> {{ userData.login }} </Nuxt-link>
+        <Nuxt-link :to="`/user/${userData.id}`" class="login"> {{ userData.login }} </Nuxt-link>
       </div>
       <div class="links">
+        <Nuxt-link class="link" :to="`/moderation#manga`" v-if="isAdmin">
+          <div class="link_text">Модерация</div>
+          <mdi-Pencil title="Модерация" />
+        </Nuxt-link>
         <a class="link" href="#" @click.prevent="logout">
           <div class="link_text">Выход</div>
           <mdi-Logout title="Выход" />
@@ -164,20 +168,24 @@ export default {
   },
 
   computed: {
+    isAdmin() {
+      return this.userData ? (this.userData.id_role === 1) : false
+    },
     loggedIn() {
       return this.$store.state.auth.loggedIn
     },
     userData() {
       // return this.$store.state.auth.user
-      let { id, name, cover } = this.$store.state.auth.user
+      let { id, name, cover, id_role } = this.$store.state.auth.user
       return {
         id: id,
         login: name,
         avatar: cover,
+        id_role: id_role,
       }
     },
     styleAvatar({ $config }) {
-      if(this.userData.avatar) {
+      if(this.userData ? this.userData.avatar : false) {
         return {
           fontSize: 0,
           backgroundSize: 'cover',

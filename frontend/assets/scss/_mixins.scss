@@ -483,3 +483,278 @@
     }
   }
 }
+
+@mixin action_save {
+  .create {
+    .action {
+      display: flex;
+      margin-bottom: 20px;
+      flex-direction: row;
+      justify-content: space-around;
+      .save,
+      .more,
+      .cancel {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        flex-direction: row;
+        padding: 8px;
+        margin: 6px 0;
+        cursor: pointer;
+        max-height: 34px;
+        position: relative;
+        border-radius: 6px;
+        text-decoration: none;
+        text-transform: uppercase;
+        border: thin solid rgba(255, 255, 255, 0.12);
+      }
+      .save {
+        border-bottom: thin solid rgba(0, 255, 34, 0.25);
+        &:hover {
+          border: thin solid rgba(0, 255, 34, 0.25);
+          &:before {
+            opacity: 0.1;
+          }
+        }
+        &:before {
+          @include before;
+        }
+      }
+      .more {
+        border-bottom: thin solid rgba(255, 166, 0, 0.25);
+        &:hover {
+          border: thin solid rgba(255, 166, 0, 0.25);
+          &:before {
+            opacity: 0.1;
+          }
+        }
+        &:before {
+          @include before;
+        }
+      }
+      .cancel {
+        border-bottom: thin solid rgba(255, 0, 0, 0.25);
+        &:hover {
+          border: thin solid rgba(255, 0, 0, 0.25);
+          &:before {
+            opacity: 0.1;
+          }
+        }
+        &:before {
+          @include before;
+        }
+      }
+    }
+  }
+}
+
+@mixin creation_pages {
+  .create {
+    min-height: 100vh;
+    border-left: thin solid rgba(255, 255, 255, 0.12);
+    border-right: thin solid rgba(255, 255, 255, 0.12);
+    &__fields {
+      &__image {
+        margin: 20px 0;
+        .cover {
+          margin: 8px 0;
+        }
+        .bg_cover {
+          margin: 8px 0;
+        }
+        span {
+        }
+      }
+      &__input {
+        margin: 20px 0;
+        .note {
+          border-radius: 2px;
+          padding: 4px 4px 4px 8px;
+          border-left: 6px solid rgba(0, 255, 34, 0.25);
+          a {
+            border-radius: 6px;
+            border-bottom: 1px solid rgba(0, 255, 34, 0.25);
+          }
+        }
+        input {
+          width: 100%;
+          color: #fff;
+          height: 36px;
+          margin: 4px 0;
+          padding: 0 8px;
+          font-size: inherit;
+          border-radius: 6px;
+          background: #1e1e1e;
+          border: thin solid rgba(255, 255, 255, 0.12);
+        }
+        textarea {
+          width: 100%;
+          color: #fff;
+          background: #1e1e1e;
+          margin: 4px 0;
+          padding: 8px 12px;
+          font-size: inherit;
+          border-radius: 6px;
+          min-height: 104px;
+          outline: none;
+          border: thin solid rgba(255, 255, 255, 0.12);
+          &:hover,
+          &:focus {
+            outline: none;
+            border: thin solid rgba(255, 255, 255, 0.12);
+          }
+          &:focus {
+            box-shadow: inset 0 0 2px 0px #fff;
+          }
+        }
+        .member {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+          #member {
+            width: 36px;
+            cursor: pointer;
+          }
+          input {
+            height: 20px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin create_chapter {
+  .create {
+    min-height: 100vh;
+    border-left: thin solid rgba(255, 255, 255, 0.12);
+    border-right: thin solid rgba(255, 255, 255, 0.12);
+
+    .create__fields {
+      &__input {
+        .upload_chapters {
+          .upload_chapter {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+          .chapter_short {
+            display: flex;
+            flex-grow: 0;
+            margin-right: 4px;
+            justify-content: space-around;
+            input:first-of-type {
+              width: 42px;
+            }
+            input:last-of-type {
+              width: 58px;
+            }
+            input {
+              text-align: center;
+            }
+          }
+          .chapter_name {
+            margin-right: 4px;
+            flex-grow: 1;
+          }
+          .chapter_team {
+            display: flex;
+            align-items: center;
+            margin-right: 4px;
+            flex-grow: 1;
+            max-width: 210px;
+            min-width: 210px;
+          }
+          .chapter_file {
+            display: flex;
+            flex-grow: 1;
+            width: 100%;
+            max-width: 200px;
+            align-items: center;
+            justify-content: space-between;
+            label {
+              padding: 0 4px;
+              overflow: hidden;
+              text-align: left;
+              align-items: center;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              position: relative;
+              cursor: pointer;
+              width: 100%;
+              border: 2px;
+              height: 32px;
+              background: #1e1e1e;
+              line-height: 32px;
+              &:hover {
+                &:before {
+                  opacity: 0.1;
+                }
+              }
+              &:before {
+                @include before;
+              }
+            }
+          }
+          .input {
+            width: 100%;
+            color: #fff;
+            height: 32px;
+            margin: 4px 2px;
+            padding: 0 8px;
+            font-size: inherit;
+            border-radius: 2px;
+            background: #1e1e1e;
+            border: thin solid rgba(255, 255, 255, 0.12);
+          }
+          .input_hide {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin multiselect {
+  .multiselect {
+    .multiselect__tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .tag__item {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      flex-direction: row;
+      margin: 2px 4px;
+      padding: 2px 4px;
+      border-radius: 2px;
+      background-color: #121212;
+      .tag__name {
+        padding-right: 6px;
+        border-right: 1px solid #252525;
+      }
+      .tag__remove {
+        opacity: 0.6;
+        cursor: pointer;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+@mixin progress_bar {
+  .progress_bar {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    .percent {
+      font-size: 0.9rem;
+    }
+  }
+}

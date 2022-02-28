@@ -43,7 +43,7 @@ export default {
         case 'top':
           return {
             id: this.id,
-            url: '/',
+            url: '/manga/',
             year: this.year,
             cover: this.isCover(urlCoverTitle),
             title: this.title,

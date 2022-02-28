@@ -53,7 +53,7 @@ export default {
     ...mapGetters( 'reader', { isOpen: 'GET_OPEN_SETTING' }),
 
     alias() {
-      return (this.post.alias) ? '/'+this.post.alias : '/'
+      return (this.post.alias) ? '/manga/'+this.post.alias : '/'
     },
 
     title() {

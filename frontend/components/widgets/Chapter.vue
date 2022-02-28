@@ -14,7 +14,7 @@
 
       <div class="teams" v-if="item.teams.length > 0">
         <mdi-AccountGroupOutline title="Команда" />
-        <nuxt-link :to="'team/'+team.id" v-for="team in item.teams" :key="team.id" class="team">
+        <nuxt-link :to="'/team/'+team.id" v-for="team in item.teams" :key="team.id" class="team">
           {{ team.name }}
         </nuxt-link>
       </div>

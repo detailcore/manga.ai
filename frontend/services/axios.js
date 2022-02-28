@@ -4,7 +4,7 @@ import Config from '~/config'
 
 const config = {
   baseURL: Config.baseUrlApi,
-  timeout: 5 * 1000,
+  timeout: 5 * 10000,
   crossDomain: true,
   withCredentials: true,
   headers: {
@@ -15,7 +15,7 @@ const config = {
   }
 }
 
-const _axios = axios.create(config)
+export const _axios = axios.create(config)
 const newAxios = axios.create(config)
 
 _axios.interceptors.request.use(originConfig => {
@@ -145,5 +145,3 @@ export function _delete(url, params = {}) {
     params
   })
 }
-
-export default _axios

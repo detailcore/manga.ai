@@ -25,16 +25,16 @@
 
       <div class="create__fields__input">
         <span class="title">Русское название *</span>
-        <input type="text" v-model.trim="formData.title_rus" placeholder="Русское название">
+        <input class="input_text" type="text" v-model.trim="formData.title_rus" placeholder="Русское название">
 
         <span class="title">Английское название *</span>
-        <input type="text" v-model.trim="formData.title_eng" placeholder="Английское название">
+        <input class="input_text" type="text" v-model.trim="formData.title_eng" placeholder="Английское название">
 
         <span class="title">Оригинальное название (без иероглифов)</span>
-        <input type="text" v-model.trim="formData.title_orig" placeholder="Оригинальное название (без иероглифов)">
+        <input class="input_text" type="text" v-model.trim="formData.title_orig" placeholder="Оригинальное название (без иероглифов)">
 
         <span class="title">Альтернативные названия (возможно с иероглифами)</span>
-        <input type="text" v-model.trim="formData.title_alt" placeholder="Разделять символом '/' (наклонная черта) ">
+        <input class="input_text" type="text" v-model.trim="formData.title_alt" placeholder="Разделять символом '/' (наклонная черта) ">
 
         <div class="line_half">
           <div class="half">
@@ -47,7 +47,7 @@
           </div>
           <div class="half">
             <span class="title">Год релиза *</span>
-            <input type="text" v-model.trim="formData.year" placeholder="Год релиза">
+            <input class="input_text" type="text" v-model.trim="formData.year" placeholder="Год релиза">
           </div>
         </div>
         
@@ -76,7 +76,7 @@
           </div>
           <!-- <div class="half">
             <span>Автор</span>
-            <input type="text" v-model.trim="manga.cover" placeholder="Автор">
+            <input class="input_text" type="text" v-model.trim="manga.cover" placeholder="Автор">
           </div> -->
           <div class="half">
             <span class="title">Художник (если есть)</span>
@@ -234,7 +234,7 @@
         </div>
 
         <span class="title">Ссылки на оригинал или анлейт (помогает модерации)</span>
-        <input type="text" v-model.trim="formData.link" placeholder="Ссылка">
+        <input class="input_text" type="text" v-model.trim="formData.link" placeholder="Ссылка">
 
         <span class="title">Описание *</span>
         <textarea v-model="formData.description" placeholder="Описание"></textarea>
@@ -247,7 +247,7 @@
 
     <div class="action">
       <div class="save" @click.prevent="createPost">Отправить на модерацию</div>
-      <div class="cancel">Отмена</div>
+      <Nuxt-link to="/" class="cancel"> Отмена </Nuxt-link>
     </div>
 
     <notifications />
@@ -337,6 +337,7 @@ export default {
         description: this.formData.description,
       }
 
+      // примитивная проверка на обязательные поля
       if(
         post.image &&
         post.id_type &&
@@ -356,6 +357,7 @@ export default {
           this.$notify({
             text: response.msg,
             type: 'success',
+            duration: 8000,
           })
         }
       } else {
@@ -411,6 +413,7 @@ export default {
         this.translators = res
       }
     },
+    // Создание Алиаса из названия // потом вынести в утилиты
     getAliasTranslit(titileRus = null, titleEng = null){
       let result = ''
       let word = ''
@@ -451,6 +454,8 @@ export default {
 </script>
 
 <style lang="scss">
+@include multiselect;
+
 .create {
   min-height: 100vh;
   border-left: thin solid rgba(255, 255, 255, 0.12);
@@ -475,7 +480,7 @@ export default {
         margin-top: 16px;
         display: inline-block;
       }
-      input[type=text] {
+      .input_text {
         width: 100%;
         color: #fff;
         height: 32px;
@@ -594,34 +599,6 @@ export default {
       }
       &:before {
         @include before;
-      }
-    }
-  }
-}
-
-.multiselect {
-  .multiselect__tags-wrap {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .tag__item {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    flex-direction: row;
-    margin: 2px 4px;
-    padding: 2px 4px;
-    border-radius: 2px;
-    background-color: burlywood;
-    .tag__name {
-      padding-right: 6px;
-      border-right: 1px solid #252525;
-    }
-    .tag__remove {
-      opacity: 0.6;
-      cursor: pointer;
-      &:hover {
-        opacity: 1;
       }
     }
   }

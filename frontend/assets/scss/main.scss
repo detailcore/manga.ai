@@ -141,7 +141,14 @@ input {
   font-size: 1.6rem;
   padding: 20px 0px 6px 0px;
 }
-
+.block__subtitle {
+  font-weight: 200;
+  font-size: 1rem;
+  padding: 4px 0;
+  span {
+    font-weight: 600;
+  }
+}
 
 //* Фон, затемнение, автозакрытие
 .background__close {
