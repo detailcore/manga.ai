@@ -137,6 +137,7 @@ input {
 }
 
 .block__title {
+  display: flex;
   font-weight: 600;
   font-size: 1.6rem;
   padding: 20px 0px 6px 0px;

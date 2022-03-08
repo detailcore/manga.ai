@@ -14,7 +14,7 @@
         <Nuxt-link :to="`/user/${userData.id}`" class="login"> {{ userData.login }} </Nuxt-link>
       </div>
       <div class="links">
-        <Nuxt-link class="link" :to="`/moderation#manga`" v-if="isAdmin">
+        <Nuxt-link class="link" to="/moderation?type=manga&statuses=2" v-if="isAdmin">
           <div class="link_text">Модерация</div>
           <mdi-Pencil title="Модерация" />
         </Nuxt-link>

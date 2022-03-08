@@ -6,7 +6,7 @@
     <div class="manga_block" v-if="data.rating">
       <div class="block__cover">
         <div class="cover">
-          <img alt="cover item" :srcset="urlCover">
+          <img :alt="title" :srcset="urlCover">
           <div class="cover__btn">
             <div class="btn_action">
               <div class="item">
@@ -45,7 +45,7 @@
           <h1 class="rus" v-show="data.title_rus"> {{ data.title_rus }} </h1>
           <span class="eng" v-show="data.title_eng"> {{ data.title_eng }} </span>
           <span class="alt">
-            <span v-show="data.title_alt"> {{ data.title_alt }} / </span> {{ data.title_orig }}
+            {{ data.title_orig }} <span v-show="data.title_alt"> / {{ data.title_alt }}</span>
           </span>
         </div>
         <div class="description" v-show="page === ''">
@@ -103,8 +103,8 @@
             <span class="item">{{ data.year }}</span>
           </div>
           <div class="line">
-            <span class="item ongoing">{{ data.status_of_releases.name }}</span>
-            <span class="item">перевод: {{ data.status_of_translation.name }}</span>
+            <span class="item ongoing" v-show="data.status_of_releases">{{ data.status_of_releases ? data.status_of_releases.name : '' }}</span>
+            <span class="item" v-show="data.status_of_translation">перевод: {{ data.status_of_translation ? data.status_of_translation.name : '' }}</span>
           </div>
           <div class="line tags" v-show="data.genres.length > 0">
             <div class="item" v-for="genre of data.genres" :key="genre.name">
@@ -148,18 +148,28 @@ export default {
   computed: {
     ...mapGetters( 'post', { data: 'GET_POST' }),
 
+    title() {
+      return this.data.title_rus ? this.data.title_rus : this.data.title_eng
+    },
     page(){
-      // определяет какая закладка отображается
+      // определяет какая вкладка отображается
       return (this.$route.query.page) ? this.$route.query.page : ''
     },
     urlCover({ $config: { urlCoverTitle } }) {
-      return urlCoverTitle + this.data.id +'/'+ this.data.cover
+      return this.data.cover ? urlCoverTitle + this.data.id +'/'+ this.data.cover : ''
     },
     styleCover() {
-      return {
-        fontSize: 0,
-        backgroundImage: `url(${this.urlCover})`
+      if (this.data.cover) {
+        return {
+          fontSize: 0,
+          backgroundImage: `url(${this.urlCover})`
+        }
+      } else {
+        return {
+          backgroundImage: 'none'
+        }
       }
+
     },
     chapterCount() {
       return this.data.chapter_count ? this.data.chapter_count : 0
