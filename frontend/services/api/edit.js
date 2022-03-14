@@ -4,7 +4,7 @@ import { post } from '~/services/axios'
  * Manga API service with backend
  */
 
-// Обновить пост
+// Отредактировать пост
 export async function updatePostById(id, data) {
   return await post(`post/${id}`, data)
 }

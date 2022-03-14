@@ -13,6 +13,7 @@ import {
       isOpen: false,
       mode: '',
     },
+    duplicateIdPages: [],
   })
     
   export const mutations = {
@@ -44,6 +45,26 @@ import {
     SET_OPEN_SETTING(state, payload) {
       state.readerSetting.isOpen = payload
     },
+    SET_CHAPTER_PAGE_EDIT(state, payload) {
+      if(payload.ids.length > 1) {
+        state.chapter.pages.forEach(item => {
+          payload.ids.forEach(id => {
+            if(+id === +item.id) {
+              item.page = payload.num
+            }
+          })
+        })
+      } else {
+        state.chapter.pages.forEach(item => {
+          if(+payload.ids[0] === +item.id) {
+            item.page = payload.num
+          }
+        })
+      }
+    },
+    SET_CHAPTER_PAGE_DUPLICATE_STATUS(state, { ids }) {
+      state.duplicateIdPages = ids
+    },
   }
   
   export const actions = {
@@ -71,12 +92,25 @@ import {
       if(state.chapter.post) return state.chapter.post
       return null
     },
+    GET_CHAPTER(state) {
+      return state.chapter
+    },
     GET_CHAPTER_NAME(state) {
       if(state.chapter.name) return state.chapter.name
       return null
     },
-    GET_CHAPTER(state) {
-      return state.chapter
+    GET_CHAPTER_CURRENT(state) {
+      return { 
+        id: state.chapter.id,
+        volume: state.chapter.volume,
+        chapter: state.chapter.chapter,
+      }
+    },
+    GET_CHAPTER_LIST(state) {
+      return state.chapterList
+    },
+    GET_CHAPTER_PAGES(state) {
+      return state.chapter.pages
     },
     GET_ID_POST(state) {
       if(state.chapter.post) return state.chapter.post.id
@@ -95,16 +129,6 @@ import {
     GET_TEAMS_CURREN(state) {
       if(state.chapter.teams) return state.chapter.teams
       return null
-    },
-    GET_CHAPTER_CURRENT(state) {
-      return { 
-        id: state.chapter.id,
-        volume: state.chapter.volume,
-        chapter: state.chapter.chapter,
-      }
-    },
-    GET_CHAPTER_LIST(state) {
-      return state.chapterList
     },
     GET_MODE(state) {
       return state.readerSetting.mode
