@@ -76,6 +76,28 @@ export default {
         path: `${this.aliasChapter}/edit`
       })
     },
+
+    async removeAll() {
+      let res = await editRemoveAllChapter(this.chapter.id)
+
+      if(res.status === 'ok') {
+        this.$router.push({
+          name: 'manga-alias',
+          params: {
+            alias: this.$route.params.alias,
+          }
+        })
+        this.$notify({
+          text: res.msg,
+          type: 'success',
+        })
+      } else {
+        this.$notify({
+          text: res.msg,
+          type: 'error',
+        })
+      }
+    },
   },
 };
 </script>

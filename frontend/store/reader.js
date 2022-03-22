@@ -5,8 +5,9 @@ import {
   
   export const state = () => ({
     alias: null,
-    chapter: [],
+    remove: [],
     pageMax: 0,
+    chapter: [],
     pageCurrent: 1,
     chapterList: [],
     readerSetting: {
@@ -64,6 +65,36 @@ import {
     },
     SET_CHAPTER_PAGE_DUPLICATE_STATUS(state, { ids }) {
       state.duplicateIdPages = ids
+    },
+    SET_EDIT_CHAPTER_VOLUME(state, payload) {
+      state.chapter.volume = payload
+    },
+    SET_EDIT_CHAPTER_CHAPTER(state, payload) {
+      state.chapter.chapter = payload
+    },
+    SET_EDIT_CHAPTER_NAME(state, payload) {
+      state.chapter.name = payload
+    },
+    SET_EDIT_CHAPTER_STATUS(state, num) {
+      state.chapter.id_status = num
+    },
+    SET_EDIT_CHAPTER_TEAMS(state, payload) {
+      state.chapter.teams = payload
+    },
+    SET_EDIT_CHAPTER_REMOVE_PAGE(state, ids) {
+      if(!state.chapter.remove) { // создать если нету
+        state.chapter.remove = []
+      }
+      ids.forEach(id => {
+        state.chapter.pages.forEach(item => {
+          // массив для отправки на сервер для удаления
+          if(+id === +item.id) {
+            state.chapter.remove.push(+id)
+          }
+        })
+        // удаление из массива
+        state.chapter.pages = state.chapter.pages.filter(item => item.id !== id)
+      })
     },
   }
   

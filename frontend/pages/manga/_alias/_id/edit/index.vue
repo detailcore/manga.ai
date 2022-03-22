@@ -37,7 +37,6 @@
                 :hide-selected="true"
                 :internal-search="false"
                 :close-on-select="false"
-                @input="changeTeams"
                 @search-change="findTeams">
               <template slot="tag" slot-scope="{ option, remove }">
                 <div class="tag__item">
@@ -65,45 +64,43 @@
           </div>
         </div>
 
-        <!-- <div class="chapter__pages">
-          <div class="page" v-for="(item, index) of chapter.pages" :key="index">
-            <div class="panel">
-              <div class="controls" v-if="item.sort === 1">
-                <input type="checkbox">
-                <div class="btn" title="Удалить страницу">
-                  <mdi-TrashCan />
-                </div>
-              </div>
-            </div>
-            <div class="thumb" :style="`background-image: url(${chapterFolder + item.link})`"></div>
-            <div class="name"> {{ item.link }} </div>
-            <div class="number">
-              <input class="num" type="text" :value="item.page" v-if="item.sort === 1">
-              <input class="num" type="text" :value="item.page" :title="`Это часть ${item.page}й страницы`" v-else disabled>
-              <div class="sort">часть: {{ item.sort }}</div>
-            </div>
-          </div>
-        </div> -->
         <div class="chapter__pages">
-          <WidgetsPageThumb v-for="item of chapter.pages" :key="item.id" :id="item.id" :idPost="postId" :pageIds="pageIds" />
+          <WidgetsPageThumb v-for="item of chapter.pages" :id="item.id" :idPost="postId" :pageIds="pageIds" :key="item.id" />
+          <WidgetsPageUpload v-for="(item, i) of uploadPageFiles" :idPost="postId" :idChapter="chapter.id" :initName="item.name" :index="i" :key="i" />
+
+          <div class="page add_file">
+            <label for="file" >
+              <div class="btn" title="Добавить новую страницу">
+                <mdi-Plus title="Добавить новую страницу" />
+              </div>
+              <input id="file" type="file" class="hidden" accept="image/*" @change="changeUploadFiles" multiple>
+              <span class="subtitle">Добавить</span>
+            </label>
+            <label @click="upload">
+              <div class="btn" title="Загрузить новые страницы">
+                <mdi-CloudDownload title="Загрузить новые страницы" />
+              </div>
+              <span class="subtitle">Загрузить</span>
+            </label>
+          </div>
         </div>
 
         <div class="action">
-          <div class="cancel">Удалить главу целиком</div>
-          <div class="more">Сохранить в черновик</div>
-          <div class="save" @click.prevent="save">Сохранить</div>
+          <div class="cancel" @click.prevent="removeAll()">Удалить главу целиком</div>
+          <div class="more" @click.prevent="save(true)">Сохранить в черновик</div>
+          <div class="save" @click.prevent="save()">Сохранить</div>
         </div>
 
       </div>
     </div>
 
-    <!-- <notifications /> -->
+    <notifications />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { createSearchTeam } from '~/services/api'
+import { createSearchTeam, editChapterById, editUploadPages, editRemovePageInChapter, editRemoveAllChapter } from '~/services/api'
 
 export default {
   async asyncData({ store, route }) {
@@ -144,6 +141,7 @@ export default {
 
   computed: {
     ...mapGetters( 'reader', { chapter: 'GET_CHAPTER' }),
+    ...mapGetters( 'upload', { uploadPageFiles: 'GET_UPLOAD_PAGES' }),
 
     postTitle() {
       return this.chapter ? (this.chapter.post ? this.chapter.post.title_rus : this.chapter.post.title_eng) : ''
@@ -157,10 +155,9 @@ export default {
     chapterFolder({ $config: { urlMangaReader } }) {
       return urlMangaReader + this.postId + '/' + this.chapter.id + '/'
     },
-    // currentChapter() {
-    //   let { id, volume:vol, chapter:ch, name, teams, } = this.chapter
-    //   return { id, vol, ch, name, teams }
-    // }
+    emptyToUpload() {
+      return this.uploadPageFiles.length === 0
+    }
   },
 
   created() {
@@ -171,26 +168,103 @@ export default {
   },
 
   methods: {
-    save() {
-      let data = this.chapter.pages      
-      let count = Object.create(null)
-      let used = new Set()
-      let dups = []
-
-      for (let {page} of data) {
-        if ((count[page] = ~~count[page] + 1) == 2) {
-          used.add(page)
-        }
+    async upload() {
+      if(this.emptyToUpload) {
+        this.$notify({
+          text: 'Страницы для загрузки не выбраны',
+          type: 'error',
+        })
+        return ''
       }
 
-      for (let x of data) {
-        if (used.has(x.page)) {
-          dups.push(x.id)
+      let response = null,
+          formData = new FormData()
+      
+      for (const item of this.uploadPageFiles) {
+        formData.append('file', item)
+        formData.append('page', item.page)
+        response = await editUploadPages(this.chapter.id, formData) //* загружаю файлы по очереди в цикле
+        
+        if(response.status === 'ok') {
+          this.$notify({
+            text: response.msg,
+            type: 'success',
+          })
+        } else {
+          this.$notify({
+            text: response.msg,
+            type: 'error',
+          })
+          break
         }
       }
+      if(response) {
+        await this.$store.dispatch('reader/FETCH_CHAPTER', this.chapter.id) //* получаю картинки загруженных файлов
+        this.$store.commit('upload/SET_UPLOAD_REMOVE_ALLPAGE') //* удаляем все страницы подготовленные к загрузке
+        this.wholePage()
+      }
+    },
 
-      if(dups.length > 0) this.$store.commit('reader/SET_CHAPTER_PAGE_DUPLICATE_STATUS', { ids: dups })      
-      console.log('Click save')
+    async save(draft = false) {
+      // console.log(draft)
+      // return draft
+      if(!this.emptyToUpload) {
+        this.$notify({
+          text: `Перед сохранением загрузите или удалите новые страницы!`,
+          type: 'error',
+          duration: 5000,
+        })
+        return ''
+      }
+      // удаление страниц из главы
+      if(this.chapter.remove) {
+        let remove = await editRemovePageInChapter(this.chapter.id, this.chapter.remove)
+        if(remove.status === 'ok') {
+          this.$notify({
+            text: remove.msg,
+            type: 'success',
+          })
+        } else {
+          this.$notify({
+            text: remove.msg,
+            type: 'error',
+          })
+        }
+        this.$store.commit('reader/SET_EDIT_CHAPTER_REMOVE_PAGE', Array())
+      }
+      let data = this.chapter,
+          duplicateIds = [];
+
+      // Поиск дубликатов с одинаковым номером page & sort
+      data.pages.map((item, index, arr) => {
+        if (arr.filter((_, kndex) => index != kndex).some(article => (article.page === item.page && item.sort === 1 && article.sort === 1) )) {
+          duplicateIds.push(item.id)
+        }
+      })
+
+      if(duplicateIds.length > 0) {
+        this.$store.commit('reader/SET_CHAPTER_PAGE_DUPLICATE_STATUS', { ids: duplicateIds })
+        this.$notify({
+          text: `Найдены одинаковые номера страниц, исправьте нумерацию!`,
+          type: 'error',
+          duration: 5000,
+        })
+      } else {
+        this.$store.commit('reader/SET_CHAPTER_PAGE_DUPLICATE_STATUS', { ids: duplicateIds }) // отметить дубликаты нумерации страниц    
+        this.$store.commit('reader/SET_EDIT_CHAPTER_TEAMS', this.selectedTeams)  
+        this.changeStatus()
+        this.$notify({
+          text: `Изменения сохранены`,
+          type: 'success',
+        })
+
+        // console.log(data)
+        if(draft) { // статус черновик
+          this.$store.commit('reader/SET_EDIT_CHAPTER_STATUS', 3)
+        }
+        await editChapterById(this.chapter.id, data) // сохранить описание в БД
+        await this.$store.dispatch('reader/FETCH_CHAPTER', this.chapter.id) // Получить изменения картинок
+      }
     },
 
     wholePage() { // объект с массивами ID страниц
@@ -203,25 +277,26 @@ export default {
         return acc;
       }, {})
     },
-    deleteChapter(id) {
-      this.selectedTeams = []
-      // this.$store.commit('create/SET_REMOVE_CHAPTER', id)
-    },
     changeVolume(e) {
-      // this.$store.commit('create/SET_CHAPTER_VOLUME', { id: this.id, vol: +e.target.value })
+      const regex = /(\D+)/;
+      this.$store.commit('reader/SET_EDIT_CHAPTER_VOLUME', +e.target.value.replace(regex, ''))
     },
     changeChapter(e) {
-      // this.$store.commit('create/SET_CHAPTER_CHAPTER', { id: this.id, ch: +e.target.value })
+      const regex = /(\D+)/;
+      this.$store.commit('reader/SET_EDIT_CHAPTER_CHAPTER', +e.target.value.replace(regex, '.'))
     },
     changeName(e) {
-      // this.$store.commit('create/SET_CHAPTER_NAME', { id: this.id, name: e.target.value })
+      this.$store.commit('reader/SET_EDIT_CHAPTER_NAME', e.target.value)
     },
-    changeTeams() {
-      // this.$store.commit('create/SET_CHAPTER_TEAMS', { id: this.id, teams: this.selectedTeams })
+    changeStatus() {
+      this.$store.commit('reader/SET_EDIT_CHAPTER_STATUS', +this.selectedStatus)
     },
-    onFile(e) {
-      // this.fileName = e.target.files[0] ? e.target.files[0].name : 'Выберите файл'
-      // this.$store.commit('create/SET_CHAPTER_FILE', { id: this.id, file: e.target.files ? e.target.files[0] : '' })
+    changeUploadFiles(e) { // Добавляем страницу в объект для загрузки
+      if(e.target.files.length > 0) {
+        for (const item of e.target.files) {
+          this.$store.commit('upload/SET_UPLOAD_PAGES', item)
+        }
+      }
     },
     async findTeams (query) {
       let res = null
@@ -239,6 +314,27 @@ export default {
           manga: this.postId,
          }
       })
+    },
+    async removeAll() {
+      let res = await editRemoveAllChapter(this.chapter.id)
+
+      if(res.status === 'ok') {
+        this.$notify({
+          text: res.msg,
+          type: 'success',
+        })
+        this.$router.push({
+          name: 'manga-alias',
+          params: {
+            alias: this.$route.params.alias,
+          }
+        })
+      } else {
+        this.$notify({
+          text: res.msg,
+          type: 'error',
+        })
+      }
     },
   },
 }
@@ -286,5 +382,17 @@ export default {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    .add_file {
+      min-height: 144px;
+      align-items: center;
+      justify-content: space-evenly;
+      label {
+        cursor: pointer;
+      }
+      .subtitle {
+        font-weight: 200;
+        font-size: 0.9rem;
+      }
+    }
   }
 </style>

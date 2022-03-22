@@ -1,23 +1,22 @@
 <template>
-  <div class="page" :class="{ duplicate_number: duplicate }">
+  <div class="page">
     <div class="panel">
-      <div class="controls" v-if="!disabled">
+      <div class="controls">
         <!-- <input type="checkbox"> -->
-        <div class="btn" title="Удалить страницу" @click="removePage">
+        <div class="btn" title="Удалить страницу" @click="remove">
           <mdi-TrashCan title="Удалить страницу" />
         </div>
       </div>
     </div>
-    <div class="thumb" :style="`background-image: url(${chapterFolder + currentPage.link})`"></div>
-    <div class="name"> {{ currentPage.link }} </div>
+    <div class="thumb">
+    </div>
+    <div class="name"> {{ initName }} </div>
     <div class="number">
-      <input class="num" 
+      <input class="num"
              type="text"
-             :value="currentPage.page"
-             @change="changePage"
-             :title="`${currentPage.sort}-я часть ${currentPage.page}-й страницы`" 
-             :disabled="disabled">
-      <div class="sort">часть: {{ currentPage.sort }}</div>
+             :value="num"
+             placeholder="Стр."
+             @change="changePage">
     </div>
   </div>
 </template>
@@ -27,68 +26,56 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   props: {
-    id: { type: Number, required: true },
     idPost: { type: Number, required: true },
-    pageIds: { type: Object, default: () => ({}) },
+    idChapter: { type: Number, required: true },
+    index: { type: Number, default: 0 },
+    initName: { type: String, default: '' },
   },
 
   data() {
     return {
-      page: {
-        num: null,
-        sort: null,
-      },
+      num: null,
     }
   },
 
   computed: {
     ...mapState( 'reader', ['duplicateIdPages'] ),
+    ...mapGetters( 'upload', { files: 'GET_UPLOAD_PAGES' }),
     ...mapGetters( 'reader', { pages: 'GET_CHAPTER_PAGES' }),
 
-    currentPage() {
-      return this.pages.filter(item => item.id === this.id)[0]
-    },
-    idChapter() {
-      return +this.$route.params.id.replace('ch', '')
-    },
-    chapterFolder({ $config: { urlMangaReader } }) {
-      return urlMangaReader + this.idPost + '/' + this.idChapter + '/'
-    },
-    disabled() {
-      return this.currentPage.sort > 1
-    },
-    fullPageIds() {
-      return this.pageIds[`page_${this.page.num}`]
-    },
-    duplicate() {
-      return (this.duplicateIdPages.length > 0) ? this.duplicateIdPages.includes(this.id) : false
+    lastNumPage() {
+      return (this.pages.length > 0) ? this.pages[this.pages.length-1].page : 0
     },
   },
 
   created() {
-    this.load()
+    this.setNum()
   },
 
   methods: {
-    load() {
-      this.page.num = this.currentPage.page
-      this.page.sort = this.currentPage.sort
+    async remove() {
+      console.log('Click remove', this.index)
+      this.$store.commit('upload/SET_UPLOAD_REMOVE_PAGE', this.index)
     },
-    removePage() {
-      this.$store.commit('reader/SET_EDIT_CHAPTER_REMOVE_PAGE', this.fullPageIds)
-    },
-    changePage(e) { // изм номенра страницы
-      this.$store.commit('reader/SET_CHAPTER_PAGE_EDIT', {
-        id: +this.id,
-        ids: this.fullPageIds,
+
+    changePage(e) {
+      this.$store.commit('upload/SET_UPLOAD_NUM_PAGE', {
         num: +e.target.value,
+        name: this.initName,
+      })
+    },
+    setNum() {
+      this.num = this.lastNumPage + this.index + 1
+      this.$store.commit('upload/SET_UPLOAD_NUM_PAGE', {
+        num: this.num,
+        name: this.initName,
       })
     },
   },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .page {
     width: 144px;
     overflow: hidden;
@@ -116,8 +103,11 @@ export default {
       }
     }
     .thumb {
-      height: 180px;
-      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
     }
     .name {
       left: 0;
@@ -153,8 +143,5 @@ export default {
         font-weight: 200;
       }
     }
-  }
-  .duplicate_number {
-    background-color: #900;
   }
 </style>

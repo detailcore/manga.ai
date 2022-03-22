@@ -253,7 +253,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { 
-  updatePostById, 
+  editPostById, 
   createSearchPeople, 
   createSearchPublisher, 
   createSearchTeam,
@@ -400,7 +400,7 @@ export default {
         post.append('id_teams', this.selectedTranslators ? this.getIdsField(this.selectedTranslators) : '');
       }
 
-      let response = await updatePostById(this.data.id, post)
+      let response = await editPostById(this.data.id, post)
       // console.log('Отправляю =>',this.data.id, post)
       // console.log('Получаю <=', response)
       if(response.status === 'ok') {

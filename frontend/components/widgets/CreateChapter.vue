@@ -11,7 +11,7 @@
     </div>
 
     <div class="chapter_team">
-      <multiselect track-by="name" label="name" placeholder="Введите название или выберите из списка"
+      <multiselect track-by="name" label="name" placeholder="Введите название команды или выберите из списка"
         v-model="selectedTeams" 
         :options="teams"
         :multiple="true"

@@ -1,14 +1,33 @@
-import { post } from '~/services/axios'
+import { post, _delete } from '~/services/axios'
 
 /**
  * Manga API service with backend
  */
 
 // Отредактировать пост
-export async function updatePostById(id, data) {
+export async function editPostById(id, data) {
   return await post(`post/${id}`, data)
 }
 
+// Отредактировать главу
+export async function editChapterById(id, data) {
+  return await post(`chapter/${id}`, data)
+}
+
+// Загрузка страниц в главу
+export async function editUploadPages(id, data) {
+  return await post(`chapter/${id}/upload_page`, data)
+}
+
+// Удалить страницу в главе
+export async function editRemovePageInChapter(id, data) {
+  return await post(`chapter/page/${id}/delete`, data)
+}
+
+// Удалить главу целиком
+export async function editRemoveAllChapter(id) {
+  return await _delete(`chapter/${id}/delete`)
+}
 
 // Получить данные для главы
 // export async function createChapterGetInfo(idPost) {

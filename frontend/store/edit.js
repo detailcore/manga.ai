@@ -10,9 +10,9 @@ export const mutations = {
   SET_INFO(state, payload) {
     state.info = payload
   },
-  SET_CHAPTER_TEAMS(state, payload) {
-    state.chapterTeams = payload
-  },
+  // SET_CHAPTER_TEAMS(state, payload) {
+  //   state.chapterTeams = payload
+  // },
   SET_CHAPTERS(state, payload) {
     state.chapters.push(payload)
   },

@@ -64,9 +64,9 @@ export default {
       this.$store.commit('reader/SET_ALIAS', this.$route.params.slug)
     },
     selectPage(e) {
-      const slug = this.$route.params.slug
+      const alias = this.$route.params.alias
       const idChapter = 'ch' + e.target.value
-      this.$router.push({ name: 'slug-id', params: { id: idChapter, slug: slug  } })
+      this.$router.push({ name: 'manga-alias-id', params: { id: idChapter, alias: alias  } })
       this.$store.commit('reader/SET_PAGE_CURRENT', 1) // при перелистывании Глав, отображать 1ю страницу
       this.hide()
     },

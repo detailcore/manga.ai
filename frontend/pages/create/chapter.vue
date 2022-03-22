@@ -1,6 +1,10 @@
 <template>
   <div class="create container">
-    <div class="block__title">Добавление глав в <Nuxt-link :to="alias" class="cancel"> {{ title }} </Nuxt-link></div>
+    <div class="block__title">
+      Добавление глав в 
+      <mdi-MenuRight />
+      <Nuxt-link :to="alias" class="cancel"> {{ title }} </Nuxt-link>
+    </div>
     <div class="block__subtitle"> Загрузка архивами <span>*.zip</span> </div>
     <div class="create__fields">
       <div class="create__fields__input">
@@ -89,22 +93,6 @@ export default {
               duration: 5000,
             })
           }
-
-            // .then((res) => {
-            //   this.$store.commit('create/SET_REMOVE_CHAPTER', id)
-            //   this.$notify({
-            //     text: `Глава ${ch} добавлена`,
-            //     type: 'success',
-            //   })
-            //   console.log(res)
-            // }).catch((err) => {
-            //   this.$notify({
-            //     text: `Во время загрузки главы ${ch} произошла ошибка`,
-            //     type: 'error',
-            //     duration: 5000,
-            //   })
-            //   console.log(err)
-            // })
         } else {
           this.$notify({
             text: `У главы ${ch} не выбран архив для загрузки`,

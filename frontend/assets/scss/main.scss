@@ -45,6 +45,13 @@ input {
   border-style: none;
 }
 
+// Скрыть полностью
+.hidden {
+  opacity: 0;
+  display: none;
+  visibility: hidden;
+}
+
 //*  mdi иконки
 .material-design-icon {
   font-size: 1.5rem;
@@ -138,6 +145,7 @@ input {
 
 .block__title {
   display: flex;
+  align-items: center;
   font-weight: 600;
   font-size: 1.6rem;
   padding: 20px 0px 6px 0px;

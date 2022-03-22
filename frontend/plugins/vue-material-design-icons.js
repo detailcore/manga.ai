@@ -52,6 +52,7 @@ import MenuLeft from 'vue-material-design-icons/MenuLeft.vue';
 import MenuRight from 'vue-material-design-icons/MenuRight.vue';
 import Pencil from 'vue-material-design-icons/Pencil.vue';
 import TrashCan from 'vue-material-design-icons/TrashCan.vue';
+import CloudDownload from 'vue-material-design-icons/CloudDownload.vue';
 
 
 // import DominoMask from 'vue-material-design-icons/DominoMask.vue';
@@ -110,6 +111,7 @@ export default function materialIcons() {
   Vue.component('MdiMenuRight', MenuRight);
   Vue.component('MdiPencil', Pencil);
   Vue.component('MdiTrashCan', TrashCan);
+  Vue.component('MdiCloudDownload', CloudDownload);
 
 
 
