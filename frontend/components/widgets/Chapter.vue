@@ -20,11 +20,11 @@
       </div>
 
       <div class="like_time">
-        <div class="likes">
+        <!-- <div class="likes">
           <mdi-HeartOutline title="Лайков нет" v-if="item.likes == 0" />
           <mdi-CardsHeart title="Лайков" v-else />
           <span>{{ item.likes }}</span>
-        </div>
+        </div> -->
         <div class="time">
           <mdi-ClockOutline title="Дата и время загрузки главы" />
           <span v-html="updateTime(item.updated_at)"></span>

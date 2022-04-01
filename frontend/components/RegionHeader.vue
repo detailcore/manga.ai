@@ -3,7 +3,7 @@
     <div class="header">
       <div class="header__home">
         <Nuxt-link to="/" class="btn"><mdi-Home title="Главная страница" /></Nuxt-link>
-        <Nuxt-link to="/test" class="btn"><mdi-Bookshelf title="Каталог" /></Nuxt-link>
+        <Nuxt-link to="/library" class="btn"><mdi-Bookshelf title="Каталог" /></Nuxt-link>
         <region-search />
         
         <!-- 

@@ -1,30 +1,38 @@
 <template>
-  <div class="item">
+  <div class="library_item">
     <Nuxt-link :to="'/manga/'+alias" class="cover" :style="coverStyle">
-      <!-- <img src="/_nuxt/assets/images/one_pixel.jpg" alt="cover" :srcset="coverUrl"> -->
-      <div class="like">
-        <mdi-CardsHeart /> {{ likes }}
-        <mdi-Star /> {{ rating }}
-      </div>
+      <div class="type"> {{ type }} </div>
       <div class="title"> {{ title }} </div>
     </Nuxt-link>
   </div>
 </template>
 
 <script>
+// import { libraryLoadStory } from '~/services/api'
+
 export default {
   props: {
+    id: { type: Number, required: true },
+    type: { type: String, default: '' },
     alias: { type: String, default: '' },
-    likes: { type: Number, default: 0 },
-    rating: { type: String, default: '0' },
     cover: { type: String, required: true },
-    title: { type: String, required: true },
+    title: { type: String, default: '' },
   },
 
+  // data() {
+  //   return {
+  //     story: {},
+  //   }
+  // },
+
   computed: {
-    coverStyle() {
+    // isEmpty() {
+    //   for (let i in this.story) return false;
+    //   return true;
+    // },
+    coverStyle({ $config: { urlCoverTitle } }) {
       return {
-        backgroundImage: 'url('+this.cover+')'
+        backgroundImage: 'url('+ urlCoverTitle + this.id +'/'+ this.cover +')'
       }
     }
   },
@@ -34,25 +42,29 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.item {
+<style lang="scss" scoped>
+.library_item {
+  width: 25%;
   padding: 12px 6px;
   .cover {
+    position: relative;
+    height: 100%;
+    padding-top: 140%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: 50%;
     &:hover {
       text-decoration: none;
       box-shadow: 0px 10px 10px rgb(0 0 0 / 50%) inset, 0px -10px 10px rgb(0 0 0 / 50%) inset;
     }
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 146px;
-    height: 220px;
-    border-radius: 6px;
-    background-size: cover;
-    background-position: center;
-    // box-shadow: 0 0 40px rgba(0, 0, 0, .5) inset;
-    .like {
-      width: 100%;
+    .type {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 26px;
       display: flex;
       font-weight: 200;
@@ -74,6 +86,10 @@ export default {
       font-weight: 200;
       font-size: 0.95rem;
       box-shadow: 0px -36px 10px rgb(0 0 0 / 50%) inset;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
     }
   }
 }
