@@ -1,71 +1,68 @@
 <template>
   <div class="bookmarks" v-show="tabBookmark">
     <div class="nav-line">
-      <div class="item">Всё <span class="count">287</span></div>
-      <div class="item">Читаю <span class="count">156</span></div>
-      <div class="item">В планах <span class="count">45</span></div>
-      <div class="item">Прочитано <span class="count">287</span></div>
-      <div class="item">Отложено <span class="count">75</span></div>
-      <div class="item">Брошено <span class="count">53</span></div>
-      <div class="item">Не интересно <span class="count">43</span></div>
-      <div class="btn"><mdi-Plus class="add_bookmark" /></div>
+      <div class="item" :class="{ active: tab === 0 }" @click.prevent="selectTab(0)">Всё <span class="count">{{ total }}</span></div>
+      <div class="item" :class="{ active: tab === item.id }" v-for="item in bookmarks" :key="item.id" @click.prevent="selectTab(item.id)">
+        {{ item.name }}
+        <span class="count" v-if="postLoaded"> {{ posts.bookmarksCount[item.id] }} </span>
+      </div>      
+      <!-- <div class="btn"><mdi-Plus class="add_bookmark" /></div> -->
     </div>
 
     <div class="container cards">
-      <Widgets-Card-Popular
-          :cover="item.cover" 
-          :title="item.title" 
-          :like="item.like" 
-          v-for="(item, index) in dataBookmarks" :key="index" />
+      <Widgets-CardLibrary
+        :id="item.id"
+        :type="item.type"
+        :alias="item.alias"
+        :cover="item.cover"
+        :title="item.title"
+        v-for="item in posts.data"
+        :key="item.id" />
+
+      <Pagination :sourceLinks="posts.links" :type="'USER_BOOKMARKS'" v-if="postLoaded" />
     </div>
 
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     tabBookmark: { type: Boolean, default: true },
   },
 
+  data() {
+    return {
+      tab: 0,
+    }
+  },
+
+  fetch() {
+    this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 })
+    if(this.bookmarks.length === 0) this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
+  },
+
   computed: {
-    dataBookmarks() {
-      return [
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 10,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 159,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 17.5,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 150100,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 100800,
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: 'Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!',
-          like: 0,
-        }
-      ]
+    ...mapGetters( 'bookmark', { posts: 'GET_USER_BOOKMARKS' }),
+    ...mapGetters( 'bookmark', { bookmarks: 'GET_BOOKMARK_LIST' }),
+
+    postLoaded() {
+      return this.posts.data ? this.posts.data.length > 0 : false
+    },
+    total() {
+      return this.postLoaded ? this.posts.total : 0
     },
   },
 
   methods: {
+    selectTab(id) {
+      if(this.tab !== +id) {
+        this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: +id })
+      }
+      this.tab = +id
+    },
   },
 };
 </script>
@@ -76,7 +73,13 @@ export default {
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
-      justify-content: space-between;
+      // justify-content: space-between;
+    }
+    .nav-line {
+      .item.active {
+        background-color: rgba(255, 255, 255, 0.12);
+        border-bottom: thin solid rgba(0, 255, 34, 0.25);
+      }
     }
   }
 </style>

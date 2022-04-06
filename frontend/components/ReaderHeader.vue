@@ -21,22 +21,19 @@
       </div>
 
       <div class="header__control">
-        <div class="btn">
-          <mdi-BookmarkPlus title="Добавить закладку" v-if="true" />
-          <mdi-BookmarkMinus title="Удалить закладку" v-else />
-        </div>
-        <span> | </span>
-        <Nuxt-link to="/test" class="btn"><mdi-BookmarkMultiple title="Закладки" /></Nuxt-link>
+        <ListBookmark v-if="1" :id_chapter="idChapter" :id_post="idPost" />
+        <!-- <span class="divider"> | </span> -->
         <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />
         </div> -->
-        <div class="btn">
-          <mdi-Account title="Пользователь" />
-        </div>
-        <span> | </span>
         <div class="btn" @click="openHideSetting">
           <mdi-Cog title="Настройки" />
         </div>
+        <!-- <span class="divider"> | </span> -->
+        <Region-User />
+        <!-- <div class="btn">
+          <mdi-Account title="Пользователь" />
+        </div> -->
         
       </div>
     </div>
@@ -49,6 +46,7 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters( 'reader', { post: 'GET_POST' }),
+    ...mapGetters( 'reader', { idPost: 'GET_ID_POST' }),
     ...mapGetters( 'reader', { name: 'GET_CHAPTER_NAME' }),
     ...mapGetters( 'reader', { isOpen: 'GET_OPEN_SETTING' }),
 
@@ -58,6 +56,9 @@ export default {
 
     title() {
       return (this.post.title_rus) ? this.post.title_rus : this.post.title_eng
+    },
+    idChapter() {
+      return this.$route.params.id ? +this.$route.params.id.replace('ch', '') : undefined
     },
   },
 
@@ -91,6 +92,9 @@ export default {
       &__home,
       &__control {
         @include flex_center_center;
+        .divider {
+          padding: 0 6px;
+        }
       }
     }
   }

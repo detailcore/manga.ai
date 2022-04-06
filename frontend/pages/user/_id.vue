@@ -38,7 +38,7 @@ export default {
 
   async asyncData({ store, route }) {
     const idUser = +route.params.id
-    await store.dispatch('user/FETCH_USER', idUser) // получить текущую главу
+    store.dispatch('user/FETCH_USER', idUser)
   },
 
   computed: {

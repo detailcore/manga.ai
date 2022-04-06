@@ -22,6 +22,7 @@
       <mdi-Magnify />
       <mdi-Star />
       <mdi-MenuDown />
+      <mdi-MenuUp />
       <mdi-ImageText />
       <mdi-FormatListNumbered />
       <mdi-Image />

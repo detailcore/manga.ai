@@ -13,20 +13,7 @@
                 <mdi-BookOpenPage title="Читать" />
                 <span>Читать</span>
               </div>
-              <div class="item" @click="openBookmark" v-click-outside="close">
-                <mdi-BookmarkPlus title="Добавить в закладки" />
-                <span>В закладки</span>
-                <mdi-MenuDown class="arrow" />
-              </div>
-              <div class="bookmark__list" v-show="showBookmarkList">
-                <span class="item">Читаю</span>
-                <span class="item">В планах</span>
-                <span class="item">Прочитано</span>
-                <span class="item">Отложено</span>
-                <span class="item">Брошено</span>
-                <span class="item">Не интересно</span>
-                <span class="item del">Удалить</span>
-              </div>
+              <ListBookmark v-if="loggedIn" :id_post="idPost" />
             </div>            
           </div>
           <div class="cover__translation">
@@ -58,18 +45,18 @@
             <span class="count">{{ data.rating.avg }}</span>
             <span class="vote">{{ data.rating.amount }}</span>
           </div>
-          <div class="item">
+          <!-- <div class="item">
             <mdi-CardsHeart title="" />
             <span class="count">XXXXX</span>
-          </div>
-          <div class="item">
+          </div> -->
+          <!-- <div class="item">
             <mdi-Eye title="" />
             <span class="count">{{ data.views }}</span>
-          </div>
-          <div class="item">
+          </div> -->
+          <!-- <div class="item">
             <mdi-BookmarkMultiple title="" />
             <span class="count">XXXXX</span>
-          </div>
+          </div> -->
         </div>
 
         <div class="btn_action">
@@ -139,14 +126,9 @@ export default {
     await store.dispatch('post/FETCH_POST', params.alias)
   },
 
-  data() {
-    return {
-      showBookmarkList: false,
-    }
-  },
-
   computed: {
     ...mapGetters( 'post', { data: 'GET_POST' }),
+    ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
 
     title() {
       return this.data.title_rus ? this.data.title_rus : this.data.title_eng
@@ -173,22 +155,10 @@ export default {
     },
     chapterCount() {
       return this.data.chapter_count ? this.data.chapter_count : 0
-    }
-  },
-
-  methods: {
-    async openBookmark() {
-      this.showBookmarkList = !this.showBookmarkList
-      console.log(
-        'qwe qwe qwe'
-      );
-      // const testData = await this.$axios.$get(`post`)
     },
-
-    close() {
-      this.showBookmarkList = false
+    loggedIn() {
+      return this.$store.state.auth.loggedIn
     },
-    
   },
 }
 </script>
@@ -233,31 +203,6 @@ export default {
         .cover__btn {
           .btn_action {
             position: relative;
-          }
-          .bookmark__list{
-            display: flex;
-            background-color: #121212;
-            border-radius: 6px;
-            padding: 0px 4px;
-            flex-direction: column;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 2;
-            border: thin solid rgba(255, 255, 255, 0.12);
-            .item {
-              &:hover {
-                border: thin solid rgb(0 255 0 / 25%);
-              }
-            }
-            .del {
-              border-bottom: thin solid rgb(255 0 0 / 50%);
-              transition-duration: .35s;
-              &:hover {
-                border: thin solid rgb(255 0 0 / 65%);
-              }
-            }
           }
         }
         .cover__translation {
@@ -445,8 +390,6 @@ export default {
           }
           .material-design-icon {
             margin-right: 8px;
-          }
-          span {
           }
         }
       }

@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <paginator v-if="pagination.pageMax > 1" />
+      <Paginator v-if="pagination.pageMax > 1" />
 
       <div class="result" v-if="content.length > 0">
         <div class="items" v-if="type === 'manga'">
@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <paginator v-if="pagination.pageMax > 1" />
+      <Paginator v-if="pagination.pageMax > 1" />
     </div>
 
   </div>

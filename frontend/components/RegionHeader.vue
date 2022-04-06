@@ -4,32 +4,19 @@
       <div class="header__home">
         <Nuxt-link to="/" class="btn"><mdi-Home title="Главная страница" /></Nuxt-link>
         <Nuxt-link to="/library" class="btn"><mdi-Bookshelf title="Каталог" /></Nuxt-link>
-        <region-search />
-        
-        <!-- 
-        <mdi-Bookshelf />
-        <mdi-ThemeLightDark />
-        <mdi-BookmarkMultiple />
-        <mdi-Bell />
-        <mdi-Account />
-        <mdi-Close />
-        <mdi-AccountDetails />
-        <mdi-DiceMultiple />
-        <mdi-Logout />
-        <mdi-CardsHeart />
-        <mdi-Magnify />
-        <mdi-Star />
-        -->
+
+        <Region-Search />
+
       </div>
       <div class="header__control">
-        <div class="btn">
+        <!-- <div class="btn">
           <mdi-ThemeLightDark title="Переключить цветовую тему сайта" />
-        </div>
-        <Nuxt-link to="/test" class="btn"><mdi-BookmarkMultiple title="Закладки" /></Nuxt-link>
+        </div> -->
+        <!-- <Nuxt-link to="/test" class="btn"><mdi-BookmarkMultiple title="Закладки" /></Nuxt-link> -->
         <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />
         </div> -->
-        <region-user />
+        <Region-User />
       </div>
     </div>
   </header>

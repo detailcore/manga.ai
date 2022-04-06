@@ -34,12 +34,6 @@ export default {
   methods: {
     async setGenre() {
       this.$store.commit('library/SET_FILTER_SELECTED', { id: this.id, type: this.type, value: this.selectedValue })
-      // console.log({
-      //   id: this.id,
-      //   type: this.type,
-      //   value: this.selectedValue,
-      //   name: this.name,
-      // });
     },
   },
 }
@@ -48,7 +42,7 @@ export default {
 <style lang="scss">
 .checkbox {
   position: relative;
-  margin: 5px 10px;
+  margin: 5px 10px !important;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;

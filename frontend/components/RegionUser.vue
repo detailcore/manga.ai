@@ -266,7 +266,7 @@ export default {
     position: relative;
     .user__modal {
       @include modal;
-      z-index: 2;
+      z-index: 11;
       right: 0;
       top: 36px;
       width: 256px;
@@ -278,6 +278,7 @@ export default {
         display: flex;
         margin-bottom: 6px;
         flex-direction: row;
+        align-items: center;
         .avatar {
           width: 60px;
           height: 60px;
@@ -288,10 +289,9 @@ export default {
           justify-content: center;
         }
         .login {
-          display: flex;
-          align-items: center;
-          padding-left: 10px;
           width: calc(100% - 70px);
+          padding-left: 8px;
+          overflow: hidden;
         }
       }
       .links {
@@ -326,7 +326,7 @@ export default {
   .login__modal {
     top: 0;
     right: 0;
-    z-index: 2;
+    z-index: 11;
     padding: 6px;
     min-width: 300px;
     position: absolute;

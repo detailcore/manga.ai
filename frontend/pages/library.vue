@@ -248,7 +248,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container_fullh {
   min-height: 100%;
   min-height: calc(100vh - 165px);
