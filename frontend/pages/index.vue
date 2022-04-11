@@ -1,38 +1,58 @@
 <template>
   <div class="container">
-    <line-popular />
+    <Line-Popular />
     <div class="main__content">
       <div class="content">
         <div class="block__title">Новые главы</div>
-        <widgets-card-latest v-for="(item, index) in dataResult" :key="index"
+
+        <Widgets-CardLatest v-for="(item, index) in latestData" :key="index"
           :id="item.id"
           :alias="item.alias"
-          :rank="item.adult_rank.name"
-          :category="item.type.name"
-          :chapter="item.new_chapter[0]"
-          :more="item.amount_chapters.amount-1"
-          :cover="item.cover.low"
-          :rating="item.rating.avg"
-          :title="item.title_rus" />
+          :rank="item.adult_rank"
+          :category="item.type"
+          :chapter="item.new_chapter"
+          :more="item.amount_chapters"
+          :cover="item.cover"
+          :rating="item.rating"
+          :title="item.title" />
+
+        <div class="more" v-if="home.nextPageUrl !== null">
+          <span class="more__button" @click.prevent="loadMore">Показать еще</span>
+        </div>
       </div>
-      <region-side :newReleases='newReleases' :topReleases='topReleases' />
+
+      <RegionSide :newReleases='newReleases' :topReleases='topReleases' />
     </div>
 
   </div>
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex"
+
 export default {
-  async asyncData({ $axios }) {
-    const latestData = await $axios.$get('/home')
-    const newReleases = await $axios.$get('/home/releases/new')
-    const topReleases = await $axios.$get('/home/releases/top')
-    return { latestData, newReleases, topReleases }
+  async asyncData({ store }) {
+    if(
+      store.state.home.new.length === 0 || 
+      (Math.floor(new Date().getTime()/1000.0) >= store.state.home.created_at + 600) // 10 min
+    ) {
+      store.dispatch('home/FETCH_NEW')
+      store.dispatch('home/FETCH_TOP')
+      store.dispatch('home/FETCH_LATEST')
+      store.commit('home/SET_TIME', Math.floor(new Date().getTime()/1000.0))
+    }
   },
 
   computed: {
-    dataResult() {
-      return this.latestData.data
+    ...mapState(['home']),
+    ...mapGetters('home', { newReleases: 'GET_NEW' }),
+    ...mapGetters('home', { topReleases: 'GET_TOP' }),
+    ...mapGetters('home', { latestData: 'GET_LATEST' }),
+  },
+
+  methods: {
+    loadMore() {
+      this.$store.dispatch('home/FETCH_LATEST')
     },
   },
 }
@@ -49,6 +69,9 @@ export default {
     padding: 4px;
     width: 66.666667%;
     max-width: 66.666667%;
+    .more {
+      @include btn_line_full;
+    }
   }
   .side {
     padding: 4px;

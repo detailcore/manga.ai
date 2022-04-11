@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="'/'+alias" class="chapter item">
+  <nuxt-link :to="'/manga/'+alias" class="chapter item">
     <div class="cover" :style="styleCover">
       <div class="rank" v-show="rank !== 'Нет'"> {{ rank }} </div>
       <div class="cat"> {{ category }} </div>
@@ -8,7 +8,7 @@
       <div class="title"> {{ title }} </div>
       <div class="chapter">
         Том {{ chapter.volume }}. Глава {{ chapter.chapter }}. {{ chapter.name }}
-        <span v-show="more">+ еще {{ more }}</span>
+        <span v-show="more > 0">+ еще {{ more }}</span>
       </div>
       <div class="update"> {{ updateTime }} </div>
       <div class="rating"> {{ ratingFixed }} </div>

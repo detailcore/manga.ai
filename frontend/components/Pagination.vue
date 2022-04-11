@@ -22,6 +22,8 @@ import { get } from '~/services/axios'
 export default {
   props: {
     type: { type: String, default: () => '' },
+    sort: { type: String, default: () => '' },
+    prefix: { type: String, default: () => '' },
     sourceLinks: { type: Array, default: () => [] },
   },
 
@@ -39,26 +41,37 @@ export default {
 
   methods: {
     nextPage () {
-      if (this.nextUrl) this.loadContent(this.nextUrl)
+      if (this.nextUrl) this.loadContent(this.nextUrl, this.prefix, this.sort)
     },
 
     prevPage () {
-      if (this.prevUrl) this.loadContent(this.prevUrl)
+      if (this.prevUrl) this.loadContent(this.prevUrl, this.prefix, this.sort)
     },
 
     loadPage(url) {
-      if(url !== null) this.loadContent(url)
+      if(url !== null) this.loadContent(url, this.prefix, this.sort)
     },
 
-    async loadContent(url) {
-      let res = await get(url)
+    async loadContent(url, prefix='', sort='') {
+      let res = undefined
+      if(prefix === '' && sort === '') {
+        res = await get(url)
+      } 
+      if(prefix !== '') {
+        res = await get(prefix + url)
+      }
+      if(sort !== '') {
+        res = await get(url + `&order=${sort}`)
+      }
+
       if(this.type === 'USER_BOOKMARKS') this.$store.commit('bookmark/SET_USER_BOOKMARKS', res) // страница профиля пользователя
+      if(this.type === 'POST_CHAPTER_LIST') this.$store.commit('post/SET_CHAPTERS', { res, id: this.$store.state.post.idByChapter }) // Список глав в FullStory
     },
   },
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .pagination {
     width: 100%;
     margin: 12px 0;

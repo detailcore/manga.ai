@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from "vuex"
 import { libraryGetFilter } from '~/services/api'
 
 export default {

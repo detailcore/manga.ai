@@ -69,7 +69,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .pagination {
     display: flex;
     margin: 12px 0;

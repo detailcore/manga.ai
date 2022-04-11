@@ -9,8 +9,8 @@
           <img :alt="title" :srcset="urlCover">
           <div class="cover__btn">
             <div class="btn_action">
-              <div class="item">
-                <mdi-BookOpenPage title="Читать" />
+              <div class="item" @click.prevent="readFirstChapter" v-if="chapterCount">
+                <mdi-BookOpenPage title="Читать с первой главы" />
                 <span>Читать</span>
               </div>
               <ListBookmark v-if="loggedIn" :id_post="idPost" />
@@ -68,20 +68,20 @@
             <mdi-FormatListNumbered title="" />
             <span>Главы ({{ chapterCount }})</span>
           </Nuxt-link>
-          <Nuxt-link class="item" to="?page=related">
+          <!-- <Nuxt-link class="item" to="?page=related">
             <mdi-FormatListText title="" />
             <span>Связанные</span>
-          </Nuxt-link>
+          </Nuxt-link> -->
           <Nuxt-link class="item" to="?page=comments">
             <mdi-CommentMultiple title="" />
-            <span>Комментарии</span>
+            <span>Комментарии ({{ commentCount }})</span>
           </Nuxt-link>
-          <span v-if="0">
+          <!-- <span v-if="0">
             <Nuxt-link class="item" to="?page=covers">
               <mdi-Image title="" />
               <span>Обложки</span>
             </Nuxt-link>
-          </span>
+          </span> -->
         </div>
 
         <div class="information" v-if="page === ''">
@@ -90,8 +90,8 @@
             <span class="item">{{ data.year }}</span>
           </div>
           <div class="line">
-            <span class="item ongoing" v-show="data.status_of_releases">{{ data.status_of_releases ? data.status_of_releases.name : '' }}</span>
-            <span class="item" v-show="data.status_of_translation">перевод: {{ data.status_of_translation ? data.status_of_translation.name : '' }}</span>
+            <span class="item ongoing" v-show="data.status_of_releases">Выпуск: {{ data.status_of_releases ? data.status_of_releases.name : '' }}</span>
+            <span class="item" v-show="data.status_of_translation">Перевод: {{ data.status_of_translation ? data.status_of_translation.name : '' }}</span>
           </div>
           <div class="line tags" v-show="data.genres.length > 0">
             <div class="item" v-for="genre of data.genres" :key="genre.name">
@@ -104,13 +104,13 @@
         </div>
 
 
-        <list-chapters v-if="page === 'chapters'" :id='data.id' />
+        <List-Chapters v-if="page === 'chapters' && chapterCount > 0" :id='data.id' />
 
-        <list-relateds class="relateds_list" v-if="page === 'related'" :id='data.id' />
+        <!-- <List-Relateds class="relateds_list" v-if="page === 'related'" :id='data.id' /> -->
 
-        <list-comments class="comments" v-if="page === 'comments'" />
+        <List-Comments class="comments" v-if="page === 'comments'" />
 
-        <list-covers class="covers" v-if="page === 'covers'" />
+        <!-- <List-Covers class="covers" v-if="page === 'covers'" /> -->
 
       </div>
     </div>
@@ -123,7 +123,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   async asyncData({ store, params }) {
-    await store.dispatch('post/FETCH_POST', params.alias)
+    if(params.alias !== store.state.post.post.alias) await store.dispatch('post/FETCH_POST', params.alias)
   },
 
   computed: {
@@ -141,23 +141,34 @@ export default {
       return this.data.cover ? urlCoverTitle + this.data.id +'/'+ this.data.cover : ''
     },
     styleCover() {
-      if (this.data.cover) {
-        return {
+      return this.data.cover ? 
+        {
           fontSize: 0,
           backgroundImage: `url(${this.urlCover})`
-        }
-      } else {
-        return {
+        } : {
           backgroundImage: 'none'
         }
-      }
-
     },
     chapterCount() {
       return this.data.chapter_count ? this.data.chapter_count : 0
     },
+    commentCount() {
+      return this.data.comment_count ? this.data.comment_count : 0
+    },
     loggedIn() {
       return this.$store.state.auth.loggedIn
+    },
+  },
+
+  methods: {
+    readFirstChapter() {
+      this.$router.push({
+        name: 'manga-alias-id',
+        params: { 
+          id: 'ch' + this.data.chapter_first,
+          alias: this.data.alias,
+         }
+      })
     },
   },
 }

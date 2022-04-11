@@ -12,7 +12,7 @@
     </div> -->
 
     
-    <div class="comment__list">
+    <div class="comment__list" v-if="!isEmpty">
       <Widgets-Comment v-for="(item, index) in comments" :key="index"
         :id="item.id"
         :id_root="item.root_id"
@@ -36,10 +36,12 @@ import { mapGetters } from 'vuex'
 
 export default {
   async fetch() {
-    await this.$store.dispatch('comments/FETCH_COMMENTS', { 
-      page_id: this.idPost, 
-      commentable_id: this.idPost
+    if(!this.isEmpty) {
+      this.$store.dispatch('comments/FETCH_COMMENTS', { 
+        page_id: this.idPost, 
+        commentable_id: this.idPost
       })
+    }
   },
 
   // data() {
@@ -54,12 +56,15 @@ export default {
   // },
 
   computed: {
-    ...mapGetters( 'post', { post: 'GET_POST' }),
     ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
     ...mapGetters( 'comments', { comments: 'GET_COMMENTS' }),
+
+    isEmpty() {
+      return this.$store.state.post.post.comment_count <= 0
+    },
   },
 
-  methods: {
+  // methods: {
     // loadMore() {},
 
     // filter(arr, str) {
@@ -67,7 +72,7 @@ export default {
     //     .map(n => ({ ...n, children: this.filter(n.children, str) }))
     //     .filter(n => n.name.includes(str) || n.children.length);
     // },
-  },
+  // },
 };
 </script>
 
