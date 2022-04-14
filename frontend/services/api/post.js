@@ -26,3 +26,13 @@ export async function chaptersGetById(id_post, sort, page) {
 export async function setComplaint(params) {
     return await post(`complaint/${params}`)
 }
+
+//* Поиск постов по названиям
+export async function postSearchByTitles(title, lang) {
+    return await get(`posts/search/?lang=${lang}&q=${title}`)
+}
+
+//* Выстовить/изменить рейтинг публикации
+export async function postSetRating(data) {
+    return await post(`post/${data.id}/rating`, data)
+}

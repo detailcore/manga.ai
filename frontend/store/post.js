@@ -25,36 +25,45 @@ export const mutations = {
     state.idByRelated = payload.id
     state.relatedsAndSimilars = payload.data
   },
+  SET_RATING(state, payload) {
+    if(payload.oldRate === null && +payload.newRate !== 0) {
+      state.post.rating.amount++
+      state.post.rating.your = +payload.newRate
+      state.post.rating[`star_count${+payload.newRate}`]++
+    } 
+    if(payload.oldRate !== null && +payload.newRate !== 0) {
+      state.post.rating[`star_count${+payload.oldRate}`]--
+      state.post.rating[`star_count${+payload.newRate}`]++
+      state.post.rating.your = +payload.newRate
+    }
+    if(+payload.newRate === 0) {
+      state.post.rating.amount--
+      state.post.rating.your = null
+      state.post.rating[`star_count${+payload.oldRate}`]--
+    }
+
+    let sum = 0
+    for (let i = 1; i <= 5; i++) { // 5 - пятизвёздочный
+      let el = state.post.rating[`star_count${i}`]
+      sum += (el * i)
+    }
+    state.post.rating.avg = (sum / state.post.rating.amount).toFixed(4)
+  },
 }
 
 export const actions = {
   async FETCH_POST({ commit }, params) {
-    try {
-      const res = await postGetByAlias(params)
-      commit('SET_POST', res)
-
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await postGetByAlias(params)
+    commit('SET_POST', res)
   },
   async FETCH_CHAPTERS({ commit }, { id, sort, page }) {
-    try {
-      const res = await chaptersGetById(id, sort, page)
-      commit('SET_CHAPTERS', {res, id})
-
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await chaptersGetById(id, sort, page)
+    commit('SET_CHAPTERS', {res, id})
   },
   async FETCH_RELATED({ commit }, params) {
-    try {
-      console.log(123)
-      const res = await relatedGetById(params)
-      commit('SET_RELATED', { data: res, id: params })
-
-    } catch (err) {
-      console.log(err)
-    }
+    console.log(123)
+    const res = await relatedGetById(params)
+    commit('SET_RELATED', { data: res, id: params })
   },
 }
 

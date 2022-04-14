@@ -7,16 +7,18 @@
       <input type="search" class="input_search"
         autocomplete="off"
         v-model.trim="query"
-        placeholder="Поиск по названию">
+        placeholder="Поиск по названию (RUS/ENG)"
+        @input="throttledSend"
+        ref="search">
       <div class="btn close" @click="close">
         <mdi-Close title="Закрыть поиск" />
       </div>
-      <div class="result">
-        <div v-for="(item, index) in searchResult" class="item" :key="index">
+      <div class="result" v-show="searchResult.length > 0">
+        <div v-for="(item, index) in searchResult" class="item" :key="index" @click="goTitle(item.alias)">
           <img :src="item.cover" alt="cover item">
           <div class="desc">
-            <div v-show="item.title.rus.length > 0" class="title">{{ item.title.rus }}</div>
-            <div v-show="item.title.rus.length > 0" class="title">{{ item.title.eng }}</div>
+            <div class="title">{{ item.title }}</div>
+            <div class="category">{{ item.type }} ({{ item.year }})</div>
           </div>
         </div>
       </div>
@@ -25,9 +27,14 @@
 </template>
 
 <script>
+import throttle from 'lodash.throttle'
+import { isCyrillic } from '~/services/util'
+import { postSearchByTitles } from '~/services/api'
+
 export default {
   data() {
     return {
+      lang: '',
       query: '',
       result: [],
       isOpen: false,
@@ -36,33 +43,37 @@ export default {
 
   computed: {
     searchResult() {
-      return this.result = [
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: {
-            rus: `Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!`,
-            eng: `It's Difficult to Love an Otaku`
-          }
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: {
-            rus: `Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!`,
-            eng: `It's Difficult to Love an Otaku`
-          }
-        },
-        {
-          cover: '/_nuxt/assets/images/mid_cover.jpg',
-          title: {
-            rus: `Я отправился в другой мир, чтобы обрести бессмертие с помощью науки и технологий!`,
-            eng: `It's Difficult to Love an Otaku`
-          }
-        },
-      ]
+      return this.result
+    },
+    throttledSend() {
+      return throttle(this.sendSearch, 1200)
     },
   },
 
   methods: {
+    async sendSearch() {
+      this.lang = isCyrillic(this.query.replace(/[^a-zа-яё]/gi, '')) ? 'ru' : 'en'
+      if(this.query.length > 2) {
+        let tmp = await postSearchByTitles(this.query, this.lang)
+        this.result = tmp.filter(item => {
+          let cover = item.cover ? item.cover.low + '.webp' : false
+          item.title = item.title_rus ? item.title_rus : (item.title_eng ? item.title_eng : '')
+          item.cover = cover ? this.$config.urlCoverTitle + item.id + '/' + cover : ''
+          item.type = item.type ? item.type.name : ''
+
+          return item
+        })
+      }
+    },
+    goTitle(alias) {
+      this.$router.push({
+        name: 'manga-alias',
+        params: {
+          alias: alias,
+         }
+      })
+      this.close()
+    },
     openSearch() {
       this.isOpen = !this.isOpen
     },
@@ -101,11 +112,15 @@ export default {
         top: 0;
       }
       .result {
+        @include scroll_bar;
         @include modal;
+        position: absolute !important;
         width: inherit;
         top: 40px;
         left: 0;
         z-index: 1;
+        overflow-y: auto;
+        max-height: 90vh;
         .item {
           cursor: pointer;
           padding: 8px;
@@ -113,7 +128,7 @@ export default {
           display: flex;
           position: relative;
           align-items: center;
-          justify-content: space-between;
+          // justify-content: space-between;
           img {
             width: 60px;
             border-radius: 4px;
@@ -123,13 +138,16 @@ export default {
             height: inherit;
             padding-left: 6px;
             flex-direction: column;
-            justify-content: space-evenly;
+            justify-content: center;
             .title {
               overflow: hidden;
               display: -webkit-box;
-              -webkit-line-clamp: 2;
+              -webkit-line-clamp: 3;
               text-overflow: ellipsis;
               -webkit-box-orient: vertical;
+            }
+            .category {
+              color: #919191;
             }
           }
           &:last-child:before {

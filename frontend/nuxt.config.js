@@ -163,6 +163,7 @@ export default {
 
   // .env config
   publicRuntimeConfig: {
+    urlManga: '/manga/',
     urlCoverUser: process.env.FILES_DOMAIN + 'users/',
     urlCoverTeam: process.env.FILES_DOMAIN + 'teams/',
     urlCoverTitle: process.env.FILES_DOMAIN + 'titles/',

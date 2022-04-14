@@ -12,7 +12,7 @@ export const state = () => ({
 export const mutations = {
   SET_POSTS(state, { data, add }) {
     // data = Array.isArray(data) ? data : Object.values(data)
-    let qwe = data.filter(item => {
+    let tmp = data.filter(item => {
       item.title = item.title_rus ? item.title_rus : (item.title_eng ? item.title_eng : '')
       item.cover = item.cover ? item.cover.mid + '.webp' : ''
       item.type = item.type ? item.type.name : ''
@@ -22,12 +22,12 @@ export const mutations = {
     })
 
     if(add) {
-      qwe.filter(item => {
+      tmp.filter(item => {
         state.posts.push(item)
       })
       
     } else {
-      state.posts = qwe
+      state.posts = tmp
     }
   },
   SET_LAST_PAGE(state, payload) {

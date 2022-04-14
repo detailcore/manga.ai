@@ -9,9 +9,9 @@
     </div>
 
     <div class="user__modal" v-if="isOpen">
-      <div class="info">
+      <div class="info" @click="goToProfile">
         <div class="avatar" :style="styleAvatar">N/A</div>
-        <Nuxt-link :to="`/user/${userData.id}`" class="login"> {{ userData.login }} </Nuxt-link>
+        <div class="login"> {{ userData.login }} </div>
       </div>
       <div class="links">
         <Nuxt-link class="link" to="/moderation?type=manga&statuses=2" v-if="isAdmin">
@@ -22,10 +22,6 @@
           <div class="link_text">Выход</div>
           <mdi-Logout title="Выход" />
         </a>
-        <!-- <Nuxt-link to="test" class="link">
-          <div class="link_text">Выход</div>
-          <mdi-Logout title="Выход" />
-        </Nuxt-link> -->
       </div>
     </div>
 
@@ -201,6 +197,15 @@ export default {
   },
 
   methods: {
+    goToProfile() {
+      this.$router.push({
+        name: 'user-id',
+        params: {
+          id: this.userData.id,
+         }
+      })
+      this.close()
+    },
     async login() {
       await this.$auth.loginWith('laravelSanctum', {
         data: {
@@ -276,6 +281,7 @@ export default {
 
       .info {
         display: flex;
+        cursor: pointer;
         margin-bottom: 6px;
         flex-direction: row;
         align-items: center;
@@ -289,9 +295,9 @@ export default {
           justify-content: center;
         }
         .login {
-          width: calc(100% - 70px);
           padding-left: 8px;
           overflow: hidden;
+          max-width: calc(100% - 70px);
         }
       }
       .links {
@@ -314,8 +320,6 @@ export default {
           }
           &:before {
             @include before;
-          }
-          .link_text {
           }
         }
       }

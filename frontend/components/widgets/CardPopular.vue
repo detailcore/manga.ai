@@ -28,13 +28,10 @@ export default {
       }
     }
   },
-
-  methods: {
-  },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .item {
   padding: 12px 6px;
   .cover {

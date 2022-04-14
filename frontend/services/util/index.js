@@ -51,3 +51,30 @@ export function getCookie(name) {
   ));
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
+
+
+/**
+ * Определить язык ввода, рус или другой
+ * @param  {String}  text
+ * @return {Boolean} 
+ */
+export function isCyrillic(text) {
+  return /[а-яё]/i.test(text)
+}
+
+
+/**
+ * Уведомление от сервера (всплывашка)
+ * @param  {Object}  { status: 'ok', msg: 'text' }
+ * @return {Object}  { text: 'str', type: 'success' }
+ */
+export function notify(res) {
+  switch (res.status) {
+    case 'ok':
+      return { text: res.msg, type: 'success' }
+    case 'warn':
+      return { text: res.msg, type: 'warn' }
+    case ('error' || 'failed'):
+      return { text: res.msg, type: 'error' }
+  }
+}

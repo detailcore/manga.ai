@@ -28,7 +28,7 @@ export default {
     ...mapGetters( 'post', { chapters: 'GET_CHAPTERS' }),
 
     isLoaded() {
-      return this.chapters.data ? this.chapters.data.length > 0 : false
+      return this.chapters.data ? (this.chapters.data.length > 0 && this.chapters.last_page > 1) : false
     },
     idPost() {
       return this.$store.state.post.idByChapter

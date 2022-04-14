@@ -68,6 +68,9 @@ export default {
     height: 114px;
     font-size: 0.9rem;
     position: relative;
+    border-radius: 6px 0px 0px 6px;
+    background-size: cover;
+    background-position: center;
     .rank {
       padding: 2px;
       max-width: 30px;

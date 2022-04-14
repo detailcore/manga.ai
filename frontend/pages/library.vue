@@ -3,6 +3,9 @@
     <div class="search-results">
       <div class="block__title"> Библиотека </div>
       <div class="search-list">
+        <div class="notice" v-show="emptyResult">
+          По вашему запросу ничего не найдено!
+        </div>
         <Widgets-CardLibrary
           :id="item.id"
           :type="item.type"
@@ -174,6 +177,9 @@ export default {
     currentYear() {
       return new Date().getFullYear()
     },
+    emptyResult() {
+      return this.posts.length === 0 && this.lastPage
+    },
   },
 
   methods: {
@@ -266,6 +272,9 @@ export default {
     .more {
       @include btn_line_full;
     }
+    .notice {
+      @include notice_inline;
+    }
   }
   .search-filter {
     overflow: hidden;
@@ -353,7 +362,7 @@ export default {
             width: calc(50% - 16px);
           }
         }
-        &.two-columns {
+        .two-columns {
           display: flex;
           overflow: inherit;
           flex-wrap: wrap;

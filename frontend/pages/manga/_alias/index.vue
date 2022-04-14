@@ -35,25 +35,31 @@
             {{ data.title_orig }} <span v-show="data.title_alt"> / {{ data.title_alt }}</span>
           </span>
         </div>
-        <div class="description" v-show="page === ''">
+        <div class="description">
           {{ data.description }}
         </div>
         
         <div class="stat">
-          <div class="item rating">
-            <mdi-Star title="" />
+          <div class="item rating" v-if="isRatingEmpty" @click="openModalRating">
+            <mdi-Star title="Рейтинг" />
+            <span class="count"> Оценить </span>
+            <span class="vote"> (рейтинг скрыт, недостаточно оценок) </span>
+          </div>
+          <div class="item rating" v-else @click="openModalRating">
+            <mdi-Star title="Рейтинг" />
             <span class="count">{{ data.rating.avg }}</span>
             <span class="vote">{{ data.rating.amount }}</span>
+            <span class="your" v-show="yourRate !== null"> Оценено на: {{ yourRate }} </span>
           </div>
           <!-- <div class="item">
             <mdi-CardsHeart title="" />
             <span class="count">XXXXX</span>
-          </div> -->
-          <!-- <div class="item">
+          </div>
+          <div class="item">
             <mdi-Eye title="" />
             <span class="count">{{ data.views }}</span>
-          </div> -->
-          <!-- <div class="item">
+          </div>
+          <div class="item">
             <mdi-BookmarkMultiple title="" />
             <span class="count">XXXXX</span>
           </div> -->
@@ -115,15 +121,41 @@
       </div>
     </div>
 
+
+    <div class="modal" v-if="openSetRating">
+      <div class="title"> Выставить оценку </div>
+      <div class="stars">
+        <mdi-Star title="1" @click="setRating(1)" />
+        <mdi-Star title="2" @click="setRating(2)" />
+        <mdi-Star title="3" @click="setRating(3)" />
+        <mdi-Star title="4" @click="setRating(4)" />
+        <mdi-Star title="5" @click="setRating(5)" />
+      </div>
+      <div class="your_rate" v-show="yourRate !== null">
+        Ваша оценка: {{ yourRate }} <mdi-TrashCan title="Удалить оценку" @click="setRating(0)" />
+      </div>
+    </div>
+
+    <div class="background__close" :class="{ hidden: !openSetRating }" @click="close"></div>
+
+    <notifications />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { notify } from '~/services/util'
+import { postSetRating } from '~/services/api'
 
 export default {
   async asyncData({ store, params }) {
     if(params.alias !== store.state.post.post.alias) await store.dispatch('post/FETCH_POST', params.alias)
+  },
+
+  data() {
+    return {
+      openSetRating: false,
+    }
   },
 
   computed: {
@@ -158,9 +190,46 @@ export default {
     loggedIn() {
       return this.$store.state.auth.loggedIn
     },
+    yourRate() {
+      return this.data.rating ? this.data.rating.your : null
+    },
+    isRatingEmpty() {
+      return this.data.rating ? this.data.rating.amount < 10 : false
+    },
+    isSingle() {
+      return this.data.rating ? this.data.formats.map(item => item.id === 6).includes(true) : false
+    },
   },
 
   methods: {
+    async setRating(num) {
+      this.close()
+      if(+num !== +this.yourRate) {
+        let res = await postSetRating({ id: +this.idPost, value: +num })
+        this.$notify(notify(res))
+      }
+      this.$store.commit('post/SET_RATING', { newRate: +num, oldRate: this.yourRate })
+    },
+
+    openModalRating() {
+      if(!this.loggedIn) {
+        this.$notify({
+          title: 'Войдите в аккаунт!',
+          text: 'Для выстевления оценки тайтлу необходимо выполнить вход в аккаунт!',
+          type: 'error'
+        })
+        return false
+      }
+      if(this.chapterCount <= 1 && !this.isSingle ) {
+        this.$notify({
+          text: 'Недостаточно глав для оценки',
+          type: 'error',
+        })
+        return false
+      }
+      this.openSetRating = !this.openSetRating
+    },
+
     readFirstChapter() {
       this.$router.push({
         name: 'manga-alias-id',
@@ -169,6 +238,10 @@ export default {
           alias: this.data.alias,
          }
       })
+    },
+
+    close() {
+      this.openSetRating = false
     },
   },
 }
@@ -216,8 +289,8 @@ export default {
             position: relative;
           }
         }
-        .cover__translation {
-        }
+        // .cover__translation {
+        // }
       }
       .block__information {
         width: 100%;
@@ -251,16 +324,23 @@ export default {
           padding-top: 20px;
           font-size: 1.1rem;
         }
-        .title_alt {
-          span {
-          }
-        }
+        // .title_alt {
+        //   span {
+        //   }
+        // }
         .stat {
           display: flex;
           font-size: 1.1rem;
           padding: 1.2rem 0;
           .rating {
             cursor: pointer;
+            position: relative;
+            .your {
+              position: absolute;
+              top: -12px;
+              left: 0;
+              font-size: 0.8rem;
+            }
           }
           .item {
             display: flex;
@@ -315,9 +395,9 @@ export default {
               margin: 0 10px;
               border-radius: 6px;
               border: thin solid rgba(255, 255, 255, 0.12);
-              &:last-child {
-                // margin: 0;
-              }
+              // &:last-child {
+              //   margin: 0;
+              // }
               &:first-child {
                 margin: 0;
               }
@@ -401,6 +481,45 @@ export default {
           }
           .material-design-icon {
             margin-right: 8px;
+          }
+        }
+      }
+    }
+    .modal {
+      @include modal;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: space-evenly;
+      .title {
+        font-weight: 300;
+        font-size: 1.4rem;
+      }
+      .stars {
+        width: 200px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        justify-content: space-around;
+        span {
+          font-size: 2rem;
+          cursor: pointer;
+          &:hover {
+            color: #ff6820;
+          }
+        }
+      }
+      .your_rate {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        flex-direction: row;
+        span {
+          cursor: pointer;
+          margin-left: 8px;
+          &:hover {
+            color: #ff6820;
           }
         }
       }

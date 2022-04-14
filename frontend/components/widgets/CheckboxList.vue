@@ -39,10 +39,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .checkbox {
   position: relative;
-  margin: 5px 10px !important;
+  margin: 5px 10px;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
