@@ -1,40 +1,28 @@
 <template>
   <div class="settings" v-if="settingsShow">
     <div class="nav-line">
-      <div class="item" :class="{ active : showAva }" @click.prevent="showAva = true, showSecurity = false, showInformation = false"> Аватарки </div>
-      <div class="item" :class="{ active : showInformation }" @click.prevent="showInformation = true, showAva = false, showSecurity = false"> Информация </div>
+      <div class="item" :class="{ active : showAva }" @click="showAva = true, showSecurity = false, showInformation = false"> Аватарки </div>
+      <div class="item" :class="{ active : showInformation }" @click="showInformation = true, showAva = false, showSecurity = false"> Информация </div>
       <!-- <div class="item"> Уведомления </div> -->
-      <div class="item" :class="{ active : showSecurity }" @click.prevent="showSecurity = true, showAva = false, showInformation = false"> Безопасность </div>
+      <div class="item" :class="{ active : showSecurity }" @click="showSecurity = true, showAva = false, showInformation = false"> Безопасность </div>
     </div>
 
     <div class="container" v-show="showAva">
       <div class="value">
         <div class="title">Аватарка</div>
-        <file-pond
-          name="cover"
-          class="filepond"
-          label-idle="Нажмите или перетащите изображение для загрузки"
-          :allow-multiple="false"
-          credits="false"
-          accepted-file-types="image/*"
-          :server="uploadCover()"
-          instantUpload="false"
-          :files="getCover" />
-        <div> Аватарка обрежется в размер 160x160 пикселей </div>
+        <input class="hidden" id="cover" type='file' accept="image/*" @change="onChangeAvatar" />
+        <label for="cover" class="user_image avatar" ref="avatar"> Нажмите сюда для выбора аватарки </label>
+        <div> Аватарка уменьшится до размера в 160x160 пикселей </div>
       </div>
       <div class="value">
         <div class="title">Фон профиля</div>
-        <file-pond
-          name="cover_bg"
-          class="filepond"
-          label-idle="Нажмите или перетащите изображение для загрузки"
-          :allow-multiple="false"
-          credits="false"
-          accepted-file-types="image/*"
-          :server="uploadCoverBg()"
-          instantUpload="false"
-          :files="getCoverBg" />
+        <input class="hidden" id="bg" type='file' accept="image/*" @change="onChangeBackground" />
+        <label for="bg" class="user_image background" ref="background"> Нажмите сюда для выбора фона профиля </label>
         <div> Фоновое изображение обрежется по высоте в 330 пикселей и выровняется по центру </div>
+      </div>
+      <div class="action">
+        <div class="save" @click="uploadImages">Сохранить</div>
+        <div class="cancel">Отмена</div>
       </div>
     </div>
 
@@ -68,7 +56,7 @@
       </div>
       <div class="value">
         <div class="title">Информация о себе:</div>
-        <textarea v-model="info.about" placeholder="Введите несколько строчек о себе"></textarea>
+        <textarea v-model="info.about" placeholder="Введите несколько строк о себе"></textarea>
       </div>
       <div class="action">
         <div class="save" @click="updateInformation">Сохранить</div>
@@ -99,8 +87,7 @@
 </template>
 
 <script>
-import { getCookie } from '~/services/util'
-import { updateUser } from '~/services/api'
+import { updateUser, userUploadCover, userUploadBackground } from '~/services/api'
 
 export default {
   props: {
@@ -137,22 +124,49 @@ export default {
     this.setUser()
   },
 
-  computed: {
-    getToken() {
-      return getCookie('XSRF-TOKEN')
-    },
-    getApi({ $config }) {
-      return $config.apiDomain + '/api/'
-    },
-    getCover() {
-      return this.cover
-    },
-    getCoverBg() {
-      return this.cover_bg
-    },
-  },
-
   methods: {
+    onChangeAvatar(e) {
+      let file = (e.target.files.length > 0) ? e.target.files[0] : false,
+          imageView = new FileReader(),
+          src = this.$refs.avatar
+
+      if(file) {
+        imageView.onload = function (el) {
+          src.style.backgroundImage = `url('${el.target.result}')`
+        }
+        imageView.readAsDataURL(file)
+        this.cover = file
+      } else {
+        this.cover = ''
+        src.style.backgroundImage = `url()`
+      }
+    },
+    onChangeBackground(e) {
+      let file = (e.target.files.length > 0) ? e.target.files[0] : false,
+          imageView = new FileReader(),
+          src = this.$refs.background
+
+      if(file) {
+        imageView.onload = function (el) {
+          src.style.backgroundImage = `url('${el.target.result}')`
+        }
+        imageView.readAsDataURL(file)
+        this.cover_bg = file
+      } else {
+        this.cover_bg = ''
+        src.style.backgroundImage = `url()`
+      }
+    },
+    async uploadImages() {
+      let images = new FormData()
+      images.append('cover', this.cover)
+      images.append('cover_bg', this.cover_bg)
+
+      let res = await userUploadCover(images)
+
+      if(res.cover) this.$store.commit('user/SET_COVER', res.cover)
+      if(res.cover_bg) this.$store.commit('user/SET_COVER_BG', res.cover_bg)
+    },
     async updateInformation() {
       await updateUser({
         name: this.info.name,
@@ -163,12 +177,6 @@ export default {
         residence: this.info.residence,
       })
     },
-    setCover(fileName) {
-      this.$store.commit('user/SET_COVER', fileName)
-    },
-    setCoverBg(fileName) {
-      this.$store.commit('user/SET_COVER_BG', fileName)
-    },
     setUser() {
       let { id, name, email, cover, cover_bg, gender, site } = this.$store.state.auth.user
       this.info.id = id
@@ -178,46 +186,6 @@ export default {
       this.info.site = site
       this.info.email = email
       this.info.gender = +gender
-    },
-    uploadCover() {
-      return {
-        url: this.getApi,
-        process: {
-          url: 'user/upload_cover',
-          headers: {
-            'X-XSRF-TOKEN': this.getToken,
-            'UserId': this.info.id
-          },
-          withCredentials: true,
-          onload: (response) => {
-            this.setCover(response)
-          },
-        },
-        revert: null,
-        restore: null,
-        load: null,
-        fetch: null,
-      }
-    },
-    uploadCoverBg() {
-      return {
-        url: this.getApi,
-        process: {
-          url: 'user/upload_cover_bg',
-          headers: {
-            'X-XSRF-TOKEN': this.getToken,
-            'UserId': this.info.id
-          },
-          withCredentials: true,
-          onload: (response) => {
-            this.setCoverBg(response)
-          },
-        },
-        revert: null,
-        restore: null,
-        load: null,
-        fetch: null,
-      }
     },
   },
 };
@@ -231,6 +199,30 @@ export default {
       font-size: 1.2rem;
       font-weight: 200;
       margin-bottom: 4px;
+    }
+    .user_image {
+      display: flex;
+      cursor: pointer;
+      font-weight: 200;
+      align-items: center;
+      border-radius: 4px;
+      justify-content: center;
+      text-align: center;
+      text-shadow: 1px 1px 3px black;
+      border: dashed 2px rgba(255, 255, 255, 0.12);
+      &.avatar {
+        width: 160px;
+        height: 160px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+      &.background {
+        height: 330px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center bottom;
+      }
     }
     .values {
       display: flex;

@@ -1,13 +1,12 @@
 <template>
-  <div class="profile">
+  <div class="profile team">
     <div class="profile__header team">
-      <div class="cover" :style="{ backgroundImage: `url(${team.cover.bg})` }">
+      <div class="cover" :style="{ backgroundImage: `url(${team.cover ? team.cover.bg+'.webp' : ''})` }">
         <div class="shadow"></div>
         <div class="container user_info">
-          <div class="cover__avatar" :style="{ backgroundImage: `url(${team.cover.avatar})` }"></div>
+          <div class="cover__avatar" :style="{ backgroundImage: `url(${team.cover ? team.cover.avatar+'.webp' : ''})` }"></div>
           <div class="user_line">
             <span class="login">{{ team.name }}</span>
-            <mdi-Cog class="btn settings" @click="settingsOpen" />
           </div>
         </div>
       </div>
@@ -25,7 +24,7 @@
           </div>
           <div class="block__title">Состав</div>
           <div class="people_team">
-            <span class="no_users" v-show="users.length == 0"> Список пуст </span>
+            <span class="no_users" v-show="users.length == 0"> Список пуст <br> (в разработке) </span>
             <!-- <Nuxt-link class="people" to="/user/260">
               <div class="cover" :style="{ backgroundImage: `url(/_nuxt/assets/images/mid_cover.jpg)` }"></div>
               <div class="info">
@@ -59,8 +58,8 @@
             <span>Наши переводы ({{ team.titles }})</span>
           </Nuxt-link>
           <Nuxt-link class="btn__line__button" to="?page=settings">
-            <mdi-FormatListText title="Дополнительные настройки" />
-            <span>Доп. настройки</span>
+            <mdi-Cog title="Дополнительные настройки" />
+            <span>Настройки</span>
           </Nuxt-link>
         </div>
 
@@ -85,56 +84,9 @@
           </div>
         </div>
 
-        <Team-Posts v-if="page === 'posts'" :page="page" />
-
-        <div class="description" v-if="page === 'settings'">
-          <div class="block__title">Дополнительные настройки</div>
-          <div class="description__text">
-            Страница пустая
-          </div>
-        </div>
+        <LazyTeamPosts v-if="page === 'posts'" />
+        <LazyTeamSetting v-if="page === 'settings'" />
       </div>
-    </div>
-
-    <div class="modal_window modal__user_settings" v-if="settingsShow">
-      <div class="block__title">Настройки</div>
-      <div class="nav__tabs">
-        <span class="item" :class="{ active : !tabTwo }" @click="tabTwo = false">Фото</span>
-        <span class="item" :class="{ active : tabTwo }" @click="tabTwo = true">Описание</span>
-      </div>
-      <div class="tab" v-if="!tabTwo">
-        <div class="block_avatar">
-          <div class="title">Аватарка</div>
-          <div class="download">
-            <input name="myAvatar" type="file">
-          </div>
-        </div>
-        <div class="block_background">
-          <div class="title">Фон профиля</div>
-          <div class="download">
-            <input name="myBackground" type="file">
-          </div>
-        </div>
-        <div class="action">
-          <div class="save">Сохранить</div>
-          <div class="cancel" @click="settingsShow = false">Отмена</div>
-        </div>
-      </div>
-      <div class="tab" v-else>
-        <div class="title">Введите описание команды</div>
-        <textarea v-model="descTeam" :maxlength="maxText" class="add_desc_team" placeholder="Введите описание вашей команды"></textarea>
-        <div class="limit">{{ lengthText }}/{{ maxText }} символов</div>
-        <div class="action">
-          <div class="save">Сохранить</div>
-          <div class="cancel" @click="settingsShow = false">Отмена</div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="background__close" 
-          v-if="settingsShow == true"
-          @click="settingsShow = false">
     </div>
   </div>
 </template>
@@ -154,7 +106,6 @@ export default {
       users: [],
       descTeam: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad eveniet ullam at, est obcaecati dolor dolorem quae totam fugiat. Quibusdam repudiandae beatae exercitationem veniam maiores modi nostrum alias facilis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad eveniet ullam at, est obcaecati dolor dolorem quae totam fugiat. Quibusdam repudiandae beatae exercitationem veniam maiores modi nostrum alias facilis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad e...',
       maxText: 512,
-      settingsShow: false,
       tabTwo: false,
       changePassword: {
         current: '',
@@ -172,11 +123,6 @@ export default {
 
     lengthText() {
       return this.descTeam.length
-    },
-  },
-  methods: {
-    settingsOpen() {
-      this.settingsShow = true
     },
   },
 };
@@ -209,8 +155,8 @@ export default {
         position: relative;
         align-items: flex-end;
         .cover__avatar {
-          width: 200px;
-          height: 200px;
+          min-width: 200px;
+          min-height: 200px;
           border-radius: 6px;
           margin-bottom: -50px;
           background-size: cover;
@@ -314,12 +260,14 @@ export default {
         margin: 12px 6px;
         border-radius: 6px;
         flex-direction: column;
+        padding-bottom: 12px;
         border: thin solid rgba(255, 255, 255, 0.12);
         .block__title {
         }
         &__text {
           padding: 4px 8px;
           line-height: 1.5rem;
+          white-space: pre-wrap;
         }
         .stat {
           display: flex;
@@ -347,127 +295,6 @@ export default {
         justify-content: space-between;
       }
     }
-    // .nav-line {
-    //   display: flex;
-    //   min-height: 50px;
-    //   align-items: center;
-    //   flex-direction: row;
-    //   justify-content: flex-start;
-    //   background-color: #252525;
-    //   .item {
-    //     margin: 0 6px;
-    //     cursor: pointer;
-    //     padding: 4px 6px;
-    //     border-radius: 6px;
-    //     border: thin solid rgba(255, 255, 255, 0.12);
-    //     // border-bottom: thin solid rgba(0, 255, 34, 0.25);
-    //     &:first-child {
-    //       border-bottom: thin solid rgba(0, 255, 34, 0.25);
-    //     }
-    //     &:hover {
-    //       border: thin solid rgba(0, 255, 34, 0.25);
-    //     }
-    //   }
-    // }
   }
-
-
-//* Settings
-.modal__user_settings {
-  width: 320px;
-  padding: 0 12px;
-  background-color: #1e1e1e;
-  border: thin solid rgba(255, 255, 255, 0.12);
-}
-.modal_window {
-  top: 50%;
-  left: 50%;
-  z-index: 10;
-  position: fixed;
-  margin-right: -50%;
-  border-radius: 6px;
-  transform: translate(-50%, -50%);
-  .block__title {
-    padding-top: 10px;
-  }
-  .nav__tabs {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    justify-content: space-around;
-    .item {
-      padding: 0;
-      margin: 12px 6px;
-      cursor: pointer;
-      position: relative;
-    }
-    .item.active {
-      &:before {
-        left: 0;
-        content: "";
-        width: 100%;
-        height: 3px;
-        bottom: -3px;
-        position: absolute;
-        background-color: rgba(255, 255, 255, 0.12);
-      }
-    }
-  }
-  .tab {
-    .add_desc_team {
-      width: 100%;
-      color: #fff;
-      background: #1e1e1e;
-      padding: 8px 12px;
-      font-size: inherit;
-      border-radius: 6px;
-      min-height: 335px;
-      outline: none;
-      border: thin solid rgba(255, 255, 255, 0.01);
-      &:hover,
-      &:focus {
-        outline: none;
-        border: thin solid rgba(255, 255, 255, 0.12);
-      }
-      &:focus {
-        box-shadow: inset 0 0 2px 0px #fff;
-      }
-    }
-    .title {
-      font-size: 1.1rem;
-    }
-    .block_avatar,
-    .block_background {
-      margin-bottom: 12px;
-    }
-    .download {
-    }
-    .action {
-      height: 40px;
-      display: flex;
-      align-items: center;
-      flex-direction: row;
-      justify-content: space-around;
-      .save,
-      .cancel {
-        cursor: pointer;
-        padding: 6px 8px;
-        border-radius: 6px;
-        border: thin solid rgba(255, 255, 255, 0.12);
-      }
-      .save {
-        border-bottom: thin solid rgba(0, 255, 34, 0.25);
-        &:hover {
-          border: thin solid rgba(0, 255, 34, 0.25);
-        }
-      }
-      .cancel {
-        &:hover {
-          border: thin solid rgba(255, 0, 0, 0.25);
-        }
-      }
-    }
-  }
-}
 }
 </style>

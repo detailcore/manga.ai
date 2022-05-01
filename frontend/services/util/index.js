@@ -1,3 +1,5 @@
+
+
 /**
  * Для добавления комментария ч/з store
  * Find comment by id.
@@ -78,3 +80,11 @@ export function notify(res) {
       return { text: res.msg, type: 'error' }
   }
 }
+
+
+/**
+ * Ширина экрана
+ */
+//  export function getWidthViewport() {
+//   return window.innerWidth
+// }

@@ -35,7 +35,7 @@ export const mutations = {
     if(payload.data) {
       payload.data.forEach(item => {
         item.title = item.title_rus ? item.title_rus : (item.title_eng ? item.title_eng : '')
-        item.cover = item.cover ? item.cover.mid + '.webp' : ''
+        item.cover = item.cover ? item.cover.mid : ''
         item.type = item.type ? item.type.name : ''
         delete item.title_rus
         delete item.title_eng

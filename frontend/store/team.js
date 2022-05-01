@@ -12,6 +12,17 @@ export const mutations = {
   SET_TEAM(state, payload) {
     state.team = payload
   },
+  SET_TEAM_UPDATE(state, payload) {
+    let { cover, name, name_alt, description, link_site, link_vk, link_discord, } = payload
+    state.team.cover.bg = cover.bg
+    state.team.cover.avatar = cover.avatar
+    state.team.name = name
+    state.team.name_alt = name_alt
+    state.team.description = description
+    state.team.link_site = link_site
+    state.team.link_vk = link_vk
+    state.team.link_discord = link_discord
+  },
   SET_TEAM_POSTS(state, payload) {
     state.teamPosts = payload
   },

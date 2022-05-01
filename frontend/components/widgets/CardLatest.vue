@@ -1,14 +1,15 @@
 <template>
   <nuxt-link :to="'/manga/'+alias" class="chapter item">
-    <div class="cover" :style="styleCover">
+    <div class="cover">
+      <img loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="title" />
       <div class="rank" v-show="rank !== 'Нет'"> {{ rank }} </div>
       <div class="cat"> {{ category }} </div>
     </div>    
     <div class="info">
       <div class="title"> {{ title }} </div>
       <div class="chapter">
-        Том {{ chapter.volume }}. Глава {{ chapter.chapter }}. {{ chapter.name }}
-        <span v-show="more > 0">+ еще {{ more }}</span>
+        Том {{ chapter.volume }}. Глава {{ chapter.chapter }} <span v-show="chapter.name">{{ chapter.name }}</span>
+        <span v-show="more > 1">+ еще {{ more-1 }}</span>
       </div>
       <div class="update"> {{ updateTime }} </div>
       <div class="rating"> {{ ratingFixed }} </div>
@@ -31,10 +32,8 @@ export default {
   },
 
   computed: {
-    styleCover({ $config: { urlCoverTitle } }) {
-      return {
-        backgroundImage: `url(${urlCoverTitle + this.id +'/'+ this.cover})`
-      }
+    imageUrl({ $config: { urlCoverTitle } }) {
+      return urlCoverTitle + this.id +'/'+ this.cover
     },
     ratingFixed() {
       let rat = this.rating
@@ -69,9 +68,17 @@ export default {
     font-size: 0.9rem;
     position: relative;
     border-radius: 6px 0px 0px 6px;
-    background-size: cover;
-    background-position: center;
+    // background-size: cover;
+    // background-position: center;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px 0px 0px 6px;
+    }
     .rank {
+      top: 0;
+      left: 0;
+      position: absolute;
       padding: 2px;
       max-width: 30px;
       border-radius: 6px 0 6px 0;
@@ -101,6 +108,10 @@ export default {
     }
     .chapter {
       font-weight: 300;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding-right: 15px;
       span {
         color: #919191;
       }

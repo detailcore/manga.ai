@@ -1,7 +1,7 @@
 <template>
   <footer class="region__footer">
-    <div class="footer">
-      <div class="footer__item">
+    <div class="footer container">
+      <div class="footer__item mb_hidden">
         <span class="manga_club">MangaClub</span>
         <span class="text">Читать мангу онлайн на русском</span>
       </div>
@@ -35,11 +35,16 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      overflow: hidden;
+      padding: 0 4px;
+      @media (max-width: 500px) {
+        width: 50%;
+      }
       a,
       span {
         font-weight: 300;
         line-height: 20px;
-        width: max-content;
+        // width: max-content;
         text-decoration: none;
       }
       .manga_club {
@@ -47,7 +52,10 @@
         font-size: 1.5rem;
         padding: 6px 0px;
       }
-      .text {
+      &.mb_hidden {
+        @media (max-width: 500px) {
+          display: none;
+        }
       }
     }
   }

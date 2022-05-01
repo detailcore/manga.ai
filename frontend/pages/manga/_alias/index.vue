@@ -1,43 +1,48 @@
 <template>
   <div class="region_manga">
-    <div class="parallax_cover" :style="styleCover">
+    <div class="pseudo_parallax_cover">
+      <picture>
+        <source type="image/webp" :srcset="urlCover +'.webp'" media="(min-width: 1060px)">
+        <source type="image/webp" :srcset="`${urlCover.replace('_high.', '_mid.')}.webp`" media="(min-width: 701px) and (max-width: 1059px)">
+        <source type="image/webp" :srcset="urlCover +'.webp'" media="(max-width: 700px)">
+        <img :src="urlCover" :alt="title">
+      </picture>
     </div>
 
     <div class="manga_block" v-if="data.rating">
       <div class="block__cover">
-        <div class="cover">
-          <img :alt="title" :srcset="urlCover">
-          <div class="cover__btn">
-            <div class="btn_action">
-              <div class="item" @click.prevent="readFirstChapter" v-if="chapterCount">
-                <mdi-BookOpenPage title="Читать с первой главы" />
-                <span>Читать</span>
-              </div>
-              <ListBookmark v-if="loggedIn" :id_post="idPost" />
-            </div>            
+        <picture>
+          <source type="image/webp" :srcset="urlCover +'.webp'" media="(min-width: 1060px)">
+          <source type="image/webp" :srcset="`${urlCover.replace('_high.', '_mid.')}.webp`" media="(min-width: 701px) and (max-width: 1059px)">
+          <source type="image/webp" :srcset="urlCover +'.webp'" media="(max-width: 700px)">
+          <img :src="urlCover" :alt="title">
+        </picture>
+        <div class="cover__btn">
+          <div class="btn_action">
+            <div class="item success" @click.prevent="readFirstChapter" v-if="chapterCount">
+              <mdi-BookOpenPage title="Читать с первой главы" />
+              <span>Читать</span>
+            </div>
+            <LazyListBookmark v-if="loggedIn" :id_post="idPost" />
           </div>
-          <div class="cover__translation">
-            <div class="block__title">Переводчики</div>
-              <widgets-card-short v-for="(item, index) in data.teams" :key="index"
-                :id="item.id"
-                :cover="item.cover"
-                :title="item.name"
-                :description="item.description"
-                type="translator" />
-          </div>
+        </div>
+        <div class="cover__translation" v-show="data.teams.length">
+          <div class="block__title">Переводчики</div>
+            <LazyWidgetsCardShort v-for="(item, index) in data.teams" :key="index"
+              :id="item.id"
+              :cover="item.cover"
+              :title="item.name"
+              :description="item.description"
+              type="translator" />
         </div>
       </div>
       <div class="block__information">
         <div class="release_name">
           <h1 class="rus" v-show="data.title_rus"> {{ data.title_rus }} </h1>
           <span class="eng" v-show="data.title_eng"> {{ data.title_eng }} </span>
-          <span class="alt">
-            {{ data.title_orig }} <span v-show="data.title_alt"> / {{ data.title_alt }}</span>
-          </span>
+          <span class="alt"> {{ data.title_orig }} <span v-show="data.title_alt"> / {{ data.title_alt }}</span> </span>
         </div>
-        <div class="description">
-          {{ data.description }}
-        </div>
+        <div class="description"> {{ data.description }} </div>
         
         <div class="stat">
           <div class="item rating" v-if="isRatingEmpty" @click="openModalRating">
@@ -54,26 +59,30 @@
           <!-- <div class="item">
             <mdi-CardsHeart title="" />
             <span class="count">XXXXX</span>
-          </div>
-          <div class="item">
+          </div> -->
+          <!-- <div class="item">
             <mdi-Eye title="" />
             <span class="count">{{ data.views }}</span>
-          </div>
-          <div class="item">
+          </div> -->
+          <!-- <div class="item">
             <mdi-BookmarkMultiple title="" />
             <span class="count">XXXXX</span>
           </div> -->
         </div>
 
-        <div class="btn_action">
+        <div class="btn_action" :class="{ pages_story: page === 'chapters' }">
           <Nuxt-link class="item" to="" :class="{ 'nuxt-link-exact-active' : page===''}">
             <mdi-ImageText title="" />
             <span>Информация</span>
           </Nuxt-link>
-          <Nuxt-link class="item" to="?page=chapters">
+          <div class="item list_chapter" @click="goToChaptersList">
             <mdi-FormatListNumbered title="" />
             <span>Главы ({{ chapterCount }})</span>
-          </Nuxt-link>
+          </div>
+          <!-- <Nuxt-link class="item list_chapter" to="?page=chapters">
+            <mdi-FormatListNumbered title="" />
+            <span>Главы ({{ chapterCount }})</span>
+          </Nuxt-link> -->
           <!-- <Nuxt-link class="item" to="?page=related">
             <mdi-FormatListText title="" />
             <span>Связанные</span>
@@ -96,25 +105,21 @@
             <span class="item">{{ data.year }}</span>
           </div>
           <div class="line">
-            <span class="item ongoing" v-show="data.status_of_releases">Выпуск: {{ data.status_of_releases ? data.status_of_releases.name : '' }}</span>
+            <span class="item" v-show="data.status_of_releases">Статус: {{ data.status_of_releases ? data.status_of_releases.name : '' }}</span>
             <span class="item" v-show="data.status_of_translation">Перевод: {{ data.status_of_translation ? data.status_of_translation.name : '' }}</span>
           </div>
           <div class="line tags" v-show="data.genres.length > 0">
-            <div class="item" v-for="genre of data.genres" :key="genre.name">
-              {{ genre.name }}
-            </div>
-            <div class="item" v-for="tag of data.tags" :key="tag.name">
-              {{ tag.name }}
-            </div>
+            <div class="item" v-for="genre of data.genres" :key="genre.name"> {{ genre.name }} </div>
+            <div class="item" v-for="tag of data.tags" :key="tag.name"> {{ tag.name }} </div>
           </div>
         </div>
 
 
-        <List-Chapters v-if="page === 'chapters' && chapterCount > 0" :id='data.id' />
+        <LazyList-Chapters v-if="(page === 'chapters' && chapterCount > 0)" :id='data.id' />
 
         <!-- <List-Relateds class="relateds_list" v-if="page === 'related'" :id='data.id' /> -->
 
-        <List-Comments class="comments" v-if="page === 'comments'" />
+        <LazyList-Comments class="comments" v-if="page === 'comments'" />
 
         <!-- <List-Covers class="covers" v-if="page === 'covers'" /> -->
 
@@ -172,15 +177,6 @@ export default {
     urlCover({ $config: { urlCoverTitle } }) {
       return this.data.cover ? urlCoverTitle + this.data.id +'/'+ this.data.cover : ''
     },
-    styleCover() {
-      return this.data.cover ? 
-        {
-          fontSize: 0,
-          backgroundImage: `url(${this.urlCover})`
-        } : {
-          backgroundImage: 'none'
-        }
-    },
     chapterCount() {
       return this.data.chapter_count ? this.data.chapter_count : 0
     },
@@ -196,12 +192,23 @@ export default {
     isRatingEmpty() {
       return this.data.rating ? this.data.rating.amount < 10 : false
     },
-    isSingle() {
+    isSingle() { // произведение из категории "сингл"
       return this.data.rating ? this.data.formats.map(item => item.id === 6).includes(true) : false
     },
   },
 
   methods: {
+    goToChaptersList() {
+      if(this.chapterCount > 0) {
+        this.$router.push({ name: 'manga-alias', query: { page: 'chapters' } })
+      } else {
+        this.$notify({
+          title: 'В тайтле нет глав!',
+          text: 'Список глав пуст',
+          type: 'error'
+        })
+      }
+    },
     async setRating(num) {
       this.close()
       if(+num !== +this.yourRate) {
@@ -220,9 +227,16 @@ export default {
         })
         return false
       }
-      if(this.chapterCount <= 1 && !this.isSingle ) {
+      if((this.chapterCount <= 1 && !this.isSingle)) {
         this.$notify({
           text: 'Недостаточно глав для оценки',
+          type: 'error',
+        })
+        return false
+      }
+      if(this.chapterCount == 0) {
+        this.$notify({
+          text: 'Невозможно выставить оценку тайтлу без глав!',
           type: 'error',
         })
         return false
@@ -248,41 +262,64 @@ export default {
 </script>
 
 <style lang="scss">
+  .mobile {
+    .region_manga {      
+      .pages_story {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 129px;
+        background-color: #121212;
+      }
+    }
+  }
   .region_manga {
     min-height: calc(100vh - 160px);
-    .parallax_cover {
+    .pseudo_parallax_cover {
       height: 300px;
       overflow: hidden;
-      perspective: 1px;
-      filter: blur(4px);
-      background-size: cover;
-      background-position: 100% 10%;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+      // perspective: 1px;
+      // filter: blur(4px);
+      // background-size: cover;
+      // background-position: 100% 10%;
+      // background-repeat: no-repeat;
+      // background-attachment: fixed;
       // transform: translateZ(-1px) scale(1.5);
       position: relative;
       z-index: -1;
       box-shadow: inset 0px -20px 16px 8px rgb(0 0 0 / 20%);
+      img {
+        top: -60px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        position: fixed;
+        filter: blur(4px);
+      }
     }
     .manga_block {
+      .success {
+        border-bottom: thin solid rgba(0, 255, 34, 0.25) !important;
+      }
+      .failed {
+        border-bottom: thin solid rgba(255, 0, 34, 0.5) !important;
+      }
       margin: 0 auto;
       padding: 0 15px;
       display: flex;
+      min-height: 530px;
+      background: #121212;
+      background: linear-gradient(to top, #121212, 99%, transparent 105%);
       justify-content: space-between;
       .block__cover {
         width: 100%;
         max-width: 300px;
         margin-top: -200px;
         margin-right: 20px;
-        .cover {
-          min-height: 100px;
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-          img {
-            max-width: 100%;
-            border-radius: 6px;
-          }
+        img {
+          max-width: 100%;
+          border-radius: 4px 4px 0 0;
         }
         .cover__btn {
           .btn_action {
@@ -299,7 +336,7 @@ export default {
         .release_name {
           display: flex;
           flex-direction: column;
-          margin-top: -2.3rem;
+          margin-top: -2rem;
           line-height: normal;
           .rus,
           .eng {
@@ -308,6 +345,7 @@ export default {
           .rus {
             font-weight: 600;
             font-size: 1.6rem;
+            text-shadow: 2px 0px 4px black;
           }
           .eng {
             font-weight: 300;
@@ -323,6 +361,8 @@ export default {
         .description {
           padding-top: 20px;
           font-size: 1.1rem;
+          text-indent: 20px;
+          text-align: justify;
         }
         // .title_alt {
         //   span {
@@ -365,6 +405,8 @@ export default {
           justify-content: space-around;
           .item {
             width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
             &:nth-child(even){
               margin-left: 8px;
               margin-right: 8px;
@@ -395,17 +437,13 @@ export default {
               margin: 0 10px;
               border-radius: 6px;
               border: thin solid rgba(255, 255, 255, 0.12);
+              overflow: hidden;
+              white-space: nowrap;
               // &:last-child {
               //   margin: 0;
               // }
               &:first-child {
                 margin: 0;
-              }
-              &.ongoing {
-                border-bottom: thin solid rgba(0, 255, 34, 0.25);
-              }
-              &.end {
-                border-bottom: thin solid rgba(255, 0, 34, 0.5);
               }
             }
             // &:last-child {

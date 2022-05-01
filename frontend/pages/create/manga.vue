@@ -6,20 +6,6 @@
       <div class="create__fields__image">
         <span class="title">Обложка *</span>
         <input name="image" type="file" class="image" @change="onChange">
-        <!-- <file-pond
-          name="cover"
-          class="filepond"
-          label-idle="Нажмите или перетащите изображение для загрузки"
-          :allow-multiple="false"
-          credits="false"
-          accepted-file-types="image/*"
-          :server="uploadCover()"
-          instantUpload="false"
-          :files="selectedCover" /> -->
-        <!-- <div class="bg_cover">
-          <span>Фоновое изображение (не обязательно)</span>
-          <input name="myBackground" type="file">
-        </div> -->
       </div>
 
 

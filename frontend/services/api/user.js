@@ -4,7 +4,7 @@ import { get, post, put } from '~/services/axios'
  * Manga API service with backend
  */
 
-// Получить информацию о пользователе
+// Получить информацию о пользователе, на странице пользователя
 export async function getUserById(id) {
   return await get(`user/${id}`)
 }
@@ -17,4 +17,14 @@ export async function register(params) {
 // Обновить информацию профиля
 export async function updateUser(params) {
   return await put(`user/profile_information`, params)
+}
+
+// Загрузить аватарку
+export async function userUploadCover(data) {
+  return await post(`user/upload_cover`, data)
+}
+
+// Загрузить фон профиля
+export async function userUploadBackground(data) {
+  return await post(`user/upload_cover_bg`, data)
 }

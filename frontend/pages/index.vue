@@ -1,9 +1,10 @@
 <template>
   <div class="container">
-    <Line-Popular />
+    <!-- <Line-Popular /> -->
     <div class="main__content">
       <div class="content">
         <div class="block__title">Новые главы</div>
+        <div class="block__subtitle">Последние добавленные в мангу главы</div>
 
         <Widgets-CardLatest v-for="(item, index) in latestData" :key="index"
           :id="item.id"
@@ -33,12 +34,12 @@ import { mapGetters, mapState } from "vuex"
 export default {
   async asyncData({ store }) {
     if(
-      store.state.home.new.length === 0 || 
-      (Math.floor(new Date().getTime()/1000.0) >= store.state.home.created_at + 600) // 10 min
+      store.state.home.new.length === 0
+      || (Math.floor(new Date().getTime()/1000.0) >= store.state.home.created_at + 600) // 10 min
     ) {
-      store.dispatch('home/FETCH_NEW')
-      store.dispatch('home/FETCH_TOP')
-      store.dispatch('home/FETCH_LATEST')
+      await store.dispatch('home/FETCH_ALL') // await обязательно
+      // await store.dispatch('home/FETCH_SIDE')
+      // await store.dispatch('home/FETCH_LATEST')
       store.commit('home/SET_TIME', Math.floor(new Date().getTime()/1000.0))
     }
   },
@@ -65,18 +66,20 @@ export default {
   padding: 0 15px;
   max-width: 1320px;
   justify-content: space-between;
+  .block__subtitle {
+    color: #919191;
+    margin-top: -10px;
+  }
   .content {
     padding: 4px;
-    width: 66.666667%;
-    max-width: 66.666667%;
+    // max-width: 66.666667%;
     .more {
       @include btn_line_full;
     }
   }
   .side {
     padding: 4px;
-    width: 33.333333%;
-    max-width: 33.333333%;
+    // max-width: 33.333333%;
   }
 }
 

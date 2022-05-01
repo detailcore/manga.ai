@@ -18,3 +18,8 @@ export async function teamPostsGetById(id) {
 export async function teamCreate(data) { 
     return await post(`team`, data)
 }
+
+// Редактировать команду
+export async function teamUpdate(id, data) { 
+    return await post(`team/${id}`, data)
+}

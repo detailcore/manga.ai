@@ -27,6 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getBookmarksList, getUserBookmarks } from '~/services/api'
 
 export default {
   props: {
@@ -39,10 +40,23 @@ export default {
     }
   },
 
-  fetch() {
-    this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 })
-    if(this.bookmarks.length === 0) this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
-  },
+  // async fetch() {
+    // await this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 })
+    // if(this.bookmarks.length === 0) await this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
+
+    // let a = this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 }),
+    //     b = this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST');
+    // Promise.all(Array(a,b)).then( values => {
+    //   console.log('values =>', values)
+    // });
+
+    // Array(a,b).forEach(el => el)
+
+    // Promise.all(Array(
+    //   this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 }),
+    //   this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
+    // ))
+  // },
 
   computed: {
     ...mapGetters( 'bookmark', { posts: 'GET_USER_BOOKMARKS' }),
@@ -54,6 +68,11 @@ export default {
     total() {
       return this.postLoaded ? this.posts.total : 0
     },
+  },
+
+  async mounted() {
+    this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 })
+    if(this.bookmarks.length === 0) this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
   },
 
   methods: {
@@ -74,6 +93,9 @@ export default {
       flex-wrap: wrap;
       flex-direction: row;
       // justify-content: space-between;
+      .library_item {
+        position: relative;
+      }
     }
     .nav-line {
       .item.active {

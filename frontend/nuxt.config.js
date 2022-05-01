@@ -1,6 +1,10 @@
 export default {
   // loading: false,
-  ssr: false,
+  loading: {
+    height: '4px',
+    color: '#ff6820', // ораньжевый
+  },
+  ssr: true,
 
   server: {
     port: 3000,
@@ -23,19 +27,22 @@ export default {
     ]
   },
 
+  router: {
+    prefetchLinks: false // отключить предварительную загрузку компонета, глобально (для nuxt-link)
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    // '~/assets/scss/main.css'
+    '~/assets/scss/main.scss',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/filepond', ssr: false },
+    // { src: '~/plugins/filepond', ssr: false },
     { src: '~/plugins/vue-headroom', ssr: false },
     { src: '~/plugins/click-outside', ssr: false },
     { src: '~/plugins/vue-multiselect', ssr: false },
-    // { src: '~/plugins/tui-image-editor', ssr: false },
-    { src: '~/plugins/vue-material-design-icons', ssr: false },
+    { src: '~/plugins/vue-mdi', ssr: true },
     { src: '~/plugins/notify-ssr', ssr: true },
     { src: '~/plugins/notify-client', ssr: false },
   ],
@@ -43,19 +50,50 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
+  // Build Configuration: https://go.nuxtjs.dev/config-build
+  build: {
+    // analyze: {
+    //   analyzerMode: 'static'
+    // },
+    extractCSS: true,
+    // splitChunks: { // деление компонентов
+    //   layouts: false,
+    //   pages: true,
+    //   commons: true
+    // },
+    // extend (config, ctx) {
+    //   if (ctx && ctx.isClient) {
+    //     config.optimization.splitChunks.maxSize = 200000
+    //   }
+    // }
+  },
+
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    // https://github.com/nuxt-community/style-resources-module
     '@nuxtjs/style-resources',
     // https://www.npmjs.com/package/@nuxtjs/moment
-    ['@nuxtjs/moment', { timezone: true, defaultTimezone: 'Europe/Samara', defaultLocale: 'ru', locales: ['ru'], }]
+    '@nuxtjs/moment',
+    // https://github.com/Developmint/nuxt-purgecss
+    'nuxt-purgecss',
   ],
 
+  moment: {
+    locales: ['ru'],
+    defaultLocale: 'ru', 
+    // timezone: false, 
+    // defaultTimezone: 'Europe/Samara', 
+    // plugins: [ // You can import plugins to moment. See a list of plugins: https://momentjs.com/docs/#/plugins/
+      // 'moment-strftime',
+    // ]
+  },
+
   styleResources: {
-    // your settings here
     scss: [
-      '~/assets/scss/main.scss',
+      // '~/assets/scss/main.scss',
       '~/assets/scss/_fonts.scss',
-      '~/assets/scss/_mixins.scss'
+      '~/assets/scss/_mixins.scss',
+      '~/assets/scss/_variables.scss',
     ],
     hoistUseStatements: true  // Hoists the "@use" imports. Applies only to "sass", "scss" and "less". Default: false.
    },
@@ -66,30 +104,50 @@ export default {
     '@nuxtjs/axios',
     // https://auth.nuxtjs.org/
     '@nuxtjs/auth-next',
-    // https://github.com/nuxt-community/laravel-echo-module
-    // '@nuxtjs/laravel-echo',
-    // https://nuxt-socket-io.netlify.app/installation
-    // 'nuxt-socket-io',
+    // https://github.com/frenchrabbit/nuxt-precompress
+    ['nuxt-precompress'],
   ],
 
-  // echo: {
-  //   plugins: [ '~/plugins/echo.js' ],
-  // },
+  nuxtPrecompress: {
+    enabled: true, // Enable in production
+    report: false, // set true to turn one console messages during module init
+    test: /\.(js|css|html|txt|xml|svg)$/, // files to compress on build
+    // Serving options
+    middleware: {
+      // You can disable middleware if you serve static files using nginx...
+      enabled: true,
+      // Enable if you have .gz or .br files in /static/ folder
+      enabledStatic: true, 
+      // Priority of content-encodings, first matched with request Accept-Encoding will me served
+      encodingsPriority: ['br', 'gzip'],
+    },
+ 
+    // build time compression settings
+    gzip: {
+      // should compress to gzip?
+      enabled: true,
+      // compression config
+      // https://www.npmjs.com/package/compression-webpack-plugin
+      filename: '[path].gz[query]', // middleware will look for this filename
+      threshold: 10240,
+      minRatio: 0.8,
+      compressionOptions: { level: 9 },
+    },
+    brotli: {
+      // should compress to brotli?
+      enabled: true,
+      // compression config
+      // https://www.npmjs.com/package/compression-webpack-plugin
+      filename: '[path].br[query]', // middleware will look for this filename
+      compressionOptions: { level: 11 },
+      threshold: 10240,
+      minRatio: 0.8,
+    },
+  },
 
-  // io: {
-  //   sockets: [ // Required
-  //     { // At least one entry is required
-  //       name: 'home',
-  //       url: 'http://manga.ai:3000',
-  //       default: true,
-  //       vuex: { /* see section below */ },
-  //       namespaces: { /* see section below */ }
-  //     },
-  //   ]
-  // },
-
-  // Axios module configuration: https://github.com/nuxt-community/moment-module
+  // Axios module configuration
   axios: {
+    // baseURL: process.env.NODE_ENV === 'production' ? process.env.API_DOMAIN + '/api/' : 'http://127.0.0.1:8000/api/',
     baseURL: process.env.API_DOMAIN + '/api/',
     credentials: true,
     headers: {
@@ -157,9 +215,6 @@ export default {
     // },
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  },
 
   // .env config
   publicRuntimeConfig: {

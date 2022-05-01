@@ -258,6 +258,7 @@ export default {
           type: 'success',
         })
 
+        data.id_post = this.chapter.post ? this.chapter.post.id : '' // добавляю в объект id поста
         // console.log(data)
         if(draft) { // статус черновик
           this.$store.commit('reader/SET_EDIT_CHAPTER_STATUS', 3)

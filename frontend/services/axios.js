@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
-import Config from '~/config'
 
 const config = {
-  baseURL: Config.baseUrlApi,
+  baseURL: 'http://api.manga.ai/api/',
   timeout: 5 * 10000,
   crossDomain: true,
   withCredentials: true,
@@ -114,6 +113,13 @@ export function post(url, data = {}, params = {}) {
 
 export function get(url, params = {}) {
   return _axios({
+    method: 'get',
+    url,
+    params
+  })
+}
+export function getNew(url, params = {}) {
+  return newAxios({
     method: 'get',
     url,
     params

@@ -1,7 +1,8 @@
 <template>
-  <div class="container container_fullh content">
+  <div class="container container_fullh content library" :class="{ 'filter-is-mobi': filterOpen }">
     <div class="search-results">
-      <div class="block__title"> Библиотека </div>
+      <div class="block__title"> Библиотека <div class="btn" @click="filterOpen = !filterOpen"><mdi-FilterMenu title="Поиск по каталогу" /></div> </div>
+      <div class="block__subtitle"> Поиск манги в каталоге по вашим предпочтениям </div>
       <div class="search-list">
         <div class="notice" v-show="emptyResult">
           По вашему запросу ничего не найдено!
@@ -16,15 +17,16 @@
           :key="item.id" />
       </div>
       <div class="more" v-show="!lastPage">
-        <span class="more__button" @click.prevent="nextPage">Показать еще</span>
+        <span class="more__button" @click="nextPage">Показать еще</span>
       </div>
     </div>
 
     <div class="search-filter">
+      <div class="btn" v-show="filterOpen" @click="filterOpen = !filterOpen"><mdi-Close title="Закрыть фильтр" /></div>
       <div class="filter-layout" :class="{ 'is-hidden': (genresOpen || tagsOpen) }">
         <div class="filter-submenu">
-          <div class="button" @click.prevent="genresOpen = !genresOpen"> Жанры <mdi-ChevronRight /> </div>
-          <div class="button" @click.prevent="tagsOpen = !tagsOpen"> Теги <mdi-ChevronRight /> </div>
+          <div class="button" @click="genresOpen = !genresOpen"> Жанры <mdi-ChevronRight /> </div>
+          <div class="button" @click="tagsOpen = !tagsOpen"> Теги <mdi-ChevronRight /> </div>
 
           <div class="checkbox-list">
             <div class="filter_title"> Тип </div>
@@ -104,8 +106,8 @@
           </div>
 
           <div class="buttons two-columns">
-            <div class="button cancel" @click.prevent="sendCancel"> Сбросить </div>
-            <div class="button submit" @click.prevent="sendFilter()"> Показать </div>
+            <div class="button cancel" @click="sendCancel"> Сбросить </div>
+            <div class="button submit" @click="sendFilter()"> Показать </div>
           </div>
         <div class="filter_title">В планах добавить фильтр по рейтингу, возрасту, кол-ву глав</div>
         </div>
@@ -114,25 +116,25 @@
 
       <div class="filter-layout" :class="{ 'is-hidden': !genresOpen }">
         <div class="filter-submenu">
-          <div class="button" @click.prevent="genresOpen = !genresOpen">
+          <div class="button" @click="genresOpen = !genresOpen">
             <mdi-ChevronLeft /> Вернуться
           </div>
           <div class="checkbox-list">
             <Widgets-CheckboxList v-for="item in filter.genres" :key="'genres'+item.id" :id="item.id" :type="'genres'" :name="item.name" :reset="reset" />
           </div>
-          <div class="button submit" @click.prevent="sendFilter()"> Выбрать </div>
+          <div class="button submit" @click="sendFilter()"> Выбрать </div>
         </div>
       </div>
         
       <div class="filter-layout" :class="{ 'is-hidden': !tagsOpen }">
         <div class="filter-submenu">
-          <div class="button" @click.prevent="tagsOpen = !tagsOpen">
+          <div class="button" @click="tagsOpen = !tagsOpen">
             <mdi-ChevronLeft /> Вернуться
           </div>
           <div class="checkbox-list">
             <Widgets-CheckboxList v-for="item in filter.tags" :key="'tags'+item.id" :id="item.id" :type="'tags'" :name="item.name" :reset="reset" />
           </div>
-          <div class="button submit" @click.prevent="sendFilter()"> Выбрать </div>
+          <div class="button submit" @click="sendFilter()"> Выбрать </div>
         </div>
       </div>
     </div>
@@ -146,8 +148,8 @@ import { libraryGetFilter } from '~/services/api'
 
 export default {
   async asyncData({ store }) {
-    if(store.state.library.filter.length === 0) store.dispatch('library/FETCH_FILTER')
-    if(store.state.library.posts.length === 0) store.dispatch('library/FETCH_POSTS')
+    if(store.state.library.filter.length === 0) await store.dispatch('library/FETCH_FILTER')
+    if(store.state.library.posts.length === 0) await store.dispatch('library/FETCH_POSTS')
   },
 
   data() {
@@ -155,6 +157,7 @@ export default {
       reset: false,
       tagsOpen: false,
       genresOpen: false,
+      filterOpen: false,
       year: {
         from: null,
         before: null
@@ -186,7 +189,8 @@ export default {
     async sendFilter() {
       this.curPage = 1
       this.tagsOpen = false
-      this.genresOpen = false      
+      this.genresOpen = false
+      this.filterOpen = false   
 
       let res = await libraryGetFilter(this.curPage, this.getDataFilter())
       this.$store.commit('library/SET_POSTS', { data: res.data, add: false })
@@ -255,6 +259,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.filter-is-mobi {
+  position: relative;
+}
+.library {
+  .block__title {
+    .btn {
+      display: none;
+    }
+  }
+  .block__subtitle {
+    color: #919191;
+    margin-top: -10px;
+  }
+}
 .container_fullh {
   min-height: 100%;
   min-height: calc(100vh - 165px);

@@ -12,6 +12,7 @@ export async function getBookmarksList() {
 // Получить текущую закладку
 export async function getBookmark(data) {
   return await post(`bookmark`, data)
+  // return await post(`bookmark?id=${id}`)
 }
 
 // Получить закладки пользователя

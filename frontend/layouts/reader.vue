@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ mobile: widthViewport <= 710 }">
     <headroom>
       <ReaderHeader />
     </headroom>
@@ -16,12 +16,21 @@ export default {
   components: {
     headroom
   },
+
+  data() {
+    return {
+      widthViewport: 0
+    }
+  },
+
+  mounted() {
+    this.widthViewport = window.innerWidth
+  },
+
+  methods: {
+    getWidthViewport() {
+      return window.innerWidth
+    }
+  },
 }
 </script>
-
-<style lang="scss">
-.links {
-  // @include center;
-}
-
-</style>

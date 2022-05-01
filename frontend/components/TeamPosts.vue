@@ -1,6 +1,8 @@
 <template>
   <div class="posts">
-    <widgets-card-popular
+    <Pagination :sourceLinks="teamPosts.links" :type="'TEAM_POSTS'" v-if="isMany" />
+
+    <Widgets-CardPopular
       :alias="item.alias"
       :cover="item.cover"
       :title="item.title"
@@ -16,12 +18,8 @@
 import { mapGetters } from "vuex";
 
 export default {
-  props: {
-    page: { type: String, default: '' },
-  },
-
-  async mounted() {
-    if(this.page == 'posts' && Object.keys(this.teamPosts).length === 0 && this.teamPosts.constructor === Object) {
+  async created() {
+    if(this.$route.query.page === 'posts') {
       await this.$store.dispatch('team/FETCH_TEAM_POSTS', this.$route.params.id)
     }
   },
@@ -29,6 +27,9 @@ export default {
   computed: {
     ...mapGetters('team', { teamPosts: 'GET_TEAM_POSTS' }),
 
+    isMany() {
+      return this.teamPosts.last_page > 1
+    },
     data({ $config: { urlCoverTitle } }) {
       if(this.teamPosts.data) {
         let res = [],

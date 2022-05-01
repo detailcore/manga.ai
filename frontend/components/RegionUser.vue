@@ -278,7 +278,7 @@ export default {
       padding: 6px;
       display: flex;
       flex-direction: column;
-
+      position: absolute;
       .info {
         display: flex;
         cursor: pointer;

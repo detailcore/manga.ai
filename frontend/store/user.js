@@ -1,6 +1,4 @@
-import { 
-  getUserById,
-} from '~/services/api'
+import { getUserById } from '~/services/api'
 
 export const state = () => ({
   user: [],
@@ -20,13 +18,8 @@ export const mutations = {
 
 export const actions = {
   async FETCH_USER({ commit }, id) {
-    try {
-      const res = await getUserById(id)
-      commit('SET_USER', res)
-
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await getUserById(id)
+    commit('SET_USER', res)
   },
 }
 

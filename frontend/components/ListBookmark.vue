@@ -36,17 +36,26 @@ export default {
     }
   },
 
-  fetch() {
-    if(this.bookmarks.length === 0) this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
-    if(this.currentBookmark.id === undefined) this.$store.dispatch('bookmark/FETCH_BOOKMARK', { id_post: this.id_post, })
+  // async fetch() {
+  //   // await this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
+  //   // await this.$store.dispatch('bookmark/FETCH_BOOKMARK', { id: this.id_post, id_user: this.userId })
+  //   if(this.bookmarks.length === 0) await this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
+  //   if(this.isEmptyBookmark.id === undefined) await this.$store.dispatch('bookmark/FETCH_BOOKMARK', { id: this.id_post, id_user: this.userId })
+  // },
+
+  mounted() {
+    this.init()
   },
 
   computed: {
     ...mapGetters( 'bookmark', { bookmarks: 'GET_BOOKMARK_LIST' }),
     ...mapGetters( 'bookmark', { currentBookmark: 'GET_BOOKMARK' }),
 
+    userId() {
+      return this.$store.state.auth.loggedIn ? this.$store.state.auth.user.id : false
+    },
     isEmptyBookmark() {
-      return this.currentBookmark.id === undefined
+      return (this.bookmarkName === 'В закладки') ? true : false
     },
     bookmarkName() {
       return !this.currentBookmark ? 'В закладки' : this.currentBookmark.name
@@ -54,6 +63,12 @@ export default {
   },
 
   methods: {
+    init() {
+      if(this.userId) {
+        if(this.bookmarks.length === 0) this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
+        this.$store.dispatch('bookmark/FETCH_BOOKMARK', { id: this.id_post, id_user: this.userId })
+      }
+    },
     createBookmark(id) { // Создать/Изменить
       this.$store.dispatch('bookmark/FETCH_CREATE_BOOKMARK', {
         id: this.currentBookmark.id ? this.currentBookmark.id : undefined,  // м.б. undefined
@@ -91,6 +106,7 @@ export default {
       padding: 6px;
       position: relative;
       border-radius: 6px;
+      white-space: nowrap;
       border: thin solid rgba(255, 255, 255, 0.12);
       .material-design-icon {
         margin-right: 8px;

@@ -2,7 +2,7 @@
   <div class="chapters">
     <Pagination :sourceLinks="chapters.links" :type="'POST_CHAPTER_LIST'" :sort="sort" v-if="isLoaded" />
     
-    <widgets-chapter v-for="(item, index) in currentChapters" :key="index" :chapters="item" />
+    <Widgets-Chapter v-for="(item, index) in currentChapters" :key="index" :chapters="item" />
     
     <Pagination :sourceLinks="chapters.links" :type="'POST_CHAPTER_LIST'" :sort="sort" v-if="isLoaded" />
   </div>
@@ -51,21 +51,19 @@ export default {
     },
   },
 
+  mounted() {
+    if(window.innerWidth <= 710) {
+      window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+      })
+    }
+  },
+
   async created() {
     if(+this.id !== +this.idPost) {
       await this.$store.dispatch('post/FETCH_CHAPTERS', { id: this.id, sort: this.sort, page: this.page })
     }
-  },
-
-  methods: {
-    // async nextPage() {
-    //   await this.$store.dispatch('post/FETCH_CHAPTERS', { id: this.id, sort: this.sort, page: ++this.page })
-    // },
-    // async prevPage() {
-    //   if(this.page > 1) {
-    //     await this.$store.dispatch('post/FETCH_CHAPTERS', { id: this.id, sort: this.sort, page: --this.page })
-    //   }
-    // },
   },
 };
 </script>
@@ -80,6 +78,21 @@ export default {
     .btn {
       margin: 0 8px !important;
     }
+  }
+}
+.mobile {
+  .chapters {
+    width: 100%;
+    height: calc(100% - 129px);
+    top: 129px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    z-index: 10;
+    display: table;
+    position: absolute;
+    background: #121212;
   }
 }
 </style>

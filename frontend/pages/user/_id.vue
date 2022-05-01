@@ -16,9 +16,9 @@
       </div>
     </div>
 
-    <User-Bookmark v-show="tabBookmark" :tabBookmark="tabBookmark" />
+    <LazyUserBookmark v-show="tabBookmark" :tabBookmark="tabBookmark" />
 
-    <User-Setting v-if="tabSetting"  :settingsShow="tabSetting" />
+    <LazyUserSetting v-if="tabSetting"  :settingsShow="tabSetting" />
     
   </div>
 </template>
@@ -36,11 +36,6 @@ export default {
     }
   },
 
-  async asyncData({ store, route }) {
-    const idUser = +route.params.id
-    store.dispatch('user/FETCH_USER', idUser)
-  },
-
   computed: {
     ...mapGetters( 'user', { user: 'GET_USER' }),
 
@@ -53,6 +48,10 @@ export default {
     isOwner() {
       return this.user ? (+this.user.id === +this.$store.state.auth.user.id) : false
     },
+  },
+
+  async mounted() {
+    await this.$store.dispatch('user/FETCH_USER', +this.$route.params.id)
   },
 
   methods: {
@@ -122,13 +121,14 @@ export default {
   }
   .nav-line {
     display: flex;
+    flex-wrap: wrap;
     min-height: 50px;
     align-items: center;
     flex-direction: row;
     justify-content: center;
     background-color: #252525;
     .item {
-      margin: 0 6px;
+      margin: 4px 6px;
       cursor: pointer;
       padding: 4px 6px;
       border-radius: 4px;

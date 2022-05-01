@@ -4,17 +4,17 @@ import { get } from '~/services/axios'
  * Manga API service with backend
  */
 
+// Получить latest и side за один запрос
+export async function getHomeAll() {
+  return await get(`home/all`)
+}
+
 // Получить ленту последних обновлений главной страницы
 export async function getHomeLatestData(page='') {
   return await get(`/home/latest${page}`)
 }
 
-// Получить новые релизы
-export async function getHomeNew() {
-  return await get(`home/releases/new`)
-}
-
-// Получить популярные релизы
-export async function getHomeTop() {
-  return await get(`home/releases/top`)
+// Получить популярные и новые релизы
+export async function getHomeSide() {
+  return await get(`home/side`)
 }

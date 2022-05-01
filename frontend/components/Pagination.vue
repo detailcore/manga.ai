@@ -66,6 +66,7 @@ export default {
 
       if(this.type === 'USER_BOOKMARKS') this.$store.commit('bookmark/SET_USER_BOOKMARKS', res) // страница профиля пользователя
       if(this.type === 'POST_CHAPTER_LIST') this.$store.commit('post/SET_CHAPTERS', { res, id: this.$store.state.post.idByChapter }) // Список глав в FullStory
+      if(this.type === 'TEAM_POSTS') this.$store.commit('team/SET_TEAM_POSTS', res) // Страница переводчиков
     },
   },
 }

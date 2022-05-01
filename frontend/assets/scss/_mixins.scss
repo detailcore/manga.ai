@@ -161,6 +161,7 @@
 }
 
 @mixin text_two_line() {
+  white-space: normal;
   display: -webkit-box;
   overflow: hidden;
   -webkit-line-clamp: 2;
@@ -404,83 +405,6 @@
   &::-webkit-scrollbar-thumb {
     background-color: $orange_primary;
     border-radius: 6px;
-  }
-}
-
-@mixin widget_chapter {
-  .widget__chapter {
-    margin: 0 0 10px 0;
-    border-radius: 2px;
-    // background-color: rgba(255, 255, 255, 0.12);
-    background-color: #1e1e1e;
-    .title {
-      display: flex;
-      align-items: center;
-      height: 24px;
-      font-weight: 600;
-      padding: 0 0 0 2px;
-    }
-    .body {
-      padding: 0 4px;
-      height: 26px;
-      display: flex;
-      justify-content: space-between;
-      border-top: 1px solid #121212;
-      border-left: 2px solid rgba(0, 255, 34, 0.25);
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.12);
-      }
-      // .name_teams {
-        // width: calc(100% - 212px);
-        // display: flex;
-        // justify-content: space-between;
-      // }
-      .name {
-        display: flex;
-        flex-grow: 1;
-        align-items: center;
-        height: 26px;
-        .material-design-icon {
-          height: 26px;
-        }
-      }
-      .teams {
-        display: flex;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        .team {
-          padding: 0 4px;
-          display: flex;
-          align-items: center;
-        }
-      }
-      .like_time {
-        display: flex;
-        max-width: 210px;
-        white-space: nowrap;
-      }
-      .likes {
-        display: flex;
-        align-items: center;
-        padding: 0 6px;
-        span:last-of-type {
-          padding: 0 4px 0 2px;
-        }
-      }
-      .time {
-        display: flex;
-        align-items: center;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        span:last-of-type {
-          padding: 0 0 0 2px;
-        }
-      }
-    }
   }
 }
 

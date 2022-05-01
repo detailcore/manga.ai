@@ -5,6 +5,7 @@
         TEST 
       </div>
       <div v-show="1">
+        <img src="~/assets/images/no-image.png" alt="test">
         <img src="~/assets/images/mid_cover.jpg" alt="test">
         <img src="~/assets/images/cover_manga.jpg" alt="test">
         <img src="~/assets/images/one_pixel.jpg" alt="test">

@@ -1,7 +1,7 @@
 <template>
   <div class="comment__item">
     <div class="comment__content">
-      <div class="cover" :style="{ backgroundImage: 'url(' + cover + ')' }"></div>
+      <div class="cover" :style="{ backgroundImage: `url(${urlCover})` }"></div>
       <div class="body">
         <div class="header">
           <Nuxt-link :to="`user/${id_user}`"> {{ name }} </Nuxt-link>
@@ -65,6 +65,9 @@ export default {
     },
     hasParentName() {
       return this.parentName ? true : false
+    },
+    urlCover({ $config }) {
+      return $config.urlCoverUser + this.id_user + '/' + this.cover
     },
   },
 

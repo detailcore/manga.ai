@@ -1,11 +1,11 @@
 <template>
   <header class="region__header">
-    <div class="header">
+    <div class="header container">
       <div class="header__home">
         <Nuxt-link to="/" class="btn"><mdi-Home title="Главная страница" /></Nuxt-link>
         <Nuxt-link to="/library" class="btn"><mdi-Bookshelf title="Каталог" /></Nuxt-link>
 
-        <Region-Search />
+        <LazyRegion-Search />
 
       </div>
       <div class="header__control">
@@ -16,7 +16,7 @@
         <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />
         </div> -->
-        <Region-User />
+        <LazyRegion-User />
       </div>
     </div>
   </header>
@@ -34,9 +34,14 @@ export default {
       height: 64px;
       padding: 0 15px;
       @include flex_space_center;
+      &__home {
+        flex-grow: 1;
+        justify-content: flex-start;
+      }
       &__home,
       &__control {
-        @include flex_center_center;
+        display: flex;
+        align-items: center;
       }
     }
   }

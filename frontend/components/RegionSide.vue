@@ -2,25 +2,27 @@
   <div class="side">
     <div class="block top">
       <div class="block__title">Топ дня</div>
+      <div class="block__subtitle">Популярная манга за сутки</div>
       <widgets-card-short v-for="item in dataTopReleases" :key="item.id"
         :id="item.id"
         :alias="item.alias"
-        :cover="item.cover"
+        :cover="item.coverLow"
         :title="item.title"
         :year="item.year"
-        :category="item.type"
+        :category="item.category"
         type="top" />
     </div>
 
     <div class="block new">
       <div class="block__title">Новые тайтлы</div>
+      <div class="block__subtitle">Недавно добавленная манга</div>
       <widgets-card-short v-for="item in dataNewReleases" :key="item.id"
         :id="item.id"
         :alias="item.alias"
-        :cover="item.cover"
+        :cover="item.coverLow"
         :title="item.title"
         :year="item.year"
-        :category="item.type"
+        :category="item.category"
         type="top" />
     </div>
   </div>
@@ -36,19 +38,17 @@ export default {
   computed: {
     dataNewReleases() {
       for (const item of this.newReleases) {
-        item.title = item.title_rus
-        if(item.title == null) {
-          item.title = item.title_eng
-        }
+        item.category = item.type ? item.type.name : ''
+        item.coverLow = item.cover ? (item.cover.low ? item.cover.low : '') : ''
+        item.title = item.title_rus ? item.title_rus : (item.title_eng ? item.title_eng : '')
       }
       return this.newReleases
     },
     dataTopReleases() {
       for (const item of this.topReleases) {
-        item.title = item.title_rus
-        if(item.title == null) {
-          item.title = item.title_eng
-        }
+        item.category = item.type ? item.type.name : ''
+        item.coverLow = item.cover ? (item.cover.low ? item.cover.low : '') : ''
+        item.title = item.title_rus ? item.title_rus : (item.title_eng ? item.title_eng : '')
       }
       return this.topReleases
     },
@@ -57,8 +57,14 @@ export default {
 </script>
 
 <style lang="scss">
+.side {
+  .block__subtitle {
+    color: #919191;
+    margin-top: -10px;
+  }
   .block.new {
     top: 0;
     position: sticky;
   }
+}
 </style>

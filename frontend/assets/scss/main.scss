@@ -1,6 +1,7 @@
-@import '~/assets/scss/_mixins.scss' ;
+// @import '~/assets/scss/_fonts.scss' ;
+// @import '~/assets/scss/_mixins.scss' ;
 // @import '~/assets/scss/_normalize.scss' ;
-@import '~/assets/scss/_variables.scss' ;
+// @import '~/assets/scss/_variables.scss' ;
 
 html {
   font-family: Roboto;
@@ -28,10 +29,10 @@ a {
   }
 }
 
-* {
-  padding: 0;
-  margin: 0;
-}
+// * {
+//   padding: 0;
+//   margin: 0;
+// }
 
 *,
 *::before,
@@ -80,7 +81,12 @@ input {
 //* Сетка / Grid
 #__nuxt {
     @media (min-width: 1201px) {
+      .main__content { // главная страницы
+        .content { width: 66.666667%; }
+        .side { width: 33.333333%; }
+      }
       .container {
+        // max-width: 1320px;
         max-width: 1140px;
         padding-left: 50px;
         padding-right: 50px;
@@ -88,33 +94,251 @@ input {
         min-width: 320px;
         width: 100%;
       }
-      .header,
-      .footer,
-      .manga_block {
-        max-width: 1320px;
-        margin: 0 auto;
+      .btn { margin: 0 12px; }
+      .library_item { // Страница библиотеки
+        width: 20%;
       }
-      .btn {
-        margin: 0 12px;
+      .region_manga { // FullStory
+        .manga_block {
+          max-width: 1320px;
+          margin: 0 auto;
+          border-radius: 5px 5px 0 0;
+        }
       }
     }
 
     @media (max-width: 1200px) {
-      .btn {
-        margin: 0 8px;
+      .main__content { // главная страницы
+        .content { width: 66.666667%; }
+        .side { width: 33.333333%; }
+      }
+      .btn { margin: 0 8px; }
+      .region_manga { // FullStory
+        .block__cover { max-width: 260px; }
+      }
+    }
+
+    @media (max-width: 1060px) {
+      .library_item { // Страница библиотеки
+        width: 25%;
+      }
+      .region_manga { // FullStory
+        .block__cover { max-width: 220px; }
       }
     }
 
     @media (max-width: 860px) {
-      .btn {
-        margin: 0;
+      .main__content { // главная страницы
+        .content { width: 70%; }
+        .side { width: 30%;
+          .short {
+            .cover { max-width: 55px; height: 75px; }
+            .category { display: none; }
+          }
+        }
+      }
+      .library_item { width: 20%; }
+      .library { // Страница библиотеки
+        .search-results { width: 100%; }
+        .search-filter { display: none; }
+        .btn {
+          display: flex;
+          position: absolute;
+          right: 15px;
+          top: auto;
+        }
+        &.filter-is-mobi {
+          .search-filter {
+            display: block;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            height: auto;
+            margin: 0;
+            background-color: #121212;
+            .btn {
+              top: 0;
+              right: 0;
+              z-index: 20;
+              position: absolute;
+            }
+          }
+        }
+      }
+      .region_manga { // FullStory
+        .block__cover { max-width: 200px; }
+        .widget__chapter {
+          .link_teams {
+            flex-direction: column;
+            .link_name { width: auto; }
+            .teams { color: #919191; }
+          }
+          .like_time {
+            align-items: flex-end;
+            flex-direction: column;
+            justify-content: center;
+            div,
+            span {
+              padding-right: 0;
+            }
+            .date {
+              // max-width: 100px;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+      }
+      .btn { margin: 0; }
+      .profile.team {  // Страница переводчиков
+        .cover__avatar { margin-bottom: 0; margin-left: 6px; }
+        .contacts { margin-top: 0; margin-left: 6px; }
+      }
+    }
+
+    @media (max-width: 710px) {
+      .block__title { font-size: 1.45rem; }
+      .block__subtitle { font-size: 0.95rem; }
+      .header {
+        padding: 0 4px;
+      }
+      .main__content { // главная страницы
+        flex-direction: column;
+        .content { width: 100%; }
+        .side {
+          width: 100%;
+          display: flex;
+          position: relative;
+          flex-direction: row;
+          justify-content: space-between;
+          &::before {
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 100%;
+            content: "";
+            margin: 0 -15px;
+            position: absolute;
+            background: linear-gradient(to bottom, #121212 50%, #252525 100%);
+          }
+          .block {
+            width: 49%;
+            position: relative;
+            .title {
+              margin-bottom: 0;
+              -webkit-line-clamp: 3;
+            }
+          }
+        }
+      }
+      .library_item { // Страница библиотеки
+        width: 25%;
+      }
+      .region_manga { // FullStory
+        .pseudo_parallax_cover {
+          min-height: 50vh;
+          img { top: 0; filter: none; }
+          picture::after {
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: '';
+            position: fixed;
+            background: linear-gradient(to top, #121212 19%, #ff000000 48%);
+          }
+        }
+        .manga_block {
+          padding: 0 4px;
+          flex-direction: column-reverse;
+          .btn_action { flex-direction: column;
+            .item {
+              margin: 4px 0;
+            }
+          }
+        }
+        .block__cover {
+          margin: 0;
+          max-width: none;
+          picture {
+            display: none;
+          }
+        }
+      }
+      .profile.team {  // Страница переводчиков
+        .content_team {
+          flex-direction: column-reverse;
+          .links { justify-content: space-evenly; }
+          .people_team {
+            flex-wrap: wrap;
+            flex-direction: row;
+          }
+        }
       }
     }
 
     @media (max-width: 600px) {
+      .main__content { // главная страницы
+        .content { width: 100%;
+          .cover {
+            width: 64px;
+            height: 90px;
+          }
+          .info {
+            font-size: 0.9rem;
+            width: calc(100% - 64px);
+          }
+          .title { font-size: 1rem; }
+        }
+      }
+      // Страница библиотеки
+      .library_item { width: 33.333333%; }
+      .profile.team {  // Страница переводчиков
+        .btn__line {
+          margin: 6px;
+          height: auto;
+          flex-direction: column;
+          .btn__line__button {
+            width: 100%;
+            margin: 3px 0;
+          }
+        }
+        .cover__avatar {
+          min-width: 160px;
+          min-height: 160px;
+        }
+        .user_line {
+          .login {
+            font-size: 1.4rem;
+            font-weight: 400;
+            display: -webkit-box;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+          }
+        }
+      }
     }
 
     @media (max-width: 500px) {
+      // Страница библиотеки
+      .library_item { width: 50%; }
+      .profile.team {  // Страница переводчиков
+        .cover__avatar {
+          min-width: 120px;
+          min-height: 120px;
+        }
+        .user_line {
+          .login {
+            font-size: 1.2rem;
+            font-weight: 200;
+            -webkit-line-clamp: 3;
+          }
+        }
+      }
     }
 }
 
@@ -154,6 +378,9 @@ input {
   font-weight: 200;
   font-size: 1rem;
   padding: 4px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   span {
     font-weight: 600;
   }

@@ -90,7 +90,8 @@ export default {
     display: flex;
     align-items: center;
     justify-self: start;
-    width: 300px;
+    width: 100%;
+    max-width: 400px;
     .search {
       @include flex_center_center;
       position: relative;

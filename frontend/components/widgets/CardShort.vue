@@ -1,6 +1,7 @@
 <template>
   <nuxt-link :to="urlResult"  class="short">
-    <div class="cover" :style="dataResult.cover"></div>
+    <img class="cover" loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="dataResult.title" />
+
     <div class="info">
       <div class="title"> {{ dataResult.title }} </div>
       <div class="category" v-if="dataResult.category"> {{ dataResult.category }} <span>({{ dataResult.year }})</span> </div>
@@ -25,6 +26,9 @@ export default {
   },
 
   computed: {
+    imageUrl() {
+      return this.dataResult.cover
+    },
     urlResult() {
       return (this.alias === '') ? this.dataResult.url + this.id : this.dataResult.url + this.alias
     },
@@ -38,7 +42,6 @@ export default {
             title: this.title,
             description: this.description
           }
-          break;
 
         case 'top':
           return {
@@ -49,7 +52,6 @@ export default {
             title: this.title,
             category: this.category
           }
-          break;
 
         case 'branch':
           return {
@@ -65,7 +67,6 @@ export default {
             title: this.title,
             count: this.count,
           }
-          break;
       
         default:
           break;
@@ -75,12 +76,8 @@ export default {
 
   methods: {
     isCover(typeUrl) {
-      return this.cover ? 
-        { backgroundImage: `url(${typeUrl + this.id +'/'+ this.cover})` } : 
-        { 
-          backgroundImage: 'url(http://api.manga.ai/uploads/no-image.png)', //! ХАРДКОД
-          backgroundSize: 'auto'
-        }
+      return this.cover ? typeUrl + this.id +'/'+ this.cover : typeUrl.replace(/uploads\/.*?$/gm, 'uploads/') + 'no-image.png'
+      // return this.cover ? typeUrl + this.id +'/'+ this.cover : require('~/assets/images/no-image.jpg')
     }
   },
 };

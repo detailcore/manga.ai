@@ -3,13 +3,13 @@
     <div class="chapter" v-if="item.post">
 
       <div class="chapter__item">
-        <Nuxt-link :to="aliasTitle"> {{ nameTitle }} </Nuxt-link>
+        <Nuxt-link class="name_title" :to="aliasTitle"> {{ nameTitle }} </Nuxt-link>
         <mdi-MenuRight title="" />
-        <Nuxt-link :to="aliasChapter"> Том {{ item.volume }} Глава {{ item.chapter }} {{ nameChapter }} </Nuxt-link>
+        <Nuxt-link class="name_chapter" :to="aliasChapter"> Том {{ item.volume }} Глава {{ item.chapter }} {{ nameChapter }} </Nuxt-link>
       </div>
 
       <div class="chapter__info">
-        <Nuxt-link :to="'/user/' + item.id_user"> {{ userName }} </Nuxt-link>
+        <Nuxt-link class="name_user" :to="'/user/' + item.id_user"> {{ userName }} </Nuxt-link>
         <div class="date">
           {{ updateTime }}
         </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <WidgetsModerationStatus v-if="isOpenStatus" :id="item.id" />
+    <LazyWidgetsModerationStatus v-if="isOpenStatus" :id="item.id" />
 
   </div>
 </template>
@@ -112,14 +112,29 @@ export default {
     justify-content: space-between;
     border-radius: 3px;
     border: 1px solid rgba(255, 255, 255, 0.12);
+    .name_user,
+    .name_title,
+    .name_chapter {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .name_user {
+      width: 70px;
+      text-align: right;
+    }
     &__item {
       display: flex;
       padding-left: 8px;
       align-items: center;
+      overflow: hidden;
+      min-width: 210px;
+      max-width: calc(100% - 230px);
     }
     &__info {
       display: flex;
       align-items: center;
+      max-width: 230px;
       .date {
         width: 65px;
         font-size: .85rem;

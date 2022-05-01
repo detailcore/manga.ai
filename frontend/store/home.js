@@ -1,6 +1,6 @@
-import { 
-  getHomeNew,
-  getHomeTop,
+import {
+  getHomeAll,
+  // getHomeSide,
   getHomeLatestData,
 } from '~/services/api'
 
@@ -16,7 +16,7 @@ export const mutations = {
   SET_LATEST(state, payload) {
     let data = payload.data.filter(item => {
       item.type = item.type ? item.type.name : ''
-      item.cover = item.cover ? item.cover.low + '.webp' : ''
+      item.cover = item.cover ? item.cover.low : ''
       item.adult_rank = item.adult_rank ? item.adult_rank.name : ''
       item.title = item.title_rus ? item.title_rus : (item.title_eng ? item.title_eng : '')
       delete item.title_rus
@@ -43,18 +43,21 @@ export const mutations = {
 }
 
 export const actions = {
+  async FETCH_ALL({ commit }) {
+    const { latest, side } = await getHomeAll()
+    commit('SET_LATEST', { data: latest.data, next_page_url: latest.next_page_url })
+    commit('SET_TOP', side.top_releases)
+    commit('SET_NEW', side.new_releases)
+  },
   async FETCH_LATEST({ commit, state }) {
     const { data, next_page_url } = await getHomeLatestData(state.nextPageUrl)
     commit('SET_LATEST', { data, next_page_url })
   },
-  async FETCH_NEW({ commit }) {
-    const res = await getHomeNew()
-    commit('SET_NEW', res)
-  },
-  async FETCH_TOP({ commit }) {
-    const res = await getHomeTop()
-    commit('SET_TOP', res)
-  },
+  // async FETCH_SIDE({ commit }) {
+  //   const res = await getHomeSide()
+  //   commit('SET_TOP', res.top_releases)
+  //   commit('SET_NEW', res.new_releases)
+  // },
 }
 
 export const getters = {
