@@ -1,3 +1,9 @@
+
+/**
+ *! ЭТОТ ФАЙЛ МОЖНО УДАЛИТЬ, УЖЕ НЕ ИСПОЛЬЗУЕТСЯ
+ * *FIX
+ */
+
 import Vue from 'vue'
 import axios from 'axios'
 

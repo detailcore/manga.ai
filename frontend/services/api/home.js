@@ -1,4 +1,4 @@
-import { get } from '~/services/axios'
+import { apiAny } from '.'
 
 /**
  * Manga API service with backend
@@ -6,15 +6,15 @@ import { get } from '~/services/axios'
 
 // Получить latest и side за один запрос
 export async function getHomeAll() {
-  return await get(`home/all`)
+  return await apiAny.get(`home/all`)
 }
 
 // Получить ленту последних обновлений главной страницы
 export async function getHomeLatestData(page='') {
-  return await get(`/home/latest${page}`)
+  return await apiAny.get(`/home/latest${page}`)
 }
 
 // Получить популярные и новые релизы
 export async function getHomeSide() {
-  return await get(`home/side`)
+  return await apiAny.get(`home/side`)
 }

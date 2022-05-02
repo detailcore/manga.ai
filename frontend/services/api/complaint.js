@@ -1,4 +1,4 @@
-import { post } from '~/services/axios'
+import { apiAny } from '.'
 
 /**
  * Manga API service with backend
@@ -6,5 +6,5 @@ import { post } from '~/services/axios'
 
 // Создать жалобу
 export async function complaintCreate(data) {
-  return await post(`complaint`, data)
+  return await apiAny.post(`complaint`, data)
 }

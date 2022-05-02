@@ -14,3 +14,27 @@ export * from '~/services/api/edit'
 export * from '~/services/api/library'
 export * from '~/services/api/bookmark'
 export * from '~/services/api/home'
+
+
+
+// Для работы Axios за пределами Vue и Nuxt, к примеру при использовании с файле '~/services/api/post' и т.д.
+const requestMethods = [
+  'request', 'delete', 'get', 'head', 'options', // url, config
+  'post', 'put', 'patch' // url, data, config
+]
+
+let client = undefined
+let apiNonVueFile = {}
+
+export function setClient(newClient) {
+  client = newClient
+}
+
+requestMethods.forEach(item => {
+  apiNonVueFile[item] = function () {
+    if(!client) throw new Error('apiNonVueFile file not installed')
+    return client[item].  apply(null, arguments)
+  }
+})
+
+export { apiNonVueFile as apiAny, }

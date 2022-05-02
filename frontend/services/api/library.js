@@ -1,4 +1,4 @@
-import { get, post } from '~/services/axios'
+import { apiAny } from '.'
 
 /**
  * Manga API service with backend
@@ -8,15 +8,15 @@ import { get, post } from '~/services/axios'
 
 // Получить начальную страницу
 export async function libraryInit() {
-    return await get(`library`)
+    return await apiAny.get(`library`)
 }
 
 // Получить краткое описание
 export async function libraryLoadShotStory(id) {
-    return await get(`library/${id}`)
+    return await apiAny.get(`library/${id}`)
 }
 
 // Получить резальтат фильтра
 export async function libraryGetFilter(page, data) {
-    return await post(`library?page=${page}`, data)
+    return await apiAny.post(`library?page=${page}`, data)
 }

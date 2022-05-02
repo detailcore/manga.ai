@@ -1,4 +1,4 @@
-import { post, get } from '~/services/axios'
+import { apiAny } from '.'
 
 /**
  * Manga API service with backend
@@ -11,22 +11,22 @@ import { post, get } from '~/services/axios'
 
 // Получить кол-во всего что есть
 export async function moderationGetCount() {
-  return await get(`moderation/count_everything`)
+  return await apiAny.get(`moderation/count_everything`)
 }
 
 // Получить публикации в зависимости от статуса
 export async function moderationGetContent(type, status, page) {
-  return await get(`moderation/content?type=${type}&statuses=${status}&page=${page}`)
+  return await apiAny.get(`moderation/content?type=${type}&statuses=${status}&page=${page}`)
 }
 
 // Создать причину модерации
 export async function moderationCreateReason(params) {
-  return await post(`moderation/reason`, params)
+  return await apiAny.post(`moderation/reason`, params)
 }
 
 // Обновить статус
 export async function moderationUpdateStatus(params) {
-  return await post(`moderation/update`, params)
+  return await apiAny.post(`moderation/update`, params)
 }
 
 // Получить данные для главы

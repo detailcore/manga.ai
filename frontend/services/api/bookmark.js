@@ -1,4 +1,4 @@
-import { get, post, _delete } from '~/services/axios'
+import { apiAny } from '.'
 
 /**
  * Manga API service with backend
@@ -6,25 +6,24 @@ import { get, post, _delete } from '~/services/axios'
 
 // Получить список закладок
 export async function getBookmarksList() {
-  return await get(`bookmark/list`)
+  return await apiAny.get(`bookmark/list`)
 }
 
 // Получить текущую закладку
 export async function getBookmark(data) {
-  return await post(`bookmark`, data)
-  // return await post(`bookmark?id=${id}`)
+  return await apiAny.post(`bookmark`, data)
 }
 
 // Получить закладки пользователя
 export async function getUserBookmarks(id_user, id_type) {
-  return await get(`bookmark/${id_user}/${id_type}/posts`)
+  return await apiAny.get(`bookmark/${id_user}/${id_type}/posts`)
 }
 // Создать закладку
 export async function createBookmark(data) {
-  return await post(`bookmark/create`, data)
+  return await apiAny.post(`bookmark/create`, data)
 }
 
 // Удалить закладку
 export async function deleteBookmark(id) {
-  return await _delete(`bookmark/${id}/delete`)
+  return await apiAny.delete(`bookmark/${id}/delete`)
 }

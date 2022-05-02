@@ -1,4 +1,4 @@
-import { post, get, put, _delete } from '~/services/axios'
+import { apiAny } from '.'
 
 /**
  * Manga API service with backend
@@ -8,32 +8,32 @@ import { post, get, put, _delete } from '~/services/axios'
 
 // Создать
 export async function commentCreate(params) {
-  console.log(params)
-  return await post(`comments`, params)
+  return await apiAny.post(`comments`, params)
 }
 
 // Получить
 export async function getComments(params) {
-  return await get(`comments`, params)
+  let { page_id, commentable_id } = params
+  return await apiAny.get(`comments?page_id=${page_id}&commentable_id=${commentable_id}`, )
 }
 
 // Плюс голос
 export async function setUpVoteComment(id) {
-  return await post(`/comments/${id}/upvote`)
+  return await apiAny.post(`/comments/${id}/upvote`)
 }
 
 // Минус голос
 export async function setDownVoteComment(id) {
-  return await post(`/comments/${id}/downvote`)
+  return await apiAny.post(`/comments/${id}/downvote`)
 }
 
 // Редактировать
 export async function updateComment(params) {
   let { id, content } = params
-  return await put(`/comments/${id}`, content)
+  return await apiAny.put(`/comments/${id}`, content)
 }
 
 // Удалить
 export async function deleteComment(id) {
-  return await _delete(`/comments/${id}`)
+  return await apiAny.delete(`/comments/${id}`)
 }
