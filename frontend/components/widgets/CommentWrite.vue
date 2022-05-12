@@ -60,7 +60,7 @@ export default {
       }
       if(this.type === 'reader') {
         idTmp = this.idChapter
-        pageTmp = this.readerPageCurrent
+        pageTmp = this.idChapter +'.'+this.readerPageCurrent
       }
       let comment = {
         content: this.addText,

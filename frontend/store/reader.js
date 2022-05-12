@@ -35,7 +35,9 @@ import {
       state.pageCurrent = 1
     },
     SET_PAGE_CURRENT(state, { num, id, alias }) {
-      this.dispatch('reader/FETCH_CHAPTER_COMMENTS', num) // хз на сколько это правильно
+      if(state.readerSetting.comments === 'show') {
+        this.dispatch('reader/FETCH_CHAPTER_COMMENTS', num) // хз на сколько это правильно
+      }
 
       state.pageCurrent = num
       this.$router.push({  // добавляем хеш в url при перелистывании страницы
@@ -50,26 +52,9 @@ import {
       state.pageNumbers = [...new Set(numbers)] // удаляет дубликаты
     },
 
-    // SET_CHAPTER_LIST(state, payload) {
-    //   state.chapterList = payload
-
-    //   // Ветвление
-    //   let teams = []
-    //   state.chapterList.forEach(item => {
-    //     if(item.teams.length >= 1) {
-    //       item.teams.forEach(el => teams.push(el))
-    //     }
-    //   })
-    //   teams = [...new Set(teams)]
-
-    //   let branches = teams.reduce((o, i) => {
-    //     if (!o.find(v => v.id == i.id)) {
-    //       o.push(i)
-    //     }
-    //     return o
-    //   }, [])
-    //   state.branches = branches
-    // },
+    SET_CHAPTER_LIST(state, payload) {
+      state.chapterList = payload
+    },
 
     SET_ALIAS(state, payload) {
       state.alias = payload
