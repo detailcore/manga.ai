@@ -3,7 +3,7 @@
     <div class="block__title">Модерация</div>
 
     <div class="panel">
-      <div class="menu">
+      <div class="menu" v-if="count.manga">
         <div class="menu-item" :class="{ active: type === 'manga' }" @click="setType('manga')">
           Манга
           <span class="count">{{ count.manga ? count.manga.total : 0 }}</span>
@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="menu sub-menu">
+      <div class="menu sub-menu" v-if="count.manga">
         <div class="menu-item" :class="{ active: statuses === 1 }" @click="setStatuses(1)">
           Опубликовано
           <span class="count">{{ (type === 'manga') ? count.manga[1] : count.chapter[1] }}</span>
@@ -37,18 +37,18 @@
         </div>
       </div>
 
-      <Paginator v-if="pagination.pageMax > 1" />
+      <Paginator v-show="pagination.pageMax > 1" />
 
       <div class="result" v-if="content.length > 0">
-        <div class="items" v-if="type === 'manga'">
+        <div class="items" v-show="type === 'manga'">
           <WidgetsModerationTitle v-for="item in content" :key="item.id" :item="item" />
         </div>
-        <div class="items" v-if="type === 'chapter'">
+        <div class="items" v-show="type === 'chapter'">
           <WidgetsModerationChapter v-for="item in content" :key="item.id" :item="item" />
         </div>
       </div>
 
-      <Paginator v-if="pagination.pageMax > 1" />
+      <Paginator v-show="pagination.pageMax > 1" />
     </div>
 
   </div>
@@ -61,12 +61,8 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  async created() {
+  async mounted() {
     await this.loadContent(this.type, this.statuses)
-  },
-
-  async asyncData({ store }) {
-    await store.dispatch('moderation/FETCH_COUNT')
   },
 
   computed: {
@@ -87,6 +83,9 @@ export default {
 
   methods: {
     async loadContent(type='manga', status=1) {
+      if(!this.count.manga) {
+        await this.$store.dispatch('moderation/FETCH_COUNT')
+      }
       await this.$store.dispatch('moderation/FETCH_CONTENT', {
         type: type,
         status: status,

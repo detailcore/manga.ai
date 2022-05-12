@@ -88,3 +88,26 @@ export function notify(res) {
 //  export function getWidthViewport() {
 //   return window.innerWidth
 // }
+
+
+/**
+ * Объединить одинаковые главы в массив
+ * @param [Array] []
+ * @return [Array] []
+ */
+ export function mergeDuplicates(array) {
+  let result = []
+
+  if(array) {
+    result = Object.values(
+      array.reduce((r, cur) => {
+        const key = 'k' + cur['chapter']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам 
+        (r[key] = r[key] || []).push(cur);
+
+        return r;
+      }, {})
+    );
+  }
+
+  return result
+}

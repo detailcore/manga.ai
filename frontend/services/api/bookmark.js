@@ -10,8 +10,8 @@ export async function getBookmarksList() {
 }
 
 // Получить текущую закладку
-export async function getBookmark(data) {
-  return await apiAny.post(`bookmark`, data)
+export async function getBookmark(id) {
+  return await apiAny.get(`bookmark?id=${id}`)
 }
 
 // Получить закладки пользователя

@@ -9,6 +9,11 @@
           <div class="value" :class="{ selected: !isHorizontal }" @click="setMode('vertically')"> Вертикальный </div>
           <div class="value" :class="{ selected: isHorizontal }" @click="setMode('horizontally')"> Горизонтальный </div>
         </div>
+        <div class="title"> Комментарии в читалке </div>
+        <div class="values">
+          <div class="value" :class="{ selected: !commentsShow }" @click="setComments('hide')"> Отключены </div>
+          <div class="value" :class="{ selected: commentsShow }" @click="setComments('show')"> Включены </div>
+        </div>
       </div>
       
     </div>
@@ -21,16 +26,24 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters( 'reader', { mode: 'GET_MODE' }),
+    ...mapGetters( 'reader', { comments: 'GET_SETTING_COMMENTS' }),
 
     isHorizontal() {
       return this.mode === 'horizontally'
-    }
+    },
+    commentsShow() {
+      return this.comments === 'show'
+    },
   },
 
   methods: {
     setMode(mode) {
       localStorage.setItem('mode', mode)
-      this.$store.commit('reader/SET_MODE', mode)
+      this.$store.commit('reader/SET_SETTING_MODE', mode)
+    },
+    setComments(value) {
+      localStorage.setItem('commentsInReader', value)
+      this.$store.commit('reader/SET_SETTING_COMMENTS', value)
     },
     hide() {
       this.$store.commit('reader/SET_OPEN_SETTING', false)

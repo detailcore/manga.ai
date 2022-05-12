@@ -61,7 +61,6 @@ export const actions = {
     commit('SET_CHAPTERS', {res, id})
   },
   async FETCH_RELATED({ commit }, params) {
-    console.log(123)
     const res = await relatedGetById(params)
     commit('SET_RELATED', { data: res, id: params })
   },

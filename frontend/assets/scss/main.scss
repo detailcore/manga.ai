@@ -34,6 +34,10 @@ a {
 //   margin: 0;
 // }
 
+ul {
+  padding: 0;
+}
+
 *,
 *::before,
 *::after {
@@ -105,6 +109,14 @@ input {
           border-radius: 5px 5px 0 0;
         }
       }
+      .page_reader { // Читалка
+        .btn-select {
+          .modal-values {
+            width: 420px;
+            // width: 232px;
+          }
+        }
+      }
     }
 
     @media (max-width: 1200px) {
@@ -124,6 +136,24 @@ input {
       }
       .region_manga { // FullStory
         .block__cover { max-width: 220px; }
+      }
+      .page_reader { // Читалка
+        .bookmarks {
+          .name,
+          .arrow { display: none; }
+          .material-design-icon { margin-right: 0; }
+          .bookmarks__list {
+            right: 0;
+            min-width: 120px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            .material-design-icon {
+              min-width: 16px;
+              min-height: 16px;
+            }
+          }
+        }
       }
     }
 
@@ -277,6 +307,12 @@ input {
           }
         }
       }
+      .page_reader { // Читалка
+        .header {
+          .info { display: none; }
+          .backspace { color: #ff6820; display: flex; margin-left: 10px; }
+        }
+      }
     }
 
     @media (max-width: 600px) {
@@ -336,6 +372,26 @@ input {
             font-size: 1.2rem;
             font-weight: 200;
             -webkit-line-clamp: 3;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 460px) {
+      .page_reader { // Читалка
+        .header {
+          .home { display: none; }
+          .backspace { margin: 0; }
+          .btn-line button {
+            min-width: auto;
+            width: 36px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .btn-selected {
+            .vol { display: none; }
           }
         }
       }

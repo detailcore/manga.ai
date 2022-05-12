@@ -4,17 +4,18 @@
       <mdi-BookmarkPlus title="Добавить в закладки" v-if="bookmarkName === 'В закладки'" />
       <mdi-Bookmark :title="'В закладках ' + bookmarkName" v-else />
       <span class="name"> {{ bookmarkName }} </span>
-      <mdi-MenuUp title="Закрыть закладки" v-if="showBookmarkList"/>
-      <mdi-MenuDown title="Открыть закладки" v-if="!showBookmarkList"/>
+      <mdi-MenuUp class="arrow" title="Закрыть закладки" v-if="showBookmarkList"/>
+      <mdi-MenuDown class="arrow" title="Открыть закладки" v-if="!showBookmarkList"/>
     </div>
 
     <div class="bookmarks__list" v-show="showBookmarkList">
       <span class="bookmark" v-for="item in bookmarks" :key="item.id" @click="createBookmark(item.id)">
-        <mdi-Plus :title="'Добавить в '+ item.name" />
+        <mdi-Plus :title="'Добавить в '+ item.name" v-if="item.name !== bookmarkName" />
+        <mdi-Minus :title="'Удалить из '+ item.name" v-if="item.name === bookmarkName" />
         {{ item.name }}
       </span>
       <span class="bookmark del" @click.prevent="deleteBookmark()" v-if="!isEmptyBookmark">
-        Удалить из закладок
+        Удалить
         <mdi-TrashCan title="Удалить из закладок" />
       </span>
     </div>
@@ -66,7 +67,7 @@ export default {
     init() {
       if(this.userId) {
         if(this.bookmarks.length === 0) this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
-        this.$store.dispatch('bookmark/FETCH_BOOKMARK', { id: this.id_post, id_user: this.userId })
+        this.$store.dispatch('bookmark/FETCH_BOOKMARK', this.id_post)
       }
     },
     createBookmark(id) { // Создать/Изменить

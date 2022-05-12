@@ -47,6 +47,7 @@ import Google from 'vue-material-design-icons/Google.vue';
 import Discord from 'vue-material-design-icons/Discord.vue';
 // import YCombinator from 'vue-material-design-icons/YCombinator.vue';
 import Plus from 'vue-material-design-icons/Plus.vue';
+import Minus from 'vue-material-design-icons/Minus.vue';
 import Cog from 'vue-material-design-icons/Cog.vue';
 import Earth from 'vue-material-design-icons/Earth.vue';
 import FormatListText from 'vue-material-design-icons/FormatListText.vue';
@@ -61,6 +62,7 @@ import Pencil from 'vue-material-design-icons/Pencil.vue';
 import TrashCan from 'vue-material-design-icons/TrashCan.vue';
 import CloudDownload from 'vue-material-design-icons/CloudDownload.vue';
 import FilterMenu from 'vue-material-design-icons/FilterMenu.vue';
+import KeyboardBackspace from 'vue-material-design-icons/KeyboardBackspace.vue';
 
 
 // import DominoMask from 'vue-material-design-icons/DominoMask.vue';
@@ -110,6 +112,7 @@ export default function materialIcons() {
   Vue.component('MdiDiscord', Discord);
   // Vue.component('MdiYCombinator', YCombinator);
   Vue.component('MdiPlus', Plus);
+  Vue.component('MdiMinus', Minus);
   Vue.component('MdiCog', Cog);
   Vue.component('MdiEarth', Earth);
   Vue.component('MdiFormatListText', FormatListText);
@@ -124,6 +127,7 @@ export default function materialIcons() {
   Vue.component('MdiTrashCan', TrashCan);
   Vue.component('MdiCloudDownload', CloudDownload);
   Vue.component('MdiFilterMenu', FilterMenu);
+  Vue.component('MdiKeyboardBackspace', KeyboardBackspace);
 
 
 

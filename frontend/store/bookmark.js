@@ -49,7 +49,12 @@ export const mutations = {
 export const actions = {
   async FETCH_BOOKMARK({ commit }, data) { // текущая закладка
     const res = await getBookmark(data)
-    commit('SET_BOOKMARK', res)
+    if(res.id) {
+      commit('SET_BOOKMARK', res)
+    } else {
+      commit('SET_BOOKMARK', res.data)
+    }
+    
   },
   async FETCH_BOOKMARK_LIST({ commit }) { // список закладок
     const res = await getBookmarksList()

@@ -6,6 +6,11 @@
         :sort="image.sort" 
         :link="image.link" 
         :page="image.page" />
+
+      <div class="button">
+        <div class="prev" :class="{ hidden: isFirst }" @click="prev"></div>
+        <div class="next" @click="next"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -18,10 +23,17 @@ export default {
     pages: { type: Array, defualt: [] },
   },
 
+  data() {
+    return {
+      count: 1
+    }
+  },
+
   computed: {
     ...mapGetters( 'reader', { idPost: 'GET_ID_POST' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { idChapter: 'GET_ID_CHAPTER' }),
+    ...mapGetters( 'reader', { numbers: 'GET_PAGE_NUMBERS' }),
 
     pageImages() { // массив т.к. картинки могут быть нарезаны на несколько patr
       let result = []
@@ -40,6 +52,15 @@ export default {
     urlImage({ $config: { urlMangaReader } }) {
       return urlMangaReader + this.idPost + '/' + this.idChapter + '/'
     },
+    lastPage() {
+      return this.numbers[this.numbers.length-1]
+    },
+    isFirst() {
+      return this.numbers[0] === this.pageCur
+    },
+    isLast() {
+      return this.pageCur === this.lastPage
+    },
   },
 
   mounted() {
@@ -47,6 +68,23 @@ export default {
   },
 
   methods: {
+    last() {
+      this.$nuxt.$emit('go-to-next-chapter', 'any payload')
+    },
+    prev() {
+      if(this.pageCur > 1) {
+        this.count = +this.pageCur
+        this.$store.commit('reader/SET_PAGE_CURRENT', { num: --this.count, id: this.idChapter, alias: this.$route.params.alias })
+      }
+    },
+    next() {
+      if(this.pageCur < this.lastPage) {
+        this.count = +this.pageCur
+        this.$store.commit('reader/SET_PAGE_CURRENT', { num: ++this.count, id: this.idChapter, alias: this.$route.params.alias })
+      } else { // Переключение на следующую главу, если страницы закончились
+        this.last()
+      }
+    },
     loadImages() {
       let newImageObj = [],
           urlImage = this.urlImage
@@ -93,14 +131,13 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .reader-image {
   display: flex;
   justify-content: center;
   .pages {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    max-width: 100%;
+    position: relative;
     .page {
       display: flex;
       flex-direction: column;
@@ -108,6 +145,34 @@ export default {
     img {
       margin: 0;
       padding: 0;
+    }
+    .button {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+      .prev {
+        width: 40%;
+        top: 0;
+        left: 0;
+        position: inherit;
+      }
+      .next {
+        width: 40%;
+        top: 0;
+        right: 0;
+        position: inherit;
+      }
+      .prev,
+      .next {
+        height: 100%;
+        cursor: pointer;
+        background-color: rgba(255, 0, 140, 0.5);
+      }
     }
   }
 }

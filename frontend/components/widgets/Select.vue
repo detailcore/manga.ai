@@ -1,10 +1,10 @@
 <template>
   <div class="btn-select" v-click-outside="hide">
     <div class="btn-selected" @click="isActive = !isActive">
-      {{ type }} {{ selected }}/{{ max }}
+      {{ type }} {{ selected }}/{{ lastPage }}
     </div>
     <ul class="values" v-show="isActive">
-      <li class="value" v-for="item in max" :key="item" :value="item" @click="selectPage">
+      <li class="value" v-for="item in pages" :key="item" :value="item" @click="selectPage">
         {{ type }} {{ item }}
       </li>
     </ul>
@@ -26,13 +26,25 @@ export default {
   },
 
   computed: {
+    ...mapGetters( 'reader', { pages: 'GET_PAGE_NUMBERS' }),
     ...mapGetters( 'reader', { selected: 'GET_PAGE_CURRENT' }),
-    ...mapGetters( 'reader', { max: 'GET_PAGE_MAX' }),
+
+    lastPage() {
+      return this.pages[this.pages.length-1]
+    },
+  },
+
+  created() {
+    this.init()
   },
 
   methods: {
+    init() {
+      this.$store.commit('reader/SET_PAGE_NUMBERS')
+    },
     selectPage(e) {
-      this.$store.commit('reader/SET_PAGE_CURRENT', +e.target.value)
+      let idChapter = this.$route.params.id.replace('ch', '')
+      this.$store.commit('reader/SET_PAGE_CURRENT', { num: +e.target.value, id: +idChapter, alias: this.$route.params.alias })
       this.hide()
     },
     show() {

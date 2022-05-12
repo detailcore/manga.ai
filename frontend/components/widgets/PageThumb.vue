@@ -89,6 +89,7 @@ export default {
 </script>
 
 <style lang="scss">
+.page_main {
   .page {
     width: 144px;
     overflow: hidden;
@@ -157,4 +158,5 @@ export default {
   .duplicate_number {
     background-color: #900;
   }
+}
 </style>

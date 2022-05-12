@@ -1,4 +1,5 @@
 import { 
+    getComments,
     chapterGetById,
     chapterListGetById,
   } from '~/services/api'
@@ -6,13 +7,15 @@ import {
   export const state = () => ({
     alias: null,
     remove: [],
-    pageMax: 0,
     chapter: [],
     pageCurrent: 1,
     chapterList: [],
+    chapterListSelected: [],
+    pageNumbers: [],
     readerSetting: {
-      isOpen: false,
       mode: '',
+      isOpen: false,
+      comments: '',
     },
     duplicateIdPages: [],
   })
@@ -28,20 +31,54 @@ import {
         })
       }
     },
-    SET_PAGE_CURRENT(state, payload) {
-      state.pageCurrent = payload
+    SET_RESET_PAGE(state) {
+      state.pageCurrent = 1
     },
-    SET_PAGE_MAX(state, payload) {
-      state.pageMax = payload
+    SET_PAGE_CURRENT(state, { num, id, alias }) {
+      this.dispatch('reader/FETCH_CHAPTER_COMMENTS', num) // хз на сколько это правильно
+
+      state.pageCurrent = num
+      this.$router.push({  // добавляем хеш в url при перелистывании страницы
+        hash:"#" + num,
+        params: { id: `ch${id}`, alias: alias },
+      })
     },
-    SET_CHAPTER_LIST(state, payload) {
-      state.chapterList = payload
+    SET_PAGE_NUMBERS(state) {
+      let numbers = [],
+          pages = state.chapter.pages;
+      pages.forEach(item => numbers.push(item.page))
+      state.pageNumbers = [...new Set(numbers)] // удаляет дубликаты
     },
+
+    // SET_CHAPTER_LIST(state, payload) {
+    //   state.chapterList = payload
+
+    //   // Ветвление
+    //   let teams = []
+    //   state.chapterList.forEach(item => {
+    //     if(item.teams.length >= 1) {
+    //       item.teams.forEach(el => teams.push(el))
+    //     }
+    //   })
+    //   teams = [...new Set(teams)]
+
+    //   let branches = teams.reduce((o, i) => {
+    //     if (!o.find(v => v.id == i.id)) {
+    //       o.push(i)
+    //     }
+    //     return o
+    //   }, [])
+    //   state.branches = branches
+    // },
+
     SET_ALIAS(state, payload) {
       state.alias = payload
     },
-    SET_MODE(state, payload) {
+    SET_SETTING_MODE(state, payload) {
       state.readerSetting.mode = String(payload)
+    },
+    SET_SETTING_COMMENTS(state, payload) {
+      state.readerSetting.comments = String(payload)
     },
     SET_OPEN_SETTING(state, payload) {
       state.readerSetting.isOpen = payload
@@ -108,12 +145,17 @@ import {
       }
     },
     async FETCH_CHAPTER_LIST({ commit }, params) {
-      try {
-        const res = await chapterListGetById(params)
-        commit('SET_CHAPTER_LIST', res)
-  
-      } catch (err) {
-        console.log(err)
+      const res = await chapterListGetById(params)
+      commit('SET_CHAPTER_LIST', res)
+    },
+    async FETCH_CHAPTER_COMMENTS({ commit, state }, pageNum) {
+      if(pageNum !== 1) {
+        const comments = await getComments({
+          type: 'reader',
+          page_id: pageNum, 
+          commentable_id: state.chapter.id,
+        })
+        this.commit('comments/SET_COMMENTS', comments)
       }
     },
   }
@@ -131,10 +173,11 @@ import {
       return null
     },
     GET_CHAPTER_CURRENT(state) {
-      return { 
+      return {
         id: state.chapter.id,
         volume: state.chapter.volume,
         chapter: state.chapter.chapter,
+        teams: state.chapter.teams ? state.chapter.teams.map(item => item.id) : [],
       }
     },
     GET_CHAPTER_LIST(state) {
@@ -154,8 +197,8 @@ import {
     GET_PAGE_CURRENT(state) {
       return state.pageCurrent
     },
-    GET_PAGE_MAX(state) {
-      return state.pageMax
+    GET_PAGE_NUMBERS(state) {
+      return state.pageNumbers
     },
     GET_TEAMS_CURREN(state) {
       if(state.chapter.teams) return state.chapter.teams
@@ -163,6 +206,9 @@ import {
     },
     GET_MODE(state) {
       return state.readerSetting.mode
+    },
+    GET_SETTING_COMMENTS(state) {
+      return state.readerSetting.comments
     },
     GET_OPEN_SETTING(state) {
       return state.readerSetting.isOpen

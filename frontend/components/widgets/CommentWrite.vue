@@ -39,6 +39,8 @@ export default {
 
   computed: {
     ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
+    ...mapGetters( 'reader', { idChapter: 'GET_ID_CHAPTER' }),
+    ...mapGetters( 'reader', { readerPageCurrent: 'GET_PAGE_CURRENT' }),
 
     lengthText() {
       return this.addText.length
@@ -51,11 +53,20 @@ export default {
 
   methods: {
     async sendComment() {
+      let idTmp, pageTmp
+      if(this.type === 'post') {
+        idTmp = this.idPost
+        pageTmp = this.idPost
+      }
+      if(this.type === 'reader') {
+        idTmp = this.idChapter
+        pageTmp = this.readerPageCurrent
+      }
       let comment = {
         content: this.addText,
         commentable_type: this.type,
-        commentable_id: this.idPost, 
-        page_id: this.idPost,
+        commentable_id: idTmp, 
+        page_id: pageTmp,
         captcha: "",
         permalink: this.$config.jsDomain + this.$route.fullPath,
         root_id: this.root,

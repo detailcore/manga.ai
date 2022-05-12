@@ -11,6 +11,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { mergeDuplicates } from '~/services/util'
 
 export default {
   props: {
@@ -34,20 +35,7 @@ export default {
       return this.$store.state.post.idByChapter
     },
     currentChapters() {
-      let result = []
-
-      if(this.chapters.data) {
-        result = Object.values(
-          this.chapters.data.reduce((r, cur) => {
-            const key = 'k' + cur['chapter']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам 
-            (r[key] = r[key] || []).push(cur);
-
-            return r;
-          }, {})
-        );
-      }
-
-      return result
+      return mergeDuplicates(this.chapters.data)
     },
   },
 

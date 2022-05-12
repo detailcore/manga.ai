@@ -5,20 +5,18 @@
     </div>
     <div class="body" v-for="item in chapters" :key="item.id">
       <div class="link_teams">
-        <nuxt-link :to="urlChapter+item.id" class="link_name">
+        <Nuxt-link :to="urlChapter+item.id" class="link_name">
           <mdi-ArrowRightBottom title="" />
           <span class="name" v-if="item.name">
             {{ item.name }}
           </span>
           <span v-else> Гл. {{ chapter }} </span>
-        </nuxt-link>
+        </Nuxt-link>
 
         <div class="teams" v-if="item.teams.length > 0">
           <mdi-AccountGroupOutline title="Команда" />
           <div class="list">
-            <span :to="'/team/'+team.id" v-for="team in item.teams" :key="team.id" class="team">
-              {{ team.name }}
-            </span>
+            <span v-for="team in item.teams" :key="team.id" class="team">{{ team.name }}</span>
           </div>
         </div>
       </div>

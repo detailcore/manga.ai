@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ mobile: widthViewport <= 710 }">
+  <div class="page_reader" :class="{ mobile: widthViewport <= 710 }">
     <headroom>
       <ReaderHeader />
     </headroom>

@@ -6,18 +6,19 @@
         <span> Пожаловаться </span>
       </div>
     </div>
+
     <div class="btn-line">
-      <button @click="prevPage">
+      <button @click="prevPage" :class="{ hidden: isFirst }">
         <mdi-ChevronLeft title="Предыдущая страница" />
       </button>
       <WidgetsSelect :type="'Страница'" />
-      <button @click="nextPage">
+      <button @click="nextPage" :class="{ hidden: isLast }">
         <mdi-ChevronRight title="Слудующая страница" />
       </button>
     </div>
     
-    <WidgetsReaderSetting v-if="isOpenSetting" />
-    <WidgetsComplaint v-if="openComplaint.value" :id="idPost" :page="pageCur" :type="'reader'" />
+    <LazyWidgetsReaderSetting v-if="isOpenSetting" />
+    <LazyWidgetsComplaint v-if="openComplaint.value" :id="idPost" :page="pageCur" :type="'reader'" />
   </div>
 </template>
 
@@ -37,12 +38,20 @@ export default {
 
   computed: {
     ...mapGetters( 'reader', { idPost: 'GET_ID_POST' }),
-    ...mapGetters( 'reader', { pageMax: 'GET_PAGE_MAX' }),
+    ...mapGetters( 'reader', { numbers: 'GET_PAGE_NUMBERS' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { isOpenSetting: 'GET_OPEN_SETTING' }),
     ...mapGetters( 'complaint', { openComplaint: 'GET_COMPLAINT_OPEN' }),
-    // ...mapGetters( 'reader', { chapterCur: 'GET_CHAPTER_CURRENT' }),
-    // ...mapGetters( 'reader', { listChapter: 'GET_CHAPTER_LIST' }),
+
+    lastPage() {
+      return this.numbers[this.numbers.length-1]
+    },
+    isFirst() {
+      return this.numbers[0] === this.pageCur
+    },
+    isLast() {
+      return this.pageCur === this.lastPage
+    },
   },
 
   methods: {
@@ -50,15 +59,15 @@ export default {
       this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: null, value: !this.openComplaint.value })
     },
     nextPage() {
-      if(this.pageCur < this.pageMax) {
+      if(this.pageCur < this.lastPage) {
         this.count = +this.pageCur
-        this.$store.commit('reader/SET_PAGE_CURRENT', ++this.count)
+        this.$store.commit('reader/SET_PAGE_CURRENT', { num: ++this.count, id: this.idChapter, alias: this.$route.params.alias })
       }
     },
     prevPage() {
       if(this.pageCur > 1) {
         this.count = +this.pageCur
-        this.$store.commit('reader/SET_PAGE_CURRENT', --this.count)
+        this.$store.commit('reader/SET_PAGE_CURRENT', { num: --this.count, id: this.idChapter, alias: this.$route.params.alias })
       }
     },
   },

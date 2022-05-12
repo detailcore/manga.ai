@@ -341,7 +341,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @include action_save;
   @include multiselect;
   @include progress_bar;

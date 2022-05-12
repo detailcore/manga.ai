@@ -1,13 +1,13 @@
 <template>
   <div class="reader">
-    <ReaderLineInfo
-      :idChapter="chapter.id" />
+    <ReaderLineInfo :idChapter="chapter.id" />
     <ReaderImage :pages="chapter.pages" />
     <ReaderLineTeam :likes="chapter.likes" />
+    <LazyListComments class="comments container" />
 
 
     
-    <small>
+    <!-- <small>
       <mdi-Account />
       <mdi-AccountDetails />
       <mdi-AccountGroupOutline />
@@ -55,7 +55,7 @@
       <mdi-MenuRight />
       <mdi-Pencil />
       <mdi-TrashCan />
-    </small>
+    </small> -->
   </div>
 </template>
 
@@ -71,28 +71,33 @@ export default {
   },
 
   mounted() {
-    this.setMaxPage()
+    this.setFirstPage()
     this.initLocalStorage()
   },
 
   computed: {
-    ...mapGetters( 'reader', { mode: 'GET_MODE' }),
     ...mapGetters( 'reader', { chapter: 'GET_CHAPTER' }),
-    ...mapGetters( 'reader', { pageMax: 'GET_PAGE_MAX' }),
   },
 
   methods: {
-    setMaxPage() {
-      let index = (this.chapter) ? this.chapter.pages.length-1 : 0
-      let count = this.chapter.pages[index].page
-      this.$store.commit('reader/SET_PAGE_MAX', count)
+    setFirstPage() {
+      // this.$router.push({ hash:"#1" }) 
+      this.$store.commit('reader/SET_RESET_PAGE')
     },
     initLocalStorage() {
-      let mode = localStorage.getItem('mode')
+      let mode = localStorage.getItem('mode'),
+          comments = localStorage.getItem('commentsInReader')
+
+      if(!comments) {
+        localStorage.setItem('commentsInReader', 'hide')
+      } else {
+        this.$store.commit('reader/SET_SETTING_COMMENTS', comments)
+      }
+
       if(!mode) {
         localStorage.setItem('mode', 'horizontally')
       } else {
-        this.$store.commit('reader/SET_MODE', mode)
+        this.$store.commit('reader/SET_SETTING_MODE', mode)
       }
     },
   },

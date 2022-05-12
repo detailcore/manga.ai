@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Widgets-CommentWrite :type="'post'" />
+    <Widgets-CommentWrite :type="isType" />
 
     <!-- Сортировка комментариев в РАЗРАБОТКЕ -->
     <!-- <div class="comments__sort">
@@ -12,7 +12,7 @@
     </div> -->
 
     
-    <div class="comment__list" v-if="!isEmpty">
+    <div class="comment__list" v-if="!isEmpty && isShowСomments">
       <Widgets-Comment v-for="(item, index) in comments" :key="index"
         :id="item.id"
         :id_root="item.root_id"
@@ -25,6 +25,9 @@
         :score="(item.upvotes + (-item.downvotes))"
         :replies="item.replies" />
     </div>
+
+    <div class="comments_info" v-if="isEmptyTotal && isShowСomments">На этой странице еще нет комментариев, вы можете стать первым(ой)!</div>
+    <div class="comments_info" v-if="!isShowСomments">Отображение комментариев отключено в настройках читалки!</div>
     
     <!-- <div class="btn__action comments__more" @click="loadMore">Показать еще комментарии</div> -->
   </div>
@@ -36,10 +39,18 @@ import { mapGetters } from 'vuex'
 
 export default {
   async fetch() {
-    if(!this.isEmpty) {
-      this.$store.dispatch('comments/FETCH_COMMENTS', { 
+    if(!this.isEmpty && this.isPost) {
+      await this.$store.dispatch('comments/FETCH_COMMENTS', { 
+        type: 'post',
         page_id: this.idPost, 
-        commentable_id: this.idPost
+        commentable_id: this.idPost,
+      })
+    }
+    if(this.isReader && this.isShowСomments) {
+      await this.$store.dispatch('comments/FETCH_COMMENTS', { 
+        type: 'reader',
+        page_id: this.readerPageCurrent, 
+        commentable_id: this.idChapter,
       })
     }
   },
@@ -58,9 +69,28 @@ export default {
   computed: {
     ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
     ...mapGetters( 'comments', { comments: 'GET_COMMENTS' }),
+    ...mapGetters( 'reader', { idChapter: 'GET_ID_CHAPTER' }),
+    ...mapGetters( 'reader', { readerPageCurrent: 'GET_PAGE_CURRENT' }),
+    ...mapGetters( 'reader', { settingComments: 'GET_SETTING_COMMENTS' }),
 
     isEmpty() {
       return this.$store.state.post.post.comment_count <= 0
+    },
+    isEmptyTotal() {
+      return this.$store.state.comments.total === 0
+    },
+    isPost() {
+      return this.$route.name === 'manga-alias'
+    },
+    isReader() {
+      return this.$route.name === 'manga-alias-id'
+    },
+    isShowСomments() {
+      return this.settingComments === 'show'
+    },
+    isType() {
+      if(this.isPost) return 'post'
+      if(this.isReader) return 'reader'
     },
   },
 
@@ -180,10 +210,18 @@ export default {
     }
   }
 
-
   .btn__action.comments__more {
     width: 100%;
     margin-bottom: 16px;
+  }
+
+  .comments_info {
+    height: 60px;
+    max-width: 300px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    text-align: center;
   }
 }
 </style>
