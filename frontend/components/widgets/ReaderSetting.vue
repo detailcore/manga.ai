@@ -42,8 +42,15 @@ export default {
       this.$store.commit('reader/SET_SETTING_MODE', mode)
     },
     setComments(value) {
-      localStorage.setItem('commentsInReader', value)
-      this.$store.commit('reader/SET_SETTING_COMMENTS', value)
+      if(this.$store.state.auth.loggedIn) {
+        localStorage.setItem('commentsInReader', value)
+        this.$store.commit('reader/SET_SETTING_COMMENTS', value)
+      } else {
+        this.$notify({
+          text: 'Настройка доступна после регистрации.',
+          type: 'error'
+        })
+      }
     },
     hide() {
       this.$store.commit('reader/SET_OPEN_SETTING', false)

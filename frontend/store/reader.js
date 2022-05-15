@@ -16,6 +16,7 @@ import {
       mode: '',
       isOpen: false,
       comments: '',
+      openComments: false,
     },
     duplicateIdPages: [],
   })
@@ -33,6 +34,14 @@ import {
     },
     SET_RESET_PAGE(state) {
       state.pageCurrent = 1
+    },
+    SET_PAGE_CURRENT_VERTICALLY(state, num) {
+      if(state.readerSetting.comments === 'show' && // вкл отображение
+         state.pageCurrent !== num &&               // страница не одна и та же
+         state.readerSetting.openComments) {        // открыто окно коментов
+        this.dispatch('reader/FETCH_CHAPTER_COMMENTS', num) // хз на сколько это правильно
+      }
+      state.pageCurrent = num
     },
     SET_PAGE_CURRENT(state, { num, id, alias }) {
       if(state.readerSetting.comments === 'show') {
@@ -67,6 +76,9 @@ import {
     },
     SET_OPEN_SETTING(state, payload) {
       state.readerSetting.isOpen = payload
+    },
+    SET_OPEN_COMMENTS(state, payload) {
+      state.readerSetting.openComments = payload
     },
     SET_CHAPTER_PAGE_EDIT(state, payload) {
       if(payload.ids.length > 1) {
@@ -197,5 +209,8 @@ import {
     },
     GET_OPEN_SETTING(state) {
       return state.readerSetting.isOpen
+    },
+    GET_OPEN_COMMENTS(state) {
+      return state.readerSetting.openComments
     },
   }

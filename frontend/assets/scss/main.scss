@@ -357,6 +357,12 @@ input {
           }
         }
       }
+      .page_reader { // Читалка
+        .comments.vertically {
+          max-width: 100%;
+          min-width: 359px;
+        }
+      }
     }
 
     @media (max-width: 500px) {
@@ -373,6 +379,11 @@ input {
             font-weight: 200;
             -webkit-line-clamp: 3;
           }
+        }
+      }
+      .page_reader { // Читалка
+        .mb_hidden {
+          display: none;
         }
       }
     }

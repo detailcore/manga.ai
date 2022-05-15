@@ -1,6 +1,6 @@
 <template>
   <div class="reader-image">
-    <div class="pages">
+    <div class="pages" v-if="mode === 'horizontally'">
       <WidgetsImage v-for="(image, index) of pageImages" :key="index" 
         :url="urlImage" 
         :sort="image.sort" 
@@ -12,11 +12,23 @@
         <div class="next" @click="next"></div>
       </div>
     </div>
+
+
+    <div class="pages" v-if="mode === 'vertically'">
+      <div v-for="(images, i) of pageImages" :key="i" :id="images[0].page" :data-p="images[0].page" ref="page">
+        <WidgetsImage v-for="(img, k) of images" :key="k"
+          :url="urlImage" 
+          :sort="img.sort" 
+          :link="img.link" 
+          :page="img.page" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import debounce from 'lodash.debounce'
 
 export default {
   props: {
@@ -30,22 +42,37 @@ export default {
   },
 
   computed: {
+    ...mapGetters( 'reader', { mode: 'GET_MODE' }),
     ...mapGetters( 'reader', { idPost: 'GET_ID_POST' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { idChapter: 'GET_ID_CHAPTER' }),
     ...mapGetters( 'reader', { numbers: 'GET_PAGE_NUMBERS' }),
 
-    pageImages() { // массив т.к. картинки могут быть нарезаны на несколько patr
+    pageImages() { // массив т.к. картинки могут быть нарезаны на несколько part
       let result = []
-      this.pages.forEach(item => {
-        if( this.pageCur == item.page ) {
-          result.push({
-            link: item.link,
-            page: item.page,
-            sort: item.sort,
-          })
-        }
-      });
+
+      if(this.mode === 'horizontally') { //* Горизонтальный режим
+        this.pages.forEach(item => {
+          if( this.pageCur == item.page ) {
+            result.push({
+              link: item.link,
+              page: item.page,
+              sort: item.sort,
+            })
+          }
+        })
+      }
+
+      if(this.mode === 'vertically') { //* Вертикальный режим
+        result = Object.values(
+          this.pages.reduce((r, cur) => {
+            const key = 'k' + cur['page']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам 
+            (r[key] = r[key] || []).push(cur);
+            return r;
+          }, {})
+        );
+      }
+
       return result
     },
 
@@ -63,27 +90,68 @@ export default {
     },
   },
 
+  beforeMount() {
+    this.handleDebouncedScroll = debounce(this.handleScroll, 150)
+    window.addEventListener('scroll', this.handleDebouncedScroll)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleDebouncedScroll)
+  },
+
   mounted() {
     this.loadImages()
   },
 
   methods: {
+    handleScroll() {
+      if(this.mode === 'vertically') {
+        console.log('scrollY => ', window.scrollY)
+        function isVisible(el) {
+          let coords = el.getBoundingClientRect(),
+              windowHeight = window.document.documentElement.offsetHeight,
+              topVisible = coords.top > 0 && coords.top < windowHeight, // виден верхний край элемента
+              bottomVisible = coords.bottom < windowHeight && coords.bottom > 0; // виден нижний край элемента
+  
+          return (topVisible || bottomVisible)
+        }
+  
+        function showVisible(context) {
+          for (const item of context.$refs.page) {
+            let page = +item.dataset.p
+            if(!page) continue
+  
+            if(isVisible(item)) {
+              console.log('page =>', page)
+              context.$store.commit('reader/SET_PAGE_CURRENT_VERTICALLY', page)
+              return false
+            }
+          }
+          return false
+        }
+  
+        showVisible(this)
+      }
+    },
     last() {
       this.$nuxt.$emit('go-to-next-chapter', 'any payload')
     },
     prev() {
       if(this.pageCur > 1) {
         this.count = +this.pageCur
-        this.$store.commit('reader/SET_PAGE_CURRENT', { num: --this.count, id: this.idChapter, alias: this.$route.params.alias })
+        this.setPage(--this.count)
       }
     },
     next() {
       if(this.pageCur < this.lastPage) {
         this.count = +this.pageCur
-        this.$store.commit('reader/SET_PAGE_CURRENT', { num: ++this.count, id: this.idChapter, alias: this.$route.params.alias })
+        this.setPage(++this.count)
       } else { // Переключение на следующую главу, если страницы закончились
         this.last()
       }
+    },
+    setPage(num, id=this.idChapter, alias=this.$route.params.alias) {
+      this.$store.commit('reader/SET_PAGE_CURRENT', { num: num, id: id, alias: alias })
     },
     loadImages() {
       let newImageObj = [],

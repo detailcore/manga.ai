@@ -4,7 +4,7 @@
       {{ type }} {{ selected }}/{{ lastPage }}
     </div>
     <ul class="values" v-show="isActive">
-      <li class="value" v-for="item in pages" :key="item" :value="item" @click="selectPage">
+      <li class="value" :class="{ selected: selected === item }" v-for="item in pages" :key="item" :value="item" @click="selectPage">
         {{ type }} {{ item }}
       </li>
     </ul>
@@ -60,5 +60,12 @@ export default {
 <style lang="scss">
 .values {
   @include scroll_bar;
+}
+.btn-select {
+  .values {
+    .value.selected {
+      background-color: $orange_primary;
+    }
+  }
 }
 </style>

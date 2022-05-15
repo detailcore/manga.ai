@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="ty">
+    <!-- <div class="ty">
       <button>
         <mdi-HeartOutline title="Сказать спасибо!" v-if="true" />
         <mdi-CardsHeart title="Вы уже поставили лайк" v-else />
@@ -18,7 +18,7 @@
       <div class="text">
         <span> Благодарностей: {{ likes }} </span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

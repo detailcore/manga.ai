@@ -16,7 +16,7 @@ export default {
 
   computed: {
     imageUrl() {
-      return this.url + this.link
+      return this.url ? this.url + this.link : this.link
     },
   },
 };

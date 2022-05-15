@@ -47,6 +47,7 @@ export default {
       })
     }
     if(this.isReader && this.isShowСomments) {
+      console.log('asd zxc qwe')
       await this.$store.dispatch('comments/FETCH_COMMENTS', { 
         type: 'reader',
         page_id: this.readerPageCurrent, 
@@ -108,6 +109,38 @@ export default {
 
 
 <style lang="scss">
+.comments.vertically {
+  // top: 0;
+  // right: 0;
+  // width: 500px;
+  // height: 100%;
+  // margin: 0;
+  // padding: 6px;
+  // margin-right: -18px;
+  // position: fixed;
+  // background-color: #121212;
+  // z-index: 10000;
+  // border-left: thin solid rgba(255, 255, 255, 0.12);
+  // overflow-y: scroll;
+  // overflow-x: hidden;
+    top: 48px;
+    right: 0;
+    width: 500px;
+    height: calc(100% - 90px);
+    margin: 0;
+    padding: 6px 18px 6px 6px;
+    margin-right: -18px;
+    position: fixed;
+    background-color: #121212;
+    border-left: thin solid rgba(255, 255, 255, 0.12);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-radius: 6px;
+  .comment__list {
+    position: relative;
+  }
+}
+
 .comments {
   margin-top: 16px;
 

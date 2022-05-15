@@ -1,9 +1,17 @@
 <template>
-  <div class="reader-chapter-line container">
+  <div class="reader-chapter-line" :class="{ container: mode === 'horizontally' }">
+
     <div class="btn-line">
       <div class="btn-text-action" @click="setComplaint">
         <mdi-ExclamationThick title="Пожаловаться" />
-        <span> Пожаловаться </span>
+        <span class="mb_hidden"> Пожаловаться </span>
+      </div>
+    </div>
+
+    <div class="btn-line">
+      <div class="btn-text-action" @click="openComments">
+        <mdi-CommentMultiple title="Показать комментарии" />
+        <span class="mb_hidden"> Комментарии </span>
       </div>
     </div>
 
@@ -16,9 +24,7 @@
         <mdi-ChevronRight title="Слудующая страница" />
       </button>
     </div>
-    
-    <LazyWidgetsReaderSetting v-if="isOpenSetting" />
-    <LazyWidgetsComplaint v-if="openComplaint.value" :id="idPost" :page="pageCur" :type="'reader'" />
+
   </div>
 </template>
 
@@ -37,10 +43,11 @@ export default {
   },
 
   computed: {
+    ...mapGetters( 'reader', { mode: 'GET_MODE' }),
     ...mapGetters( 'reader', { idPost: 'GET_ID_POST' }),
     ...mapGetters( 'reader', { numbers: 'GET_PAGE_NUMBERS' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
-    ...mapGetters( 'reader', { isOpenSetting: 'GET_OPEN_SETTING' }),
+    ...mapGetters( 'reader', { showComments: 'GET_OPEN_COMMENTS' }),
     ...mapGetters( 'complaint', { openComplaint: 'GET_COMPLAINT_OPEN' }),
 
     lastPage() {
@@ -55,6 +62,9 @@ export default {
   },
 
   methods: {
+    openComments() {
+      this.$store.commit('reader/SET_OPEN_COMMENTS', !this.showComments)
+    },
     setComplaint() {
       this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: null, value: !this.openComplaint.value })
     },
@@ -80,6 +90,17 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    &.vertically {
+      padding: 2px 0px 3px 0px;
+      background-color: #121212;
+      border-top: thin solid rgba(255, 255, 255, 0.12);
+    }
+  }
+  .vertically {
+    .btn-line .btn-select .values {
+      top: inherit;
+      bottom: 100%
+    }
   }
   .btn-line {
     @include btn_line;

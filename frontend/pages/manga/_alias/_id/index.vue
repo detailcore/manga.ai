@@ -1,11 +1,19 @@
 <template>
   <div class="reader">
-    <ReaderLineInfo :idChapter="chapter.id" />
+    <LazyReaderLineInfo :idChapter="chapter.id" v-if="mode === 'horizontally'" />
+
     <ReaderImage :pages="chapter.pages" />
+
     <ReaderLineTeam :likes="chapter.likes" />
-    <LazyListComments class="comments container" />
 
+    <LazyListComments class="comments" :class="{ vertically: isOpenComments, container: (mode === 'horizontally')}" />
 
+    <headroom :footroom="true" v-if="mode === 'vertically'">
+      <LazyReaderLineInfo :idChapter="chapter.id" :class="{ vertically: (mode === 'vertically')}" />
+    </headroom>
+
+    <LazyWidgetsReaderSetting v-if="isOpenSetting" />
+    <LazyWidgetsComplaint v-if="openComplaint.value" :id="chapter.post.id" :page="pageCur" :type="'reader'" />
     
     <!-- <small>
       <mdi-Account />
@@ -61,9 +69,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { headroom } from "vue-headroom";
 
 export default {
   layout: 'reader',
+
+  components: {
+    headroom
+  },
 
   async asyncData({ store, route }) {
     const idChapter = +route.params.id.replace('ch', '')
@@ -76,12 +89,20 @@ export default {
   },
 
   computed: {
+    ...mapGetters( 'reader', { mode: 'GET_MODE' }),
     ...mapGetters( 'reader', { chapter: 'GET_CHAPTER' }),
+    ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
+    ...mapGetters( 'reader', { isOpenSetting: 'GET_OPEN_SETTING' }),
+    ...mapGetters( 'reader', { showComments: 'GET_OPEN_COMMENTS' }),
+    ...mapGetters( 'complaint', { openComplaint: 'GET_COMPLAINT_OPEN' }),
+
+    isOpenComments() {
+      return (this.mode === 'vertically' && this.showComments)
+    },
   },
 
   methods: {
     setFirstPage() {
-      // this.$router.push({ hash:"#1" }) 
       this.$store.commit('reader/SET_RESET_PAGE')
     },
     initLocalStorage() {
@@ -105,4 +126,10 @@ export default {
 </script>
 
 <style lang="scss">
+.reader {
+  .headroom--top {
+    bottom: 0px !important;
+    position: fixed !important;
+  }
+}
 </style>
