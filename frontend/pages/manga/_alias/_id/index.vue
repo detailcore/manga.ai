@@ -78,6 +78,19 @@ export default {
     headroom
   },
 
+  head() {
+    return {
+      title: 'Чтение манги ' + (this.chapter.post.title_rus ? this.chapter.post.title_rus : this.chapter.post.title_eng) + '. Глава ' + this.chapter.chapter + ' (страница ' + this.pageCur + ')',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Читать мангу ' + (this.chapter.post.title_rus ? this.chapter.post.title_rus : this.chapter.post.title_eng) + ' глава ' + this.chapter.chapter + ' ' + (this.chapter.name ? this.chapter.name : '') + '. Читать онлайн мангу.'
+        }
+      ]
+    }
+  },
+
   async asyncData({ store, route }) {
     const idChapter = +route.params.id.replace('ch', '')
     await store.dispatch('reader/FETCH_CHAPTER', idChapter) // получить текущую главу

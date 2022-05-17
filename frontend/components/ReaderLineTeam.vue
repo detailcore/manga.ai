@@ -4,7 +4,7 @@
       <div class="team" v-for="team in teams" :key="team.id">
         <div class="ava" :style="`background-image: url(${team.cover});`"></div>
         <div class="text">
-          <Nuxt-link to="#" class="name"> {{ team.name }} </Nuxt-link>
+          <Nuxt-link :to="`/team/${team.id}`" class="name"> {{ team.name }} </Nuxt-link>
           <div class="desc"> {{ team.desc_short }} </div>
         </div>
       </div>

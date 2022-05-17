@@ -23,7 +23,6 @@ import { commentCreate } from '~/services/api'
 
 export default {
   props: {
-    type: { type: String, required: true },
     id: { type: Number, default: null },
     id_root: { type: Number, default: null },
     action: { type: Boolean, default: false },
@@ -45,26 +44,35 @@ export default {
     lengthText() {
       return this.addText.length
     },
-
     root() {
       return this.id_root === null ? (this.id === null ? '' : this.id) : this.id_root
+    },
+    isPost() {
+      return this.$route.name === 'manga-alias'
+    },
+    isReader() {
+      return this.$route.name === 'manga-alias-id'
+    },
+    isType() {
+      if(this.isPost) return 'post'
+      if(this.isReader) return 'reader'
     },
   },
 
   methods: {
     async sendComment() {
       let idTmp, pageTmp
-      if(this.type === 'post') {
+      if(this.isType === 'post') {
         idTmp = this.idPost
         pageTmp = this.idPost
       }
-      if(this.type === 'reader') {
+      if(this.isType === 'reader') {
         idTmp = this.idChapter
         pageTmp = this.idChapter +'.'+this.readerPageCurrent
       }
       let comment = {
         content: this.addText,
-        commentable_type: this.type,
+        commentable_type: this.isType,
         commentable_id: idTmp, 
         page_id: pageTmp,
         captcha: "",

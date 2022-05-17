@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Widgets-CommentWrite :type="isType" />
+    <Widgets-CommentWrite />
 
     <!-- Сортировка комментариев в РАЗРАБОТКЕ -->
     <!-- <div class="comments__sort">
@@ -47,7 +47,6 @@ export default {
       })
     }
     if(this.isReader && this.isShowСomments) {
-      console.log('asd zxc qwe')
       await this.$store.dispatch('comments/FETCH_COMMENTS', { 
         type: 'reader',
         page_id: this.readerPageCurrent, 

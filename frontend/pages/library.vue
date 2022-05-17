@@ -147,6 +147,17 @@ import { mapGetters } from "vuex"
 import { libraryGetFilter } from '~/services/api'
 
 export default {
+  head: {
+    title: 'Библиотека манги (каталог), найди мангу для чтения!',
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Библиотека манги и комиксов. Огромный каталог манги на русском. Удобный поиск по жанрам и категориям с указанием различных настроек для более точного поиска. Большой каталог манги(японская), манхвы(корейская), руманги(кириличная), маньхуа(китайская) комиксы'
+      }
+    ],
+  },
+
   async asyncData({ store }) {
     if(store.state.library.filter.length === 0) await store.dispatch('library/FETCH_FILTER')
     if(store.state.library.posts.length === 0) await store.dispatch('library/FETCH_POSTS')

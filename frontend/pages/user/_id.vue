@@ -29,6 +29,12 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  head() {
+    return {
+      title: 'Пользователь ' + this.user.name + ', страница профиля.',
+    }
+  },
+
   data() {
     return {
       tabSetting: false,

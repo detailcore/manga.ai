@@ -44,7 +44,7 @@ export default {
   computed: {
     urlCover({ $config: { urlCoverTitle } }) {
       return {
-        backgroundImage: `url('${this.item.cover ? urlCoverTitle + this.item.id +'/'+ this.item.cover.mid : '/_nuxt/assets/images/one_pixel.jpg'}')`
+        backgroundImage: `url('${this.item.cover ? urlCoverTitle + this.item.id +'/'+ this.item.cover.mid + '.webp' : '/_nuxt/assets/images/one_pixel.jpg'}')`
       }
     },
     alias() {

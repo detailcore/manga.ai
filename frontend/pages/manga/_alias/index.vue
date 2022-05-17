@@ -42,7 +42,15 @@
           <span class="eng" v-show="data.title_eng"> {{ data.title_eng }} </span>
           <span class="alt"> {{ data.title_orig }} <span v-show="data.title_alt"> / {{ data.title_alt }}</span> </span>
         </div>
-        <div class="description"> {{ data.description }} </div>
+
+        <div itemscope itemtype="http://schema.org/CreativeWork">
+          <meta itemprop="name" :content="title">
+          <meta itemprop="alternativeHeadline" :content="data.title_orig ? data.title_orig : data.title_alt">
+          <meta itemprop="url" :content="domain + '/manga/' + data.alias">
+
+          <meta itemprop="description" :content="data.description">
+          <div class="description"> {{ data.description }} </div>
+        </div>
         
         <div class="stat">
           <div class="item rating" v-if="isRatingEmpty" @click="openModalRating">
@@ -111,6 +119,7 @@
           <div class="line tags" v-show="data.genres.length > 0">
             <div class="item" v-for="genre of data.genres" :key="genre.name"> {{ genre.name }} </div>
             <div class="item" v-for="tag of data.tags" :key="tag.name"> {{ tag.name }} </div>
+            <div class="item" v-for="format of data.formats" :key="format.name"> {{ format.name }} </div>
           </div>
         </div>
 
@@ -153,6 +162,13 @@ import { notify } from '~/services/util'
 import { postSetRating } from '~/services/api'
 
 export default {
+  head() {
+    return {
+      title: 'Читать ' + (this.title ? this.title : this.data.title_orig) + '. ' + (this.data.type ? this.data.type.name : 'Манга') + ' онлайн.',
+      // title: 'Читать ' + (this.data.title_rus ? this.data.title_rus : '') + ((this.data.title_rus && this.data.title_orig) ? ' / ' : '') + (this.data.title_orig ? this.data.title_orig : '') + '. ' + (this.data.type ? this.data.type.name : 'Манга') + ' онлайн.',
+    }
+  },
+
   async asyncData({ store, params }) {
     if(params.alias !== store.state.post.post.alias) await store.dispatch('post/FETCH_POST', params.alias)
   },
@@ -167,6 +183,9 @@ export default {
     ...mapGetters( 'post', { data: 'GET_POST' }),
     ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
 
+    domain({ $config: { jsDomain } }) {
+      return jsDomain
+    },
     title() {
       return this.data.title_rus ? this.data.title_rus : this.data.title_eng
     },

@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <div class="btn-line">
+    <div class="btn-line" v-if="mode === 'vertically'">
       <div class="btn-text-action" @click="openComments">
         <mdi-CommentMultiple title="Показать комментарии" />
         <span class="mb_hidden"> Комментарии </span>

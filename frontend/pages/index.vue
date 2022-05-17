@@ -32,6 +32,17 @@
 import { mapGetters, mapState } from "vuex"
 
 export default {
+  head: {
+    title: 'Читать мангу и комиксы онлайн. Манга онлайн, новые главы!',
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Манга онлайн и комиксы. Новые главы топовых произведений. Быстрые переводы манги на русском языке. Читать мангу, популярную мангу и избранные мангу'
+      }
+    ],
+  },
+
   async asyncData({ store }) {
     if(
       store.state.home.new.length === 0

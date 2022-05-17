@@ -61,6 +61,12 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  head() {
+    return {
+      title: 'Модерация',
+    }
+  },
+
   async mounted() {
     await this.loadContent(this.type, this.statuses)
   },

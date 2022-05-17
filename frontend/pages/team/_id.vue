@@ -1,7 +1,7 @@
 <template>
   <div class="profile team">
     <div class="profile__header team">
-      <div class="cover" :style="{ backgroundImage: `url(${team.cover ? team.cover.bg+'.webp' : ''})` }">
+      <div class="cover" :style="{ backgroundImage: `url(${team.cover.bg ? team.cover.bg+'.webp' : ''})` }">
         <div class="shadow"></div>
         <div class="container user_info">
           <div class="cover__avatar" :style="{ backgroundImage: `url(${team.cover ? team.cover.avatar+'.webp' : ''})` }"></div>
@@ -69,10 +69,10 @@
             {{ team.description }}
           </div>
           <div class="stat">
-            <div class="item">
+            <!-- <div class="item">
               <div class="count">{{ team.likes }}</div>
               <div class="item__text">лукасов</div>
-            </div>
+            </div> -->
             <div class="item">
               <div class="count">{{ team.titles }}</div>
               <div class="item__text">тайтлов</div>
@@ -97,6 +97,19 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  head() {
+    return {
+      title: 'Переводчик ' + this.team.name + ', перевод манги',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'Команда переводчика(ов) - ' + this.team.name + '. ' + (this.team.description ? this.team.description.slice(0, 110).replace(/(<([^>]+)>)/ig, '') : '')
+        }
+      ]
+    }
+  },
+
   async asyncData({store, params}) {
     await store.dispatch('team/FETCH_TEAM', params.id)
   },

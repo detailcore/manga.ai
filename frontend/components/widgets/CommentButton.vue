@@ -28,7 +28,7 @@
     </div>
 
     <div class="reply" v-if="isOpenComment">
-      <Widgets-CommentWrite :type="'post'" :id="id" :id_root="id_root" :action="writeShow" />
+      <Widgets-CommentWrite :id="id" :id_root="id_root" :action="writeShow" />
     </div>
 
     <Widgets-Complaint v-if="isOpenComplaint" :id="id" :id_user="id_user" :type="'comment'" :content="text" :action="complaintShow" />
@@ -83,7 +83,7 @@ export default {
       this.$store.commit('comments/SET_WRITE_COMMENT', { id: this.id, value: this.writeShow })
     },
     showComplaint() {
-      this.complaintShow = !this.openComment.value
+      this.complaintShow = !this.openComplaint.value
       this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: this.complaintShow })
     },
     async upVote() {
