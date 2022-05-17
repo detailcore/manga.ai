@@ -84,7 +84,7 @@ export default {
 
   methods: {
     close() {
-      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: false })
+      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: false, type: '' })
     },
     async send() {
       let id_sender = this.$auth.loggedIn ? this.$store.state.auth.user.id : 0 //* id отправителя жалобы или 0
@@ -101,7 +101,7 @@ export default {
           content: this.content,
         })        
         .then(() => {
-          this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: false })
+          this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: false, type: '' })
         })
       }
     },

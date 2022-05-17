@@ -62,11 +62,19 @@ export default {
   },
 
   methods: {
-    openComments() {
+    async openComments() {
       this.$store.commit('reader/SET_OPEN_COMMENTS', !this.showComments)
+
+      if(this.showComments) {
+        await this.$store.dispatch('comments/FETCH_COMMENTS', { 
+          type: 'reader',
+          page_id: this.pageCur, 
+          commentable_id: this.idChapter,
+        })
+      }
     },
     setComplaint() {
-      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: null, value: !this.openComplaint.value })
+      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: null, value: !this.openComplaint.value, type: 'reader' })
     },
     nextPage() {
       if(this.pageCur < this.lastPage) {

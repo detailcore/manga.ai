@@ -65,7 +65,7 @@ export default {
       return this.writeComment.value && this.writeComment.id === this.id
     },
     isOpenComplaint() {
-      return this.openComplaint.value && this.openComplaint.id === this.id
+      return this.openComplaint.value && this.openComplaint.id === this.id && (this.openComplaint.type === 'comment')
     },
     vote() {
       return this.cnt
@@ -84,7 +84,7 @@ export default {
     },
     showComplaint() {
       this.complaintShow = !this.openComplaint.value
-      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: this.complaintShow })
+      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: this.complaintShow, type: 'comment' })
     },
     async upVote() {
       this.cnt++

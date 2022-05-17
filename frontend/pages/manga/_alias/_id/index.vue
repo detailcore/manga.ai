@@ -13,7 +13,7 @@
     </headroom>
 
     <LazyWidgetsReaderSetting v-if="isOpenSetting" />
-    <LazyWidgetsComplaint v-if="openComplaint.value" :id="chapter.post.id" :page="pageCur" :type="'reader'" />
+    <LazyWidgetsComplaint v-if="isOpenComplaint" :id="chapter.post.id" :page="pageCur" :type="'reader'" />
     
     <!-- <small>
       <mdi-Account />
@@ -111,6 +111,9 @@ export default {
 
     isOpenComments() {
       return (this.mode === 'vertically' && this.showComments)
+    },
+    isOpenComplaint() {
+      return this.openComplaint.value && (this.openComplaint.type === 'reader')
     },
   },
 

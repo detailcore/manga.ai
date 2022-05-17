@@ -2,6 +2,10 @@
   <div>
     <Widgets-CommentWrite />
 
+    <div class="action" v-show="showComments" @click="closeComments">
+      <div class="cancel">Закрыть</div>
+    </div>
+
     <!-- Сортировка комментариев в РАЗРАБОТКЕ -->
     <!-- <div class="comments__sort">
       <select v-model="selected">
@@ -70,6 +74,7 @@ export default {
     ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
     ...mapGetters( 'comments', { comments: 'GET_COMMENTS' }),
     ...mapGetters( 'reader', { idChapter: 'GET_ID_CHAPTER' }),
+    ...mapGetters( 'reader', { showComments: 'GET_OPEN_COMMENTS' }),
     ...mapGetters( 'reader', { readerPageCurrent: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { settingComments: 'GET_SETTING_COMMENTS' }),
 
@@ -94,7 +99,11 @@ export default {
     },
   },
 
-  // methods: {
+  methods: {
+    closeComments() {
+      this.$store.commit('reader/SET_OPEN_COMMENTS', false)
+      // 
+    },
     // loadMore() {},
 
     // filter(arr, str) {
@@ -102,7 +111,7 @@ export default {
     //     .map(n => ({ ...n, children: this.filter(n.children, str) }))
     //     .filter(n => n.name.includes(str) || n.children.length);
     // },
-  // },
+  },
 };
 </script>
 
@@ -137,6 +146,37 @@ export default {
     border-radius: 6px;
   .comment__list {
     position: relative;
+  }
+  .action {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .cancel {
+      width: 100%;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      margin: 6px 0;
+      cursor: pointer;
+      position: relative;
+      border-radius: 6px;
+      text-transform: uppercase;
+      border: thin solid rgba(255, 255, 255, 0.12);
+    }
+    .cancel {
+      border-bottom: thin solid rgba(255, 0, 0, 0.25);
+      &:hover {
+        border: thin solid rgba(255, 0, 0, 0.25);
+        &:before {
+          opacity: 0.1;
+        }
+      }
+      &:before {
+        @include before;
+      }
+    }
   }
 }
 

@@ -31,7 +31,7 @@ import { mapGetters } from 'vuex'
 export default {
   head() {
     return {
-      title: 'Пользователь ' + this.user.name + ', страница профиля.',
+      title: 'Пользователь ' + this.user.name + ', страница профиля на MangaClub.',
     }
   },
 
