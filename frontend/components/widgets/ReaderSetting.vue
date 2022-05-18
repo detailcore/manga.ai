@@ -26,6 +26,8 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters( 'reader', { mode: 'GET_MODE' }),
+    ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
+    ...mapGetters( 'reader', { idChapter: 'GET_ID_CHAPTER' }),
     ...mapGetters( 'reader', { comments: 'GET_SETTING_COMMENTS' }),
 
     isHorizontal() {
@@ -41,10 +43,17 @@ export default {
       localStorage.setItem('mode', mode)
       this.$store.commit('reader/SET_SETTING_MODE', mode)
     },
-    setComments(value) {
+    async setComments(value) {
       if(this.$store.state.auth.loggedIn) {
         localStorage.setItem('commentsInReader', value)
         this.$store.commit('reader/SET_SETTING_COMMENTS', value)
+        if(value === 'show') { // получить актуальные комментарии
+          await this.$store.dispatch('comments/FETCH_COMMENTS', {
+            type: 'reader',
+            page_id: this.pageCur, 
+            commentable_id: this.idChapter,
+          })
+        }
       } else {
         this.$notify({
           text: 'Настройка доступна после регистрации.',

@@ -91,7 +91,7 @@ export default {
       return this.$route.name === 'manga-alias-id'
     },
     isShowСomments() {
-      return this.settingComments === 'show'
+      return this.settingComments !== 'hide'
     },
     isType() {
       if(this.isPost) return 'post'

@@ -27,17 +27,17 @@
       </div>
     </div>
 
-    <div class="reply" v-if="isOpenComment">
-      <Widgets-CommentWrite :id="id" :id_root="id_root" :action="writeShow" />
-    </div>
+    <LazyWidgets-CommentWrite class="reply" v-if="isOpenComment" :id="id" :id_root="id_root" :action="writeShow" />
 
-    <Widgets-Complaint v-if="isOpenComplaint" :id="id" :id_user="id_user" :type="'comment'" :content="text" :action="complaintShow" />
+    <LazyWidgets-CommentEdit class="reply" v-if="isOpenEditComment" :id="id" :text="text" />
+
+    <LazyWidgets-Complaint v-if="isOpenComplaint" :id="id" :id_user="id_user" :type="'comment'" :content="text" :action="complaintShow" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { setUpVoteComment, setDownVoteComment, updateComment, deleteComment } from '~/services/api'
+import { setUpVoteComment, setDownVoteComment, deleteComment } from '~/services/api'
 
 export default {
   props: {
@@ -51,6 +51,7 @@ export default {
 
   data() {
     return {
+      isEdit: false,
       cnt: this.score,
       writeShow: false,
       complaintShow: false
@@ -58,14 +59,21 @@ export default {
   },
 
   computed: {
+    ...mapGetters( 'comments', { edit: 'GET_OPEN_EDIT' }),
     ...mapGetters( 'comments', { writeComment: 'GET_WRITE_COMMENT' }),
     ...mapGetters( 'complaint', { openComplaint: 'GET_COMPLAINT_OPEN' }),
 
+    isOpenEditComment() {
+      return this.edit.value && this.edit.id === this.id
+    },
     isOpenComment() {
       return this.writeComment.value && this.writeComment.id === this.id
     },
     isOpenComplaint() {
       return this.openComplaint.value && this.openComplaint.id === this.id && (this.openComplaint.type === 'comment')
+    },
+    isMyComment() {
+      return (this.$store.state.auth.user.id === this.id_user)
     },
     vote() {
       return this.cnt
@@ -87,20 +95,37 @@ export default {
       this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: this.complaintShow, type: 'comment' })
     },
     async upVote() {
+      if(this.isMyComment) {
+        this.voteMyself()
+        return false
+      }
       this.cnt++
       this.$store.commit('comments/SET_COMMENT_SCORE', {id: this.id, str: 'up'})
       await setUpVoteComment(this.id)
     },
     async downVote() {
+      if(this.isMyComment) {
+        this.voteMyself()
+        return false
+      }
       this.cnt--
       this.$store.commit('comments/SET_COMMENT_SCORE', {id: this.id, str: 'down'})
       await setDownVoteComment(this.id)
     },
     async editComment() {
-      await updateComment({ id: this.id, content: this.text })
+      this.$store.commit('comments/SET_OPEN_EDIT', { id: this.id, value: !this.edit.value })
+      // await updateComment({ id: this.id, content: this.text })
+      console.log('click to update')
     },
     async delComment() {
+      this.$store.commit('comments/SET_REMOVE_COMMENT', this.id)
       await deleteComment(this.id)
+    },
+    voteMyself() {
+      this.$notify({
+        text: `Вы не можете голосовать за самого себя!`,
+        type: 'error',
+      })
     },
   },
 }

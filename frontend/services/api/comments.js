@@ -37,7 +37,7 @@ export async function setDownVoteComment(id) {
 // Редактировать
 export async function updateComment(params) {
   let { id, content } = params
-  return await apiAny.put(`/comments/${id}`, content)
+  return await apiAny.put(`/comments/${id}`, { content: content })
 }
 
 // Удалить

@@ -7,7 +7,7 @@
  * @param  {Number} id
  * @return {Object}
  */
- export function findComment (comments, id) {
+export function findComment(comments, id) {
   for (let i = 0; i < comments.length; i++) {
     if (comments[i].id === id) {
       return comments[i]
@@ -19,6 +19,24 @@
       return comment
     }
   }
+}
+
+
+/**
+ * Для удаления комментария ч/з store
+ * @param  {Array} comments
+ * @param  {Number} id
+ * @return {Object}
+ */
+export function removeComment(comments, id) {
+  comments.forEach((item, index) => {
+    if (item.id === id) {
+      comments.splice(index, 1)
+      return false
+    }
+    removeComment(item.replies, id)
+  })
+  return false
 }
 
 

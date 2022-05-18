@@ -70,6 +70,13 @@ export default {
         idTmp = this.idChapter
         pageTmp = this.idChapter +'.'+this.readerPageCurrent
       }
+      if(this.addText.length < 9) {
+        this.$notify({
+          text: `Длинна комментария не может быть меньше 10 символов`,
+          type: 'error',
+        })
+        return false
+      }
       let comment = {
         content: this.addText,
         commentable_type: this.isType,

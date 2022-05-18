@@ -1,5 +1,5 @@
 import { getComments, } from '~/services/api'
-import { hierarchical, findComment } from '~/services/util'
+import { hierarchical, findComment, removeComment } from '~/services/util'
 
 export const state = () => ({
   total: 0,
@@ -10,11 +10,22 @@ export const state = () => ({
     id: null,
     value: false,
   },
+  editComment: {
+    id: null,
+    value: false,
+  },
 })
   
 export const mutations = {
   SET_WRITE_COMMENT(state, payload) {
     state.writeComment = payload
+  },
+  SET_EDIT(state, payload) {
+    let comment = findComment(state.comments, payload.id)
+    comment.content = payload.text
+  },
+  SET_OPEN_EDIT(state, payload) {
+    state.editComment = payload
   },
   SET_COMMENTS(state, { comments, total, pagination }) {
     comments.forEach(comment => {
@@ -36,6 +47,12 @@ export const mutations = {
     } else {
       state.comments.unshift(payload)
     }
+  },
+  SET_REMOVE_COMMENT(state, id) {
+    --state.total
+    removeComment(state.comments, id)
+    console.log('id =>', id)
+    // console.log('comment =>', comment)
   },
   SET_COMMENT_SCORE(state, payload) {
     state.comments.forEach(item => {
@@ -66,6 +83,9 @@ export const actions = {
 export const getters = {
   GET_WRITE_COMMENT(state) {
     return state.writeComment
+  },
+  GET_OPEN_EDIT(state) {
+    return state.editComment
   },
   GET_COMMENTS(state) {
     return state.comments
