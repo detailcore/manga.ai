@@ -89,6 +89,15 @@ export default {
     async send() {
       let id_sender = this.$auth.loggedIn ? this.$store.state.auth.user.id : 0 //* id отправителя жалобы или 0
 
+      if(this.text.length < 10) {
+        this.$notify({
+          title: 'Укажите причину жалобы!',
+          text: 'Подробней опишите причину жалобы, иначе её отправка будет бесполезной.',
+          type: 'error',
+        })
+        return false
+      }
+
       if(this.text.length > 1) {
         await this.$store.dispatch('complaint/FETCH_COMPLAINT', {
           text: this.text.substring(0, this.maxText),
@@ -102,6 +111,10 @@ export default {
         })        
         .then(() => {
           this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: false, type: '' })
+          this.$notify({
+            text: 'Жалоба успешно отправлена, мы постараемся учесть ваши пожелания.',
+            type: 'success',
+          })
         })
       }
     },

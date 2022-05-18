@@ -31,9 +31,7 @@ import { complaintCreate } from '~/services/api'
   
   export const actions = {
     async FETCH_COMPLAINT({ commit }, params) {
-      console.log('params => ', params)
       const res = await complaintCreate(params)
-      console.log(res)
       commit('SET_COMPLAINT', {
         text: res.text,
         cause: res.cause,
