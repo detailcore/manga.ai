@@ -3,8 +3,9 @@ export default {
   loading: {
     height: '4px',
     color: '#ff6820', // ораньжевый
+    // throttle: 200, // задержка перед показом полоски
   },
-  ssr: true,
+  ssr: false,
 
   server: {
     port: 3000,
@@ -13,7 +14,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'frontend',
+    // title: 'frontend',
     htmlAttrs: {
       lang: 'ru'
     },
@@ -22,9 +23,9 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    // link: [
+    //   { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    // ]
   },
 
   router: {
@@ -38,10 +39,10 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    // { src: '~/plugins/filepond', ssr: false },
     { src: '~/plugins/vue-headroom', ssr: false },
     { src: '~/plugins/click-outside', ssr: false },
     { src: '~/plugins/vue-multiselect', ssr: false },
+    { src: '~/plugins/axios', ssr: true },
     { src: '~/plugins/vue-mdi', ssr: true },
     { src: '~/plugins/notify-ssr', ssr: true },
     { src: '~/plugins/notify-client', ssr: false },
@@ -55,7 +56,7 @@ export default {
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    extractCSS: true,
+    // extractCSS: true,
     // splitChunks: { // деление компонентов
     //   layouts: false,
     //   pages: true,
@@ -76,7 +77,27 @@ export default {
     '@nuxtjs/moment',
     // https://github.com/Developmint/nuxt-purgecss
     'nuxt-purgecss',
+    // https://pwa.nuxtjs.org
+    '@nuxtjs/pwa',
   ],
+
+  pwa: {
+    icon: {
+      purpose: 'any'
+    },
+    meta: {
+      author: false,
+      ogType: false,
+      ogTitle: false,
+      ogSiteName: false,
+    },
+    manifest: {
+      lang: 'ru',
+      name: 'MangaClub Reincarnated',
+      short_name: 'MangaClub Re',
+      background_color: '#121212',
+    },
+  },
 
   moment: {
     locales: ['ru'],
@@ -91,7 +112,7 @@ export default {
   styleResources: {
     scss: [
       // '~/assets/scss/main.scss',
-      '~/assets/scss/_fonts.scss',
+      // '~/assets/scss/_fonts.scss',
       '~/assets/scss/_mixins.scss',
       '~/assets/scss/_variables.scss',
     ],
