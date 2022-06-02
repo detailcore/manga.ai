@@ -345,6 +345,9 @@ export default {
             type: 'success',
             duration: 8000,
           })
+          setTimeout(() => {
+            this.$router.push({ path: `/manga/${response.alias}` })
+          }, 1500);
         }
       } else {
         this.$notify({

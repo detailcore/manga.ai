@@ -14,6 +14,7 @@ export * from '~/services/api/edit'
 export * from '~/services/api/library'
 export * from '~/services/api/bookmark'
 export * from '~/services/api/home'
+export * from '~/services/api/admin'
 
 
 

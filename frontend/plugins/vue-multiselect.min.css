@@ -147,7 +147,10 @@ fieldset[disabled] .multiselect {
 
 .multiselect__single {
   padding-left: 5px;
-  margin-bottom: 8px
+  margin-bottom: 8px;
+  height: 32px;
+  display: flex;
+  align-items: center;
 }
 
 .multiselect__tags-wrap {

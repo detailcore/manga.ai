@@ -14,6 +14,9 @@
         <div class="login"> {{ userData.login }} </div>
       </div>
       <div class="links">
+        <Nuxt-link class="link" to="/admin" v-if="isAdmin">
+          <div class="link_text" style="color:#ff6820;">Админка</div>
+        </Nuxt-link>
         <Nuxt-link class="link" to="/moderation?type=manga&statuses=2" v-if="isAdmin">
           <div class="link_text">Модерация</div>
           <mdi-Pencil title="Модерация" />
@@ -139,7 +142,7 @@
 </template>
 
 <script>
-import { register } from '~/services/api'
+import { register, findUserAndSetRole } from '~/services/api'
 
 export default {
   data() {
@@ -227,13 +230,15 @@ export default {
 
     async registration() {
       await register( this.reg )
-        .then((res) => {
+        .then(async (res) => {
           this.isOpenLogin = false
           this.isOpenRegistry = false
+          if(res.status === 201) {
+            await findUserAndSetRole({ name: this.reg.name, email: this.reg.email, }) // Найти пользователя и установить ему роль
+          }
         })
         .catch((e) => {
-          console.log('ОШИБКА')
-          console.log(0, e);
+          console.log('ОШИБКА РЕГИСТРАЦИИ')
         })
     },
 

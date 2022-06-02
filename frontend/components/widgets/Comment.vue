@@ -4,7 +4,7 @@
       <div class="cover" :style="{ backgroundImage: `url(${urlCover})` }"></div>
       <div class="body">
         <div class="header">
-          <Nuxt-link :to="`user/${id_user}`"> {{ name }} </Nuxt-link>
+          <Nuxt-link :to="`/user/${id_user}`"> {{ name }} </Nuxt-link>
           <span class="date"> {{ updateTime }} </span>
         </div>
         <div class="text">

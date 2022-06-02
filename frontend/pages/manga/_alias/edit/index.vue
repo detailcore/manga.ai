@@ -365,6 +365,7 @@ export default {
       post.append('id_author', this.selectedAuthors ? this.getIdsField(this.selectedAuthors) : ''); 
       post.append('id_adult_rank', this.selectedAdult ? +this.selectedAdult : 1); 
       post.append('id_user', +this.getUserId); 
+      // post.append('id_status', 1);  //! УКЗАТЬ СТАТУС РЕДАКТИОРВАНИЯ
       post.append('id_status_of_releases', this.selectedStatus); 
       post.append('id_status_of_translation', this.selectedTranslation); 
       post.append('title_rus', this.formData.title_rus ? this.formData.title_rus : ''); 
@@ -408,6 +409,11 @@ export default {
           text: response.msg,
           type: 'success',
           duration: 5000,
+        })
+      } else {
+        this.$notify({
+          text: response.msg,
+          type: 'error',
         })
       }
     },

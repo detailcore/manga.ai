@@ -75,7 +75,6 @@ export default {
           formData.append('name', name);
           formData.append('file', file);
           formData.append('id_post', this.id);
-          formData.append('id_user', +this.$store.state.auth.user.id);
           formData.append('id_team', teamIds); // id команды, строка через запятую
 
           let res = await createChapterDownload(formData)

@@ -61,6 +61,12 @@
 import { mapGetters } from 'vuex'
 
 export default {
+  middleware({ store, redirect }) {
+    if (!store.state.auth.loggedIn) {
+      return redirect('/')
+    }
+  },
+
   head() {
     return {
       title: 'Модерация',

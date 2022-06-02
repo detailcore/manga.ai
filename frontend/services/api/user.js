@@ -13,6 +13,10 @@ export async function getUserById(id) {
 export async function register(params) {
   return await apiAny.post(`register`, params)
 }
+// Найти пользователя и установить ему роль
+export async function findUserAndSetRole(data) {
+  return await apiAny.post(`register/set_role`, data)
+}
 
 // Обновить информацию профиля
 export async function updateUser(params) {
