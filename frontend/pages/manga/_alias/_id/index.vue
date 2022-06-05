@@ -13,7 +13,7 @@
     </headroom>
 
     <LazyWidgetsReaderSetting v-if="isOpenSetting" />
-    <LazyWidgetsComplaint v-if="isOpenComplaint" :id="chapter.post.id" :page="pageCur" :type="'reader'" />
+    <LazyWidgetsComplaint v-if="isOpenComplaint" :id="chapter.id" :page="pageCur" :type="'reader'" />
     
     <!-- <small>
       <mdi-Account />

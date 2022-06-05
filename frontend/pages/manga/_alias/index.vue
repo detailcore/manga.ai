@@ -24,6 +24,14 @@
               <span>Читать</span>
             </div>
             <LazyListBookmark v-if="loggedIn" :id_post="idPost" />
+            <div class="action  space-evenly">
+              <mdi-Plus class="btn" title="Добавить новую главу" @click="goToAddChapter" />
+              <mdi-Pencil class="btn" title="Редактировать тайтл" @click="goToEdit" />
+              <span class="btn" @click="showComplaint">
+                <mdi-ExclamationThick v-if="!isOpenComplaint" title="Пожаловаться" />
+                <mdi-Close v-if="isOpenComplaint" title="Закрыть" />
+              </span>
+            </div>
           </div>
         </div>
         <div class="cover__translation" v-show="data.teams.length">
@@ -152,6 +160,7 @@
 
     <div class="background__close" :class="{ hidden: !openSetRating }" @click="close"></div>
 
+    <LazyWidgets-Complaint v-if="isOpenComplaint" :id="idPost" :type="'post'" :action="complaintShow" />
     <notifications />
   </div>
 </template>
@@ -176,12 +185,14 @@ export default {
   data() {
     return {
       openSetRating: false,
+      complaintShow: false,
     }
   },
 
   computed: {
     ...mapGetters( 'post', { data: 'GET_POST' }),
     ...mapGetters( 'post', { idPost: 'GET_POST_ID' }),
+    ...mapGetters( 'complaint', { openComplaint: 'GET_COMPLAINT_OPEN' }),
 
     domain({ $config: { jsDomain } }) {
       return jsDomain
@@ -214,9 +225,37 @@ export default {
     isSingle() { // произведение из категории "сингл"
       return this.data.rating ? this.data.formats.map(item => item.id === 6).includes(true) : false
     },
+    isOpenComplaint() {
+      return this.openComplaint.value && (this.openComplaint.type === 'post')
+    },
   },
 
   methods: {
+    loggedInPlease() {
+      this.$notify({
+          title: 'Войдите в аккаунт!',
+          text: 'Для выполнения этого действия необходимо выполнить вход в аккаунт!',
+          type: 'error'
+        })
+    },
+    showComplaint() {
+      this.complaintShow = !this.openComplaint.value
+      this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.idPost, value: this.complaintShow, type: 'post' })
+    },
+    goToEdit() {
+      if(!this.loggedIn) {
+        this.loggedInPlease()
+        return false
+      }
+      this.$router.push({ name: 'manga-alias-edit', params: { alias: this.$route.params.alias }, query: { id: +this.idPost } })
+    },
+    goToAddChapter() {
+      if(!this.loggedIn) {
+        this.loggedInPlease()
+        return false
+      }
+      this.$router.push({ name: 'create-chapter', query: { manga: +this.idPost } })
+    },
     goToChaptersList() {
       if(this.chapterCount > 0) {
         this.$router.push({ name: 'manga-alias', query: { page: 'chapters' } })
@@ -239,11 +278,7 @@ export default {
 
     openModalRating() {
       if(!this.loggedIn) {
-        this.$notify({
-          title: 'Войдите в аккаунт!',
-          text: 'Для выстевления оценки тайтлу необходимо выполнить вход в аккаунт!',
-          type: 'error'
-        })
+        this.loggedInPlease()
         return false
       }
       if((this.chapterCount <= 1 && !this.isSingle)) {
@@ -343,6 +378,9 @@ export default {
         .cover__btn {
           .btn_action {
             position: relative;
+          }
+          .space-evenly {
+            justify-content: space-evenly;
           }
         }
         // .cover__translation {

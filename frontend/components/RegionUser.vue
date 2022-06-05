@@ -14,6 +14,21 @@
         <div class="login"> {{ userData.login }} </div>
       </div>
       <div class="links">
+        <div class="links_line">
+          <Nuxt-link class="link line" to="/create/manga">
+            <div class="link_text">
+              <mdi-Plus title="Добавить" /> Тайтл
+            </div>
+          </Nuxt-link>
+          <Nuxt-link class="link line" to="/create/team">
+            <div class="link_text">
+              <mdi-Plus title="Добавить" /> Команду
+            </div>
+          </Nuxt-link>
+        </div>
+        <Nuxt-link class="link" to="/user/content">
+          <div class="link_text">Всё моё!</div>
+        </Nuxt-link>
         <Nuxt-link class="link" to="/admin" v-if="isAdmin">
           <div class="link_text" style="color:#ff6820;">Админка</div>
         </Nuxt-link>
@@ -308,6 +323,18 @@ export default {
       .links {
         display: flex;
         flex-direction: column;
+        .links_line {
+          display: flex;
+          justify-content: space-between;
+          .line {
+            width: calc(50% - 4px);
+            padding: 4px 6px;
+            .link_text {
+              display: flex;
+              align-items: center;
+            }
+          }
+        }
         .link {
           padding: 6px;
           margin: 4px 0;

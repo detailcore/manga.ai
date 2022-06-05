@@ -57,7 +57,7 @@
             <mdi-FormatListText title="Переводы" />
             <span>Наши переводы ({{ team.titles }})</span>
           </Nuxt-link>
-          <Nuxt-link class="btn__line__button" to="?page=settings">
+          <Nuxt-link class="btn__line__button" to="?page=settings" v-if="$store.state.auth.loggedIn">
             <mdi-Cog title="Дополнительные настройки" />
             <span>Настройки</span>
           </Nuxt-link>
@@ -85,7 +85,7 @@
         </div>
 
         <LazyTeamPosts v-if="page === 'posts'" />
-        <LazyTeamSetting v-if="page === 'settings'" />
+        <LazyTeamSetting v-if="page === 'settings' && $store.state.auth.loggedIn" />
       </div>
     </div>
   </div>

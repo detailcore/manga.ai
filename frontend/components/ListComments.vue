@@ -182,7 +182,9 @@ export default {
 
 .comments {
   margin-top: 16px;
-
+  .center {
+    text-align: center;
+  }
   .btn__action {
     max-height: 34px;
     text-transform: uppercase;

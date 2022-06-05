@@ -73,7 +73,7 @@ export default {
       return this.openComplaint.value && this.openComplaint.id === this.id && (this.openComplaint.type === 'comment')
     },
     isMyComment() {
-      return (this.$store.state.auth.user.id === this.id_user)
+      return this.$store.state.auth.loggedIn ? (this.$store.state.auth.user.id === this.id_user) : false
     },
     vote() {
       return this.cnt
@@ -86,6 +86,13 @@ export default {
   },
 
   methods: {
+    loggedInPlease() {
+      this.$notify({
+        title: 'Войдите в аккаунт!',
+        text: 'Для выполнения этого действия необходимо выполнить вход в аккаунт!',
+        type: 'error'
+      })
+    },
     showWriteComment() {
       this.writeShow = !this.writeComment.value
       this.$store.commit('comments/SET_WRITE_COMMENT', { id: this.id, value: this.writeShow })
@@ -95,6 +102,10 @@ export default {
       this.$store.commit('complaint/SET_COMPLAINT_OPEN', { id: this.id, value: this.complaintShow, type: 'comment' })
     },
     async upVote() {
+      if(!this.$store.state.auth.loggedIn) {
+        this.loggedInPlease()
+        return false
+      }
       if(this.isMyComment) {
         this.voteMyself()
         return false
@@ -104,6 +115,10 @@ export default {
       await setUpVoteComment(this.id)
     },
     async downVote() {
+      if(!this.$store.state.auth.loggedIn) {
+        this.loggedInPlease()
+        return false
+      }
       if(this.isMyComment) {
         this.voteMyself()
         return false

@@ -1,5 +1,5 @@
 <template>
-  <div class="comment__add">
+  <div class="comment__add" v-if="this.$store.state.auth.loggedIn">
     <textarea v-model="addText" :maxlength="maxText" class="comment__add__text" placeholder="Введите ваш комментарий"></textarea>
     <div class="comment__add__action">
       <div class="limit">{{ lengthText }}/{{ maxText }} символов</div>
@@ -14,6 +14,9 @@
         <div class="btn__action" @click="sendComment">Отправить</div>
       </div>
     </div>
+  </div>
+  <div class="block__title center" v-else>
+    Оставлять комментарии могут только авторизованные пользователи, войдите в аккаунт.
   </div>
 </template>
 

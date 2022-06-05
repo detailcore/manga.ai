@@ -39,7 +39,10 @@
         
         <div class="line_half">
           <div class="half">
-            <span class="title">Автор(ы) *</span>
+            <span class="title">
+              Автор(ы) *
+              <Nuxt-link to="/create/people" target="_blank">Добавить автора</Nuxt-link>
+            </span>
             <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
                 v-model="selectedAuthors" 
                 :options="authors" 
@@ -65,7 +68,10 @@
             <input class="input_text" type="text" v-model.trim="manga.cover" placeholder="Автор">
           </div> -->
           <div class="half">
-            <span class="title">Художник (если есть)</span>
+            <span class="title">
+              Художник (если есть)
+              <Nuxt-link to="/create/people" target="_blank">Добавить художника</Nuxt-link>
+            </span>
             <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
                 v-model="selectedArtists" 
                 :options="artists" 
@@ -88,7 +94,10 @@
           </div>
         </div>
 
-        <span class="title">Издатель</span>
+        <span class="title">
+          Издатель
+          <Nuxt-link to="/create/publisher" target="_blank">Добавить издателя</Nuxt-link>
+        </span>
         <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
             v-model="selectedPublishers" 
             :options="publishers" 
@@ -163,7 +172,10 @@
           </template>
         </multiselect>
 
-        <span class="title">Переводчики (команды)</span>
+        <span class="title">
+          Переводчики (команды)
+          <Nuxt-link to="/create/team" target="_blank">Добавить команду</Nuxt-link>
+        </span>
         <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
             v-model="selectedTranslators" 
             :options="translators" 
@@ -467,7 +479,12 @@ export default {
       margin: 10px 0 20px 0;
       span.title {
         margin-top: 16px;
-        display: inline-block;
+        // display: inline-block;
+        display: flex;
+        justify-content: space-between;
+        a {
+          color: #ff6820;
+        }
       }
       .input_text {
         width: 100%;
