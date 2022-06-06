@@ -5,7 +5,7 @@ export default {
     color: '#ff6820', // ораньжевый
     // throttle: 200, // задержка перед показом полоски
   },
-  ssr: false,
+  ssr: true,
 
   server: {
     port: 3000,
