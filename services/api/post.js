@@ -18,7 +18,7 @@ export async function similarGetById(id_post) {
     return await apiAny.get(`post/${id_post}/similars`)
 }
 // Получить список глав в описании
-export async function chaptersGetById(id_post, sort, page) {
+export async function chaptersGetById(id_post, sort='desc', page=1) {
     return await apiAny.get(`post/chapters/${id_post}?order=${sort}&page=${page}`)
 }
 

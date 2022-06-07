@@ -17,8 +17,6 @@
 </template>
 
 <script>
-import { get } from '~/services/axios'
-
 export default {
   props: {
     type: { type: String, default: () => '' },
@@ -55,13 +53,13 @@ export default {
     async loadContent(url, prefix='', sort='') {
       let res = undefined
       if(prefix === '' && sort === '') {
-        res = await get(url)
+        res = await this.$axios.get(url)
       } 
       if(prefix !== '') {
-        res = await get(prefix + url)
+        res = await this.$axios.get(prefix + url)
       }
       if(sort !== '') {
-        res = await get(url + `&order=${sort}`)
+        res = await this.$axios.get(url + `&order=${sort}`)
       }
 
       if(this.type === 'USER_BOOKMARKS') this.$store.commit('bookmark/SET_USER_BOOKMARKS', res) // страница профиля пользователя
