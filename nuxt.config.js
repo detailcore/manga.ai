@@ -39,9 +39,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/vue-headroom', ssr: false },
-    { src: '~/plugins/click-outside', ssr: false },
-    { src: '~/plugins/vue-multiselect', ssr: false },
+    { src: '~/plugins/vue-headroom', ssr: true },
+    { src: '~/plugins/click-outside', ssr: true },
+    { src: '~/plugins/vue-multiselect', ssr: true },
     { src: '~/plugins/axios', ssr: true },
     { src: '~/plugins/vue-mdi', ssr: true },
     { src: '~/plugins/notify-ssr', ssr: true },
@@ -56,17 +56,17 @@ export default {
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    extractCSS: true,
-    splitChunks: { // деление компонентов
-      layouts: false,
-      pages: true,
-      commons: true
-    },
-    extend (config, ctx) {
-      if (ctx && ctx.isClient) {
-        config.optimization.splitChunks.maxSize = 200000
-      }
-    }
+    // extractCSS: true,
+    // splitChunks: { // деление компонентов
+    //   layouts: false,
+    //   pages: true,
+    //   commons: true
+    // },
+    // extend (config, ctx) {
+    //   if (ctx && ctx.isClient) {
+    //     config.optimization.splitChunks.maxSize = 200000
+    //   }
+    // }
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
