@@ -24,7 +24,7 @@
               <span>Читать</span>
             </div>
             <LazyListBookmark v-if="loggedIn" :id_post="idPost" />
-            <div class="action  space-evenly">
+            <div class="space_evenly action">
               <mdi-Plus class="btn" title="Добавить новую главу" @click="goToAddChapter" />
               <mdi-Pencil class="btn" title="Редактировать тайтл" @click="goToEdit" />
               <span class="btn" @click="showComplaint">
@@ -379,7 +379,8 @@ export default {
           .btn_action {
             position: relative;
           }
-          .space-evenly {
+          .space_evenly {
+            display: flex;
             justify-content: space-evenly;
           }
         }

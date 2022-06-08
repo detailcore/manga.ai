@@ -5,7 +5,7 @@ export default {
     color: '#ff6820', // ораньжевый
     // throttle: 200, // задержка перед показом полоски
   },
-  ssr: false,
+  ssr: true,
 
   server: {
     port: 3000,
@@ -56,17 +56,17 @@ export default {
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    // extractCSS: true,
-    // splitChunks: { // деление компонентов
-    //   layouts: false,
-    //   pages: true,
-    //   commons: true
-    // },
-    // extend (config, ctx) {
-    //   if (ctx && ctx.isClient) {
-    //     config.optimization.splitChunks.maxSize = 200000
-    //   }
-    // }
+    extractCSS: true,
+    splitChunks: { // деление компонентов
+      layouts: false,
+      pages: true,
+      commons: true
+    },
+    extend (config, ctx) {
+      if (ctx && ctx.isClient) {
+        config.optimization.splitChunks.maxSize = 200000
+      }
+    }
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -76,7 +76,7 @@ export default {
     // https://www.npmjs.com/package/@nuxtjs/moment
     '@nuxtjs/moment',
     // https://github.com/Developmint/nuxt-purgecss
-    'nuxt-purgecss',
+    // 'nuxt-purgecss',
     // https://pwa.nuxtjs.org
     '@nuxtjs/pwa',
   ],
@@ -248,6 +248,5 @@ export default {
     apiDomain: process.env.API_DOMAIN,
   },
   privateRuntimeConfig: {
-    // apiSecret: process.env.TEST
   }
 }

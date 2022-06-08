@@ -1,7 +1,7 @@
 <template>
   <div class="profile team">
     <div class="profile__header team">
-      <div class="cover" :style="{ backgroundImage: `url(${team.cover.bg ? team.cover.bg+'.webp' : ''})` }">
+      <div class="cover" :style="{ backgroundImage: `url(${bgCover})` }">
         <div class="shadow"></div>
         <div class="container user_info">
           <div class="cover__avatar" :style="{ backgroundImage: `url(${team.cover ? team.cover.avatar+'.webp' : ''})` }"></div>
@@ -136,6 +136,10 @@ export default {
 
     lengthText() {
       return this.descTeam.length
+    },
+
+    bgCover() {
+      return this.team.cover ? (this.team.cover.bg ? this.team.cover.bg : '') : ''
     },
   },
 };
