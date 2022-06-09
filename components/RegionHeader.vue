@@ -16,9 +16,7 @@
         <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />
         </div> -->
-        <no-ssr>
-          <LazyRegion-User />
-        </no-ssr>
+        <Region-User />
       </div>
     </div>
   </header>
