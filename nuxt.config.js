@@ -5,7 +5,7 @@ export default {
     color: '#ff6820', // ораньжевый
     // throttle: 200, // задержка перед показом полоски
   },
-  ssr: true,
+  ssr: false,
 
   server: {
     port: 3000,
@@ -57,16 +57,16 @@ export default {
     //   analyzerMode: 'static'
     // },
     // extractCSS: true,
-    splitChunks: { // деление компонентов
-      layouts: false,
-      pages: true,
-      commons: true
-    },
-    extend (config, ctx) {
-      if (ctx && ctx.isClient) {
-        config.optimization.splitChunks.maxSize = 200000
-      }
-    }
+    // splitChunks: { // деление компонентов
+    //   layouts: false,
+    //   pages: true,
+    //   commons: true
+    // },
+    // extend (config, ctx) {
+    //   if (ctx && ctx.isClient) {
+    //     config.optimization.splitChunks.maxSize = 200000
+    //   }
+    // }
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -78,26 +78,26 @@ export default {
     // https://github.com/Developmint/nuxt-purgecss
     // 'nuxt-purgecss',
     // https://pwa.nuxtjs.org
-    '@nuxtjs/pwa',
+    // '@nuxtjs/pwa',
   ],
 
-  pwa: {
-    icon: {
-      purpose: 'any'
-    },
-    meta: {
-      author: false,
-      ogType: false,
-      ogTitle: false,
-      ogSiteName: false,
-    },
-    manifest: {
-      lang: 'ru',
-      name: 'MangaClub Reincarnated',
-      short_name: 'MangaClub Re',
-      background_color: '#121212',
-    },
-  },
+  // pwa: {
+  //   icon: {
+  //     purpose: 'any'
+  //   },
+  //   meta: {
+  //     author: false,
+  //     ogType: false,
+  //     ogTitle: false,
+  //     ogSiteName: false,
+  //   },
+  //   manifest: {
+  //     lang: 'ru',
+  //     name: 'MangaClub Reincarnated',
+  //     short_name: 'MangaClub Re',
+  //     background_color: '#121212',
+  //   },
+  // },
 
   moment: {
     locales: ['ru'],
