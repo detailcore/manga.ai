@@ -62,7 +62,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   middleware({ store, redirect }) {
-    if (!store.state.auth.loggedIn || store.state.auth.user.id_role != 1 || store.state.auth.user.id_role != 2) {
+    if (!store.state.auth.loggedIn || (+store.state.auth.user.id_role !== 1 && +store.state.auth.user.id_role !== 2)) {
       return redirect('/')
     }
   },
