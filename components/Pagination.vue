@@ -51,15 +51,20 @@ export default {
     },
 
     async loadContent(url, prefix='', sort='') {
-      let res = undefined
+      let res = undefined,
+          apiProtocol = this.$config.apiDomain.split(':')[0],
+          // jsProtocol = this.$config.jsDomain.split(':')[0],
+          curProtocol = url.split(':')[0],
+          needUrl = (curProtocol === apiProtocol) ? url : url.replace(curProtocol, apiProtocol);
+
       if(prefix === '' && sort === '') {
-        res = await this.$axios.get(url)
+        res = await this.$axios.get(needUrl)
       } 
       if(prefix !== '') {
-        res = await this.$axios.get(prefix + url)
+        res = await this.$axios.get(prefix + needUrl)
       }
       if(sort !== '') {
-        res = await this.$axios.get(url + `&order=${sort}`)
+        res = await this.$axios.get(needUrl + `&order=${sort}`)
       }
 
       if(this.type === 'USER_BOOKMARKS') this.$store.commit('bookmark/SET_USER_BOOKMARKS', res) // страница профиля пользователя
