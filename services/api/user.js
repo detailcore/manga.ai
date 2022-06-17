@@ -23,6 +23,11 @@ export async function updateUser(params) {
   return await apiAny.put(`user/profile_information`, params)
 }
 
+// Изменить пароль пользователя
+export async function changePassword(params) {
+  return await apiAny.put(`user/password`, params)
+}
+
 // Загрузить аватарку
 export async function userUploadCover(data) {
   return await apiAny.post(`user/upload_cover`, data)

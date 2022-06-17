@@ -7,7 +7,7 @@
       <div class="item" :class="{ active : showSecurity }" @click="showSecurity = true, showAva = false, showInformation = false"> Безопасность </div>
     </div>
 
-    <div class="container" v-show="showAva">
+    <div class="container" v-if="showAva">
       <div class="value">
         <div class="title">Аватарка</div>
         <input class="hidden" id="cover" type='file' accept="image/*" @change="onChangeAvatar" />
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="container" v-show="showInformation">
+    <div class="container" v-if="showInformation">
       <div class="value">
         <div class="title">Ваш ник (виден всем):</div>
         <input class="text" name="name" type="text" v-model="info.name">
@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div class="container" v-show="showSecurity">
+    <div class="container" v-if="showSecurity">
       <div class="value">
         <div class="title">Текущий пароль</div>
         <input class="text" type="password" v-model.trim="changePassword.current" placeholder="Текущий пароль">
@@ -78,16 +78,18 @@
         <input class="text" type="password" v-model.trim="changePassword.reNew" placeholder="Повторите новый пароль">
       </div>
       <div class="action">
-        <div class="save">Сохранить</div>
+        <div class="save" @click="updatePassword">Сохранить</div>
         <div class="cancel" @click="settingsShow = false">Отмена</div>
       </div>
     </div>
+
+    <notifications />
 
   </div>
 </template>
 
 <script>
-import { updateUser, userUploadCover, userUploadBackground } from '~/services/api'
+import { updateUser, userUploadCover, userUploadBackground, changePassword } from '~/services/api'
 
 export default {
   props: {
@@ -176,6 +178,21 @@ export default {
         gender: +this.info.gender,
         residence: this.info.residence,
       })
+    },
+    async updatePassword() {
+      if(this.changePassword.new === this.changePassword.reNew && this.changePassword.new.length > 7) {
+        let res = await changePassword({
+          current_password: this.changePassword.current,
+          password: this.changePassword.new,
+          password_confirmation: this.changePassword.reNew,
+        })
+        console.log(res)
+      } else {
+        this.$notify({
+          text: `Новый и повторный пароли не совпадают, либо длина пароля меньше 8 символов!`,
+          type: 'error',
+        })
+      }
     },
     setUser() {
       let { id, name, email, cover, cover_bg, gender, site } = this.$store.state.auth.user
