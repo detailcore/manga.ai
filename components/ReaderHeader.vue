@@ -233,6 +233,7 @@ export default {
       }
       &__home,
       &__control {
+        display: flex;
         .divider {
           padding: 0 6px;
         }

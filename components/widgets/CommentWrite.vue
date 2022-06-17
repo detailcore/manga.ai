@@ -73,6 +73,13 @@ export default {
         idTmp = this.idChapter
         pageTmp = this.idChapter +'.'+this.readerPageCurrent
       }
+      if(!this.$store.state.auth.loggedIn) {
+        this.$notify({
+          text: `Необходимо авторизоваться!`,
+          type: 'error',
+        })
+        return false
+      }
       if(this.addText.length < 9) {
         this.$notify({
           text: `Длинна комментария не может быть меньше 10 символов`,
