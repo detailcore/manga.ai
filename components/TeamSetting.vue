@@ -53,13 +53,16 @@
 
     <div class="action">
       <div class="save" @click="saveAndUpload">Сохранить</div>
-      <div class="cancel">Отмена</div>
+      <!-- <div class="cancel">Отмена</div> -->
     </div>
+
+    <notifications />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import { notify } from '~/services/util'
 import { teamUpdate } from "~/services/api"
 
 export default {
@@ -104,10 +107,19 @@ export default {
       form.append('link_discord', this.data.link_discord ? this.data.link_discord : '')
 
       let res = await teamUpdate(this.team.id, form)
-      res.cover.avatar = res.cover.mid ? this.$config.urlCoverTeam + this.team.id + '/' + res.cover.mid : ''
-      res.cover.bg = res.cover.bg ? this.$config.urlCoverTeam + this.team.id + '/' + res.cover.bg : ''
-      this.$store.commit('team/SET_TEAM_UPDATE', res)
-      
+
+      if(res.status == 'ok' || res.id) {
+        res.cover.avatar = res.cover.mid ? this.$config.urlCoverTeam + this.team.id + '/' + res.cover.mid : ''
+        res.cover.bg = res.cover.bg ? this.$config.urlCoverTeam + this.team.id + '/' + res.cover.bg : ''
+        this.$store.commit('team/SET_TEAM_UPDATE', res)
+        this.$notify({
+          text: "Изменения сохранены!",
+          type: "success",
+        })
+      } else {
+        this.$notify(notify(res))
+      }
+
       this.data.avatar = ''
       this.data.cover_bg = ''
     },

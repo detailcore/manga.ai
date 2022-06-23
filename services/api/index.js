@@ -18,7 +18,7 @@ export * from '~/services/api/admin'
 
 
 
-// Для работы Axios за пределами Vue и Nuxt, к примеру при использовании с файле '~/services/api/post' и т.д.
+// Для работы Axios за пределами Vue и Nuxt, к примеру при использовании в файле '~/services/api/post' и т.д.
 const requestMethods = [
   'request', 'delete', 'get', 'head', 'options', // url, config
   'post', 'put', 'patch' // url, data, config

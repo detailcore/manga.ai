@@ -76,7 +76,7 @@ export function getCookie(name) {
 /**
  * Определить язык ввода, рус или другой
  * @param  {String}  text
- * @return {Boolean} 
+ * @return {Boolean}
  */
 export function isCyrillic(text) {
   return /[а-яё]/i.test(text)
@@ -88,14 +88,16 @@ export function isCyrillic(text) {
  * @param  {Object}  { status: 'ok', msg: 'text' }
  * @return {Object}  { text: 'str', type: 'success' }
  */
-export function notify(res) {
-  switch (res.status) {
+export function notify({ status, msg }) {
+  switch (status) {
     case 'ok':
-      return { text: res.msg, type: 'success' }
+      return { text: msg, type: 'success' }
     case 'warn':
-      return { text: res.msg, type: 'warn' }
-    case ('error' || 'failed'):
-      return { text: res.msg, type: 'error' }
+      return { text: msg, type: 'warn' }
+    case 'error':
+      return { text: msg, type: 'error' }
+    case 'failed':
+      return { text: msg, type: 'error' }
   }
 }
 
@@ -119,7 +121,7 @@ export function notify(res) {
   if(array) {
     result = Object.values(
       array.reduce((r, cur) => {
-        const key = 'k' + cur['chapter']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам 
+        const key = 'k' + cur['chapter']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам
         (r[key] = r[key] || []).push(cur);
 
         return r;

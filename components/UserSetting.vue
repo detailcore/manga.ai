@@ -166,7 +166,12 @@ export default {
 
       let res = await userUploadCover(images)
 
-      if(res.cover) this.$store.commit('user/SET_COVER', res.cover)
+      if(res.cover) {
+        let user = { ...this.$auth.user }
+        user.cover = res.cover
+        this.$auth.setUser(user)
+        this.$store.commit('user/SET_COVER', res.cover)
+      }
       if(res.cover_bg) this.$store.commit('user/SET_COVER_BG', res.cover_bg)
     },
     async updateInformation() {
@@ -181,12 +186,23 @@ export default {
     },
     async updatePassword() {
       if(this.changePassword.new === this.changePassword.reNew && this.changePassword.new.length > 7) {
-        let res = await changePassword({
+        await changePassword({
           current_password: this.changePassword.current,
           password: this.changePassword.new,
           password_confirmation: this.changePassword.reNew,
         })
-        console.log(res)
+        .then(() => {
+          this.$notify({
+            text: `Пароль успешно изменён!`,
+            type: 'success',
+          })
+        })
+        .catch(() => {
+          this.$notify({
+            text: `Ошибка изменения пароля`,
+            type: 'error',
+          })
+        })
       } else {
         this.$notify({
           text: `Новый и повторный пароли не совпадают, либо длина пароля меньше 8 символов!`,
@@ -195,14 +211,16 @@ export default {
       }
     },
     setUser() {
-      let { id, name, email, cover, cover_bg, gender, site } = this.$store.state.auth.user
+      let { id, name, email, cover, cover_bg, gender, site, residence, about } = this.$store.state.auth.user
       this.info.id = id
+      this.info.about = about
       this.info.cover = cover
       this.info.cover_bg = cover_bg
       this.info.name = name
       this.info.site = site
       this.info.email = email
       this.info.gender = +gender
+      this.info.residence = residence
     },
   },
 };

@@ -68,7 +68,7 @@ export default function ({ app, $axios, redirect }) {
     // console.log('Response to ', res)
     if(
       res.status.toString().charAt(0) === '2' &&
-      res.config.url.replace(res.config.baseURL, '') !== 'user' // исключение, фикс бага с авторизованным пользователем (костыль так-то)
+      res.config.url.replace(res.config.baseURL, '') !== 'user' //? исключение, фикс бага с авторизованным пользователем (костыль так-то)
     ) {
       return res.data
     }

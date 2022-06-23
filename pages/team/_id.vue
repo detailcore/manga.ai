@@ -57,7 +57,7 @@
             <mdi-FormatListText title="Переводы" />
             <span>Наши переводы ({{ team.titles }})</span>
           </Nuxt-link>
-          <Nuxt-link class="btn__line__button" to="?page=settings" v-if="$store.state.auth.loggedIn">
+          <Nuxt-link class="btn__line__button" to="?page=settings" v-if="canEdit">
             <mdi-Cog title="Дополнительные настройки" />
             <span>Настройки</span>
           </Nuxt-link>
@@ -85,7 +85,7 @@
         </div>
 
         <LazyTeamPosts v-if="page === 'posts'" />
-        <LazyTeamSetting v-if="page === 'settings' && $store.state.auth.loggedIn" />
+        <LazyTeamSetting v-if="viewEdit" />
       </div>
     </div>
   </div>
@@ -140,6 +140,14 @@ export default {
 
     bgCover() {
       return this.team.cover ? (this.team.cover.bg ? this.team.cover.bg : '') : ''
+    },
+    canEdit() {
+      return (this.$store.state.auth.user ? this.$store.state.auth.user.id : false ) == this.team.id_owner ||
+              ((this.$store.state.auth.user ? this.$store.state.auth.user.id_role : 0 ) === 1 ||
+              (this.$store.state.auth.user ? this.$store.state.auth.user.id_role : 0 ) === 2)
+    },
+    viewEdit() {
+      return this.page === 'settings' && this.canEdit
     },
   },
 };

@@ -136,23 +136,25 @@
       <div class="modal__recovery_text">
         Регистрируясь, вы соглашаетесь с нашими <Nuxt-link to="#">Правилами и устоями</Nuxt-link>.
       </div>
-      
+
       <div class="modal__btn">
         <div class="item" @click.prevent="registration"> Зарегистрироваться </div>
       </div>
     </div>
 
 
-    <div class="background__close" 
-          v-if="isOpen == true || 
+    <div class="background__close"
+          v-if="isOpen == true ||
                 isOpenLogin == true ||
                 isOpenRecovery == true ||
                 isOpenRegistry == true"
-          @click="isOpen = false, 
+          @click="isOpen = false,
                   isOpenLogin = false,
                   isOpenRecovery = false,
                   isOpenRegistry = false">
     </div>
+
+    <notifications />
   </div>
 </template>
 
@@ -233,13 +235,25 @@ export default {
         },
       })
       .then(() => {
+        this.$notify({
+          text: `Вход выполнен успешно!`,
+          type: 'success',
+          duration: 1500
+        })
+      })
+      .then(() => {
         this.auth.login = ''  //обнуление введунных данных
         this.auth.password = '' //обнуление введунных данных
         this.isOpenLogin = false
       })
       .catch((e) => {
-        console.log('ОШИБКА')
-        console.log(0, e);
+        console.log('ОШИБКА ВХОДА')
+        this.$notify({
+          title: `E-mail или пароль введены неверно!`,
+          text: `Проверьте правильность ввода почты или пароля!`,
+          type: 'error',
+          duration: 5000
+        })
       })
     },
 
@@ -263,8 +277,7 @@ export default {
           this.isOpen = false
         })
         .catch((e) => {
-          console.log('ОШИБКА')
-          console.log(0, e);
+          console.log('ОШИБКА ВЫХОДА')
         })
     },
 
@@ -275,7 +288,7 @@ export default {
     openUser() {
       this.isOpen = !this.isOpen
     },
-    
+
     close() {
       this.isOpen = false
       this.isOpenLogin = false

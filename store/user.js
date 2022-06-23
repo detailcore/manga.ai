@@ -2,8 +2,15 @@ import { getUserById } from '~/services/api'
 
 export const state = () => ({
   user: [],
+  roles: [
+    { id: 1, name: 'Администратор' },
+    { id: 2, name: 'Модератор' },
+    { id: 3, name: 'Переводчик' },
+    { id: 4, name: 'Доверенный' },
+    { id: 5, name: 'Пользователь' },
+  ],
 })
-  
+
 export const mutations = {
   SET_USER(state, payload) {
     state.user = payload
