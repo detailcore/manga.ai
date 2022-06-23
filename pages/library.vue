@@ -1,7 +1,7 @@
 <template>
   <div class="container container_fullh content library" :class="{ 'filter-is-mobi': filterOpen }">
     <div class="search-results">
-      <div class="block__title"> Библиотека <div class="btn" @click="filterOpen = !filterOpen"><mdi-FilterMenu title="Поиск по каталогу" /></div> </div>
+      <div class="block__title"> Библиотека <div class="btn btn-filter" @click="filterOpen = !filterOpen"><mdi-FilterMenu title="Поиск по каталогу" /></div> </div>
       <div class="block__subtitle"> Поиск манги в каталоге по вашим предпочтениям </div>
       <div class="search-list">
         <div class="notice" v-show="emptyResult">
@@ -125,7 +125,7 @@
           <div class="button submit" @click="sendFilter()"> Выбрать </div>
         </div>
       </div>
-        
+
       <div class="filter-layout" :class="{ 'is-hidden': !tagsOpen }">
         <div class="filter-submenu">
           <div class="button" @click="tagsOpen = !tagsOpen">
@@ -201,7 +201,7 @@ export default {
       this.curPage = 1
       this.tagsOpen = false
       this.genresOpen = false
-      this.filterOpen = false   
+      this.filterOpen = false
 
       let res = await libraryGetFilter(this.curPage, this.getDataFilter())
       this.$store.commit('library/SET_POSTS', { data: res.data, add: false })
@@ -230,7 +230,7 @@ export default {
       let data = {}
       data.year = []
       // data.rating = []
-      
+
       data.year[0] = this.validNumber(this.year.from, 1930, this.currentYear)
       data.year[1] = this.validNumber(this.year.before, 1930, this.currentYear)
       if(data.year[0] > data.year[1]) data.year[1] = undefined
@@ -250,7 +250,7 @@ export default {
       data.formats = this.returnValue(this.filter.formats)
       data.status_of_translations = this.returnValue(this.filter.status_of_translations)
       data.status_of_releases = this.returnValue(this.filter.status_of_releases)
-      
+
       data.sortType = this.sortType ? this.sortType : undefined
       data.sortByName = this.sortByName ? this.sortByName : undefined
 
