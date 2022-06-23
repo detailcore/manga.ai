@@ -5,28 +5,28 @@
     <div class="container">
       <div class="value">
         <div class="title">Название команды: *</div>
-        <input class="text" name="name" type="text" placeholder="Основное название команды" v-model.trim="data.name">
+        <input class="text" name="name" type="text" placeholder="Основное название команды" v-model="data.name">
         <div class="block__subtitle">* - изменять основное название команды не рекомендуется</div>
       </div>
       <div class="value">
         <div class="title">Другие названия:</div>
-        <input class="text" name="name_alt" type="text" placeholder="Другие названия" v-model.trim="data.name_alt">
+        <input class="text" name="name_alt" type="text" placeholder="Другие названия" v-model="data.name_alt">
       </div>
       <div class="value">
         <div class="title">Сайт:</div>
-        <input class="text" name="site" type="text" placeholder="Ссылка на сайт" v-model.trim="data.link_site">
+        <input class="text" name="site" type="text" placeholder="Ссылка на сайт" v-model="data.link_site">
       </div>
       <div class="value">
         <div class="title">Группа ВК:</div>
-        <input class="text" name="vk" type="text" placeholder="Ссылка на группу" v-model.trim="data.link_vk">
+        <input class="text" name="vk" type="text" placeholder="Ссылка на группу" v-model="data.link_vk">
       </div>
       <div class="value">
         <div class="title">Дискорд:</div>
-        <input class="text" name="discord" type="text" placeholder="Ссылка на дискорд" v-model.trim="data.link_discord">
+        <input class="text" name="discord" type="text" placeholder="Ссылка на дискорд" v-model="data.link_discord">
       </div>
       <div class="value">
         <div class="title">Описание команды:</div>
-        <textarea placeholder="Несколько слов о вашей команде" :maxlength="maxText" v-model.trim="data.description"></textarea>
+        <textarea placeholder="Несколько слов о вашей команде" :maxlength="maxText" v-model="data.description"></textarea>
         <div class="limit">{{ lengthText }}/{{ maxText }} символов</div>
       </div>
     </div>
@@ -99,12 +99,12 @@ export default {
       let form = new FormData()
       if(this.data.avatar) form.append('avatar', this.data.avatar)
       if(this.data.cover_bg) form.append('cover_bg', this.data.cover_bg)
-      form.append('name', this.data.name)
-      form.append('name_alt', this.data.name_alt ? this.data.name_alt : '')
-      form.append('description', this.data.description ? this.data.description : '')
-      form.append('link_site', this.data.link_site ? this.data.link_site : '')
-      form.append('link_vk', this.data.link_vk ? this.data.link_vk : '')
-      form.append('link_discord', this.data.link_discord ? this.data.link_discord : '')
+      form.append('name', this.data.name.trim())
+      form.append('name_alt', this.data.name_alt ? this.data.name_alt.trim() : '')
+      form.append('description', this.data.description ? this.data.description.trim() : '')
+      form.append('link_site', this.data.link_site ? this.data.link_site.trim() : '')
+      form.append('link_vk', this.data.link_vk ? this.data.link_vk.trim() : '')
+      form.append('link_discord', this.data.link_discord ? this.data.link_discord.trim() : '')
 
       let res = await teamUpdate(this.team.id, form)
 
@@ -126,7 +126,7 @@ export default {
     init() {
       this.data.name = this.team.name
       this.data.name_alt = this.team.name_alt
-      this.data.description = this.team.description.trim()
+      this.data.description = this.team.description
       this.data.link_site = this.team.link_site
       this.data.link_vk = this.team.link_vk
       this.data.link_discord = this.team.link_discord

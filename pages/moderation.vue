@@ -12,39 +12,46 @@
           Главы
           <span class="count">{{ count.chapter ? count.chapter.total : 0 }}</span>
         </div>
+        <div class="menu-item" :class="{ active: type === 'team' }" @click="setType('team')">
+          Команды
+          <span class="count">{{ count.team ? count.team.total : 0 }}</span>
+        </div>
       </div>
 
       <div class="menu sub-menu" v-if="count.manga">
         <div class="menu-item" :class="{ active: statuses === 1 }" @click="setStatuses(1)">
           Опубликовано
-          <span class="count">{{ (type === 'manga') ? count.manga[1] : count.chapter[1] }}</span>
+          <span class="count">{{ countSubMenu[1] }}</span>
         </div>
         <div class="menu-item" :class="{ active: statuses === 2 }" @click="setStatuses(2)">
           Проверяется
-          <span class="count">{{ (type === 'manga') ? count.manga[2] : count.chapter[2] }}</span>
+          <span class="count">{{ countSubMenu[2] }}</span>
         </div>
         <div class="menu-item" :class="{ active: statuses === 3 }" @click="setStatuses(3)">
           Черновик
-          <span class="count">{{ (type === 'manga') ? count.manga[3] : count.chapter[3] }}</span>
+          <span class="count">{{ countSubMenu[3] }}</span>
         </div>
         <div class="menu-item" :class="{ active: statuses === 4 }" @click="setStatuses(4)">
           Снято с публикации
-          <span class="count">{{ (type === 'manga') ? count.manga[4] : count.chapter[4] }}</span>
+          <span class="count">{{ countSubMenu[4] }}</span>
         </div>
         <div class="menu-item" :class="{ active: statuses === 5 }" @click="setStatuses(5)">
           Отклонено модератором
-          <span class="count">{{ (type === 'manga') ? count.manga[5] : count.chapter[5] }}</span>
+          <span class="count">{{ countSubMenu[5] }}</span>
         </div>
       </div>
 
       <Paginator v-show="pagination.pageMax > 1" />
 
       <div class="result" v-if="content.length > 0">
-        <div class="items" v-show="type === 'manga'">
+        <div class="items" v-if="type === 'manga'">
           <WidgetsModerationTitle v-for="item in content" :key="item.id" :item="item" />
         </div>
-        <div class="items" v-show="type === 'chapter'">
+        <div class="items" v-if="type === 'chapter'">
           <WidgetsModerationChapter v-for="item in content" :key="item.id" :item="item" />
+        </div>
+        <div class="items" v-if="type === 'team'">
+          <WidgetsModerationTeam v-for="item in content" :key="item.id" :item="item" />
         </div>
       </div>
 
@@ -91,6 +98,9 @@ export default {
     statuses() {
       return this.$route.query ? +this.$route.query.statuses : '/'
     },
+    countSubMenu() {
+      return this.count[this.type]
+    }
   },
 
   methods: {
@@ -106,9 +116,9 @@ export default {
     },
 
     setType(type) {
-      this.$router.push({ 
-        path: '/moderation', 
-        query: { 
+      this.$router.push({
+        path: '/moderation',
+        query: {
           type: type,
           statuses: this.statuses,
          }
@@ -117,9 +127,9 @@ export default {
     },
 
     setStatuses(status) {
-      this.$router.push({ 
-        path: '/moderation', 
-        query: { 
+      this.$router.push({
+        path: '/moderation',
+        query: {
           type: this.type,
           statuses: status,
          }
