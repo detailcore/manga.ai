@@ -8,7 +8,8 @@
 </template>
 
 <script>
-import { headroom } from "vue-headroom";
+import { headroom } from "vue-headroom"
+import { reloadPage } from "~/services/util"
 
 export default {
   name: "reader",
@@ -25,6 +26,7 @@ export default {
 
   mounted() {
     this.widthViewport = window.innerWidth
+    reloadPage()
   },
 
   methods: {

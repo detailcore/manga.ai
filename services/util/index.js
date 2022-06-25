@@ -131,3 +131,17 @@ export function notify({ status, msg }) {
 
   return result
 }
+
+
+/**
+ * Перезагрузить страницу, если слетела авторизация, но есть токен!
+ */
+ export function reloadPage() {
+  let storage = localStorage.getItem('auth._token.laravelSanctum'),
+      loggedIn = window.$nuxt.$store.state.auth.loggedIn;
+
+  if(storage === 'true' && loggedIn == false) {
+    console.log(9669, 'Reload Page')
+    window.location.reload()
+  }
+}
