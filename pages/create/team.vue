@@ -61,7 +61,7 @@ export default {
       }
     }
   },
-  
+
   computed: {
     lengthText() {
       return this.team.desc.length
@@ -77,11 +77,11 @@ export default {
         link_site: this.team.site ? this.team.site : '',
         link_vk: this.team.vk ? this.team.vk : '',
         link_discord: this.team.discord ? this.team.discord : '',
-        owner: this.team.member ? this.$store.state.auth.user.id : this.team.owner,
+        owner: this.team.member ? (this.$store.state.auth.loggedIn ? this.$store.state.auth.user.id : this.team.owner) : this.team.owner,
       }
       if(this.team.name) {
         let response = await teamCreate(data) // создаём
-        
+
         if(response.status === 'ok') {
           this.$notify({
             text: response.msg,

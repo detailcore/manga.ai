@@ -9,7 +9,7 @@ export const state = () => ({
     links: [],
   }
 })
-  
+
 export const mutations = {
   SET_COUNT(state, payload) {
     state.count = payload
@@ -28,10 +28,8 @@ export const mutations = {
     state.pagination.pageCurrent = payload
   },
   SET_UPDATE_COUNT(state, { id, type, oldStatus, newStatus }) {
-    if(type === 'manga' || type === 'chapter') {
       state.count[type][oldStatus] -= 1
       state.count[type][newStatus] += 1
-    }
   },
   SET_UPDATE_CONTENT(state, { id, type, oldStatus, newStatus }) {
     if(oldStatus !== newStatus) {

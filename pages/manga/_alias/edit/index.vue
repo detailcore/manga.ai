@@ -5,12 +5,13 @@
       <mdi-MenuRight />
       <Nuxt-link :to="'/manga/'+ alias"> {{ data ? data.title_rus : data.title_eng }} </Nuxt-link>
     </div>
-    <div class="block__subtitle"> Изменяйте только необходимые поля </div>
+    <div class="block__subtitle "> Изменяйте только необходимые поля </div>
     <div class="create__fields">
 
       <div class="create__fields__image">
         <span class="title">Изменить обложку</span>
-        <input name="image" type="file" class="image" accept="image/*" @change="onChange">
+        <input class="hidden" id="cover" type='file' accept="image/*" @change="onChangeCover" />
+        <label for="cover" class="image" ref="cover"> Нажмите сюда для выбора изображения </label>
       </div>
 
 
@@ -45,13 +46,13 @@
             <input class="input_text" type="text" v-model.trim="alias" placeholder="Год релиза">
           </div>
         </div>
-        
+
         <div class="line_half">
           <div class="half">
             <span class="title">Автор(ы)</span>
             <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-                v-model="selectedAuthors" 
-                :options="authors" 
+                v-model="selectedAuthors"
+                :options="authors"
                 :multiple="true"
                 :max-height="600"
                 :searchable="true"
@@ -76,8 +77,8 @@
           <div class="half">
             <span class="title">Художник (если есть)</span>
             <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-                v-model="selectedArtists" 
-                :options="artists" 
+                v-model="selectedArtists"
+                :options="artists"
                 :multiple="true"
                 :max-height="600"
                 :searchable="true"
@@ -99,8 +100,8 @@
 
         <span class="title">Издатель</span>
         <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedPublishers" 
-            :options="publishers" 
+            v-model="selectedPublishers"
+            :options="publishers"
             :multiple="true"
             :max-height="600"
             :searchable="true"
@@ -120,8 +121,8 @@
 
         <span class="title">Жанры</span>
         <multiselect track-by="name" label="name" placeholder="Выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedGenres" 
-            :options="info.genres" 
+            v-model="selectedGenres"
+            :options="info.genres"
             :multiple="true"
             :max-height="300"
             :searchable="false"
@@ -138,8 +139,8 @@
 
         <span class="title">Теги</span>
         <multiselect track-by="name" label="name" placeholder="Выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedTags" 
-            :options="info.tags" 
+            v-model="selectedTags"
+            :options="info.tags"
             :multiple="true"
             :max-height="300"
             :searchable="false"
@@ -156,8 +157,8 @@
 
         <span class="title">Формат выпуска</span>
         <multiselect track-by="name" label="name" placeholder="Выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedFormats" 
-            :options="info.formats" 
+            v-model="selectedFormats"
+            :options="info.formats"
             :multiple="true"
             :max-height="300"
             :searchable="false"
@@ -174,8 +175,8 @@
 
         <span class="title">Переводчики (команды)</span>
         <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedTranslators" 
-            :options="translators" 
+            v-model="selectedTranslators"
+            :options="translators"
             :multiple="true"
             :max-height="600"
             :searchable="true"
@@ -252,10 +253,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { 
-  editPostById, 
-  createSearchPeople, 
-  createSearchPublisher, 
+import {
+  editPostById,
+  createSearchPeople,
+  createSearchPublisher,
   createSearchTeam,
   } from '~/services/api'
 
@@ -299,9 +300,13 @@ export default {
       }
     }
   },
-  
+
   created() {
     this.loadFields()
+  },
+
+  mounted() {
+    this.initCover()
   },
 
   computed: {
@@ -311,9 +316,9 @@ export default {
     getUserId() {
       return this.$store.state.auth.user.id
     },
-    // urlCover({ $config: { urlCoverTitle } }) {
-    //   return urlCoverTitle + this.data.id +'/'+ this.data.cover
-    // },
+    urlCover({ $config: { urlCoverTitle } }) {
+      return urlCoverTitle + this.data.id +'/'+ (this.data.cover ? this.data.cover : '')
+    },
     identicFormats() {
       return JSON.stringify(this.data.formats.map(item => item.id)) === JSON.stringify(this.selectedFormats.map(item => item.id))
     },
@@ -335,6 +340,29 @@ export default {
   },
 
   methods: {
+    initCover() {
+      if(this.data.cover) {
+        let src = this.$refs.cover
+        src.style.backgroundImage = `url('${this.urlCover}')`
+      }
+    },
+    onChangeCover(e) {
+      let file = (e.target.files.length > 0) ? e.target.files[0] : false,
+          imageView = new FileReader(),
+          src = this.$refs.cover
+
+      if(file) {
+        imageView.onload = function (el) {
+          src.style.backgroundImage = `url('${el.target.result}')`
+        }
+        imageView.readAsDataURL(file)
+        this.selectedCover = file
+      } else {
+        this.selectedCover = ''
+        src.style.backgroundImage = `url()`
+        // src.style.backgroundImage = `url('${this.urlCover}')` // отобразит обложку которая была изначально
+      }
+    },
     loadFields() {
       this.alias = this.data.alias
 
@@ -360,30 +388,30 @@ export default {
     },
     async updatePost() {
       let post = new FormData();
-      post.append('id_type', this.selectedType ? +this.selectedType : ''); 
-      post.append('id_artist', this.selectedArtists ? this.getIdsField(this.selectedArtists) : ''); 
-      post.append('id_author', this.selectedAuthors ? this.getIdsField(this.selectedAuthors) : ''); 
-      post.append('id_adult_rank', this.selectedAdult ? +this.selectedAdult : 1); 
-      post.append('id_user', +this.getUserId); 
+      post.append('id_type', this.selectedType ? +this.selectedType : '');
+      post.append('id_artist', this.selectedArtists ? this.getIdsField(this.selectedArtists) : '');
+      post.append('id_author', this.selectedAuthors ? this.getIdsField(this.selectedAuthors) : '');
+      post.append('id_adult_rank', this.selectedAdult ? +this.selectedAdult : 1);
+      post.append('id_user', +this.getUserId);
       // post.append('id_status', 1);  //! УКЗАТЬ СТАТУС РЕДАКТИОРВАНИЯ
-      post.append('id_status_of_releases', this.selectedStatus); 
-      post.append('id_status_of_translation', this.selectedTranslation); 
-      post.append('title_rus', this.formData.title_rus ? this.formData.title_rus : ''); 
-      post.append('title_eng', this.formData.title_eng ? this.formData.title_eng : ''); 
-      post.append('title_orig', this.formData.title_orig ? this.formData.title_orig : ''); 
+      post.append('id_status_of_releases', this.selectedStatus);
+      post.append('id_status_of_translation', this.selectedTranslation);
+      post.append('title_rus', this.formData.title_rus ? this.formData.title_rus : '');
+      post.append('title_eng', this.formData.title_eng ? this.formData.title_eng : '');
+      post.append('title_orig', this.formData.title_orig ? this.formData.title_orig : '');
       post.append('title_alt', this.formData.title_alt ? this.formData.title_alt : '');
-      post.append('year', this.formData.year ? +this.formData.year : ''); 
-      post.append('mod_link', this.formData.link ? this.formData.link : ''); 
-      post.append('description', this.formData.description ? this.formData.description : ''); 
+      post.append('year', this.formData.year ? +this.formData.year : '');
+      post.append('mod_link', this.formData.link ? this.formData.link : '');
+      post.append('description', this.formData.description ? this.formData.description : '');
 
       if(this.getUserId) {
-        post.append('id_user', this.getUserId ? this.getUserId : ''); 
+        post.append('id_user', this.getUserId ? this.getUserId : '');
       }
       if(this.getUserId === 1) {
-        post.append('alias', this.alias ? this.alias : ''); 
+        post.append('alias', this.alias ? this.alias : '');
       }
       if(!this.identicCover) {
-        post.append('image', this.selectedCover); 
+        post.append('image', this.selectedCover);
       }
       if(!this.identicFormats) {
         post.append('id_formats', this.selectedFormats ? this.getIdsField(this.selectedFormats) : '');
@@ -416,9 +444,6 @@ export default {
           type: 'error',
         })
       }
-    },
-    onChange(e) {
-      this.selectedCover = e.target.files[0]
     },
     getIdsField(obj) {
       let res = []
@@ -470,6 +495,19 @@ export default {
 <style lang="scss">
 @include multiselect;
 
+.mobile .create {
+  padding: 0 10px;
+  border: none;
+  .line_half,
+  .line_quarter {
+    flex-direction: column;
+    .half,
+    .quarter {
+      width: auto;
+    }
+  }
+}
+
 .create {
   min-height: 100vh;
   border-left: thin solid rgba(255, 255, 255, 0.12);
@@ -479,13 +517,23 @@ export default {
       margin: 20px 0 0 0;
       display: flex;
       flex-direction: column;
-      .title {}
-      input.image {
-        margin: 4px 0;
-        font-size: inherit;
-        border-radius: 2px;
-        background: #1e1e1e;
-        border: thin solid rgba(255, 255, 255, 0.12);
+      label.image {
+        display: flex;
+        cursor: pointer;
+        font-weight: 200;
+        align-items: center;
+        border-radius: 4px;
+        justify-content: center;
+        text-align: center;
+        text-shadow: 1px 1px 3px black;
+        border: dashed 2px rgba(255, 255, 255, 0.12);
+        width: 50%;
+        min-height: 50%;
+        max-height: 350px;
+        aspect-ratio: 5 / 7;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
       }
     }
     &__input {
@@ -573,7 +621,7 @@ export default {
       }
     }
   }
-  
+
   .action {
     display: flex;
     margin-bottom: 20px;

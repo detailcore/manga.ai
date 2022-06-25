@@ -1,10 +1,10 @@
 <template>
   <div class="reader-image">
     <div class="pages" v-if="mode === 'horizontally'">
-      <WidgetsImage v-for="(image, index) of pageImages" :key="index" 
-        :url="urlImage" 
-        :sort="image.sort" 
-        :link="image.link" 
+      <WidgetsImage v-for="(image, index) of pageImages" :key="index"
+        :url="urlImage"
+        :sort="image.sort"
+        :link="image.link"
         :page="image.page" />
 
       <div class="button">
@@ -17,9 +17,9 @@
     <div class="pages" v-if="mode === 'vertically'">
       <div v-for="(images, i) of pageImages" :key="i" :id="images[0].page" :data-p="images[0].page" ref="page">
         <WidgetsImage v-for="(img, k) of images" :key="k"
-          :url="urlImage" 
-          :sort="img.sort" 
-          :link="img.link" 
+          :url="urlImage"
+          :sort="img.sort"
+          :link="img.link"
           :page="img.page" />
       </div>
     </div>
@@ -66,7 +66,7 @@ export default {
       if(this.mode === 'vertically') { //* Вертикальный режим
         result = Object.values(
           this.pages.reduce((r, cur) => {
-            const key = 'k' + cur['page']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам 
+            const key = 'k' + cur['page']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам
             (r[key] = r[key] || []).push(cur);
             return r;
           }, {})
@@ -106,30 +106,30 @@ export default {
   methods: {
     handleScroll() {
       if(this.mode === 'vertically') {
-        console.log('scrollY => ', window.scrollY)
+        // console.log('scrollY => ', window.scrollY)
         function isVisible(el) {
           let coords = el.getBoundingClientRect(),
               windowHeight = window.document.documentElement.offsetHeight,
               topVisible = coords.top > 0 && coords.top < windowHeight, // виден верхний край элемента
               bottomVisible = coords.bottom < windowHeight && coords.bottom > 0; // виден нижний край элемента
-  
+
           return (topVisible || bottomVisible)
         }
-  
+
         function showVisible(context) {
           for (const item of context.$refs.page) {
             let page = +item.dataset.p
             if(!page) continue
-  
+
             if(isVisible(item)) {
-              console.log('page =>', page)
+              // console.log('page =>', page)
               context.$store.commit('reader/SET_PAGE_CURRENT_VERTICALLY', page)
               return false
             }
           }
           return false
         }
-  
+
         showVisible(this)
       }
     },
@@ -156,11 +156,11 @@ export default {
     loadImages() {
       let newImageObj = [],
           urlImage = this.urlImage
-      
+
       for (const item of this.pages) {
         newImageObj.push(item)
       }
-      
+
       function loadImage(url, httpFolder) {
         return new Promise(function(resolve, reject)
         {
@@ -239,7 +239,7 @@ export default {
       .next {
         height: 100%;
         cursor: pointer;
-        background-color: rgba(255, 0, 140, 0.5);
+        // background-color: rgba(255, 0, 140, 0.5);
       }
     }
   }

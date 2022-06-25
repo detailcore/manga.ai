@@ -15,8 +15,8 @@
     <div class="info">
       <Nuxt-link class="line title" :to="alias">
         Название: {{ item.name }}
-        Альтернативное: {{ item.name_alt }}
       </Nuxt-link>
+      <div class="line subtitle"><b>Альтернативное</b>: {{ item.name_alt }}</div>
       <div class="line"><b>Тайтлов</b>: {{ item.titles }}</div>
       <div class="line"><b>Глав</b>: {{ item.chapters }}</div>
       <div class="line"><b>Лайков</b>: {{ item.likes }}</div>

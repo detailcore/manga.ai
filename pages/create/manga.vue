@@ -5,7 +5,8 @@
 
       <div class="create__fields__image">
         <span class="title">Обложка *</span>
-        <input name="image" type="file" class="image" @change="onChange">
+        <input class="hidden" id="cover" type='file' accept="image/*" @change="onChangeCover" />
+        <label for="cover" class="image" ref="cover"> Нажмите сюда для выбора изображения </label>
       </div>
 
 
@@ -36,7 +37,7 @@
             <input class="input_text" type="text" v-model.trim="formData.year" placeholder="Год релиза">
           </div>
         </div>
-        
+
         <div class="line_half">
           <div class="half">
             <span class="title">
@@ -44,8 +45,8 @@
               <Nuxt-link to="/create/people" target="_blank">Добавить автора</Nuxt-link>
             </span>
             <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-                v-model="selectedAuthors" 
-                :options="authors" 
+                v-model="selectedAuthors"
+                :options="authors"
                 :multiple="true"
                 :max-height="600"
                 :searchable="true"
@@ -73,8 +74,8 @@
               <Nuxt-link to="/create/people" target="_blank">Добавить художника</Nuxt-link>
             </span>
             <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-                v-model="selectedArtists" 
-                :options="artists" 
+                v-model="selectedArtists"
+                :options="artists"
                 :multiple="true"
                 :max-height="600"
                 :searchable="true"
@@ -99,8 +100,8 @@
           <Nuxt-link to="/create/publisher" target="_blank">Добавить издателя</Nuxt-link>
         </span>
         <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedPublishers" 
-            :options="publishers" 
+            v-model="selectedPublishers"
+            :options="publishers"
             :multiple="true"
             :max-height="600"
             :searchable="true"
@@ -120,8 +121,8 @@
 
         <span class="title">Жанры *</span>
         <multiselect track-by="name" label="name" placeholder="Выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedGenres" 
-            :options="info.genres" 
+            v-model="selectedGenres"
+            :options="info.genres"
             :multiple="true"
             :max-height="300"
             :searchable="false"
@@ -138,8 +139,8 @@
 
         <span class="title">Теги</span>
         <multiselect track-by="name" label="name" placeholder="Выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedTags" 
-            :options="info.tags" 
+            v-model="selectedTags"
+            :options="info.tags"
             :multiple="true"
             :max-height="300"
             :searchable="false"
@@ -156,8 +157,8 @@
 
         <span class="title">Формат выпуска</span>
         <multiselect track-by="name" label="name" placeholder="Выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedFormats" 
-            :options="info.formats" 
+            v-model="selectedFormats"
+            :options="info.formats"
             :multiple="true"
             :max-height="300"
             :searchable="false"
@@ -177,8 +178,8 @@
           <Nuxt-link to="/create/team" target="_blank">Добавить команду</Nuxt-link>
         </span>
         <multiselect track-by="name" label="name" placeholder="Начните вводить текст и выберите из списка" selectLabel='Нажмите для выбора'
-            v-model="selectedTranslators" 
-            :options="translators" 
+            v-model="selectedTranslators"
+            :options="translators"
             :multiple="true"
             :max-height="600"
             :searchable="true"
@@ -255,10 +256,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { 
-  createManga, 
-  createSearchPeople, 
-  createSearchPublisher, 
+import {
+  createManga,
+  createSearchPeople,
+  createSearchPublisher,
   createSearchTeam,
   } from '~/services/api'
 
@@ -368,8 +369,22 @@ export default {
         })
       }
     },
-    onChange(e) {
-      this.selectedCover = e.target.files[0]
+    onChangeCover(e) {
+      let file = (e.target.files.length > 0) ? e.target.files[0] : false,
+          imageView = new FileReader(),
+          src = this.$refs.cover
+
+      if(file) {
+        imageView.onload = function (el) {
+          src.style.backgroundImage = `url('${el.target.result}')`
+        }
+        imageView.readAsDataURL(file)
+        this.selectedCover = file
+      } else {
+        this.selectedCover = ''
+        src.style.backgroundImage = `url()`
+        // src.style.backgroundImage = `url('${this.urlCover}')` // отобразит обложку которая была изначально
+      }
     },
     getIdsField(obj) {
       let res = []
@@ -442,7 +457,7 @@ export default {
           answer += converter[word[i]];
         }
       }
-      
+
       answer = answer.replace(/[^-0-9a-z]/g, '-');
       answer = answer.replace(/[-]+/g, '-');
       answer = answer.replace(/^\-|-$/g, '');
@@ -457,24 +472,42 @@ export default {
 <style lang="scss">
 @include multiselect;
 
+.mobile .create {
+  padding: 0 10px;
+  border: none;
+  .line_half,
+  .line_quarter {
+    flex-direction: column;
+    .half,
+    .quarter {
+      width: auto;
+    }
+  }
+}
+
 .create {
   min-height: 100vh;
   border-left: thin solid rgba(255, 255, 255, 0.12);
   border-right: thin solid rgba(255, 255, 255, 0.12);
   &__fields {
-    &__image {
-      margin: 20px 0 0 0;
-      display: flex;
-      flex-direction: column;
-      .title {}
-      input.image {
-        margin: 4px 0;
-        font-size: inherit;
-        border-radius: 2px;
-        background: #1e1e1e;
-        border: thin solid rgba(255, 255, 255, 0.12);
+      label.image {
+        display: flex;
+        cursor: pointer;
+        font-weight: 200;
+        align-items: center;
+        border-radius: 4px;
+        justify-content: center;
+        text-align: center;
+        text-shadow: 1px 1px 3px black;
+        border: dashed 2px rgba(255, 255, 255, 0.12);
+        width: 50%;
+        min-height: 50%;
+        max-height: 350px;
+        aspect-ratio: 5 / 7;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
       }
-    }
     &__input {
       margin: 10px 0 20px 0;
       span.title {
@@ -565,7 +598,7 @@ export default {
       }
     }
   }
-  
+
   .action {
     display: flex;
     margin-bottom: 20px;

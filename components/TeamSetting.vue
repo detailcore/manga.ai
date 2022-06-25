@@ -86,7 +86,7 @@ export default {
     ...mapGetters('team', { team: 'GET_TEAM' }),
 
     lengthText() {
-      return this.data.description.length
+      return this.data.description ? this.data.description.length : 0
     },
   },
 
