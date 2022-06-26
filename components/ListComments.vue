@@ -15,8 +15,8 @@
       </select>
     </div> -->
 
-    
-    <div class="comment__list" v-if="!isEmpty && isShowСomments">
+
+    <div class="comment__list" v-if="!isEmpty">
       <Widgets-Comment v-for="(item, index) in comments" :key="index"
         :id="item.id"
         :id_root="item.root_id"
@@ -30,9 +30,9 @@
         :replies="item.replies" />
     </div>
 
-    <div class="comments_info" v-if="isEmptyTotal && isShowСomments">На этой странице еще нет комментариев, вы можете стать первым(ой)!</div>
-    <div class="comments_info" v-if="!isShowСomments">Отображение комментариев отключено в настройках читалки!</div>
-    
+    <div class="comments_info" v-if="isEmptyTotal">На этой странице еще нет комментариев, вы можете стать первым(ой)!</div>
+    <div class="comments_info" v-if="!isShowСomments && isReader">Отображение комментариев отключено в настройках читалки!</div>
+
     <!-- <div class="btn__action comments__more" @click="loadMore">Показать еще комментарии</div> -->
   </div>
 </template>
@@ -44,16 +44,16 @@ import { mapGetters } from 'vuex'
 export default {
   async fetch() {
     if(!this.isEmpty && this.isPost) {
-      await this.$store.dispatch('comments/FETCH_COMMENTS', { 
+      await this.$store.dispatch('comments/FETCH_COMMENTS', {
         type: 'post',
-        page_id: this.idPost, 
+        page_id: this.idPost,
         commentable_id: this.idPost,
       })
     }
     if(this.isReader && this.isShowСomments) {
-      await this.$store.dispatch('comments/FETCH_COMMENTS', { 
+      await this.$store.dispatch('comments/FETCH_COMMENTS', {
         type: 'reader',
-        page_id: this.readerPageCurrent, 
+        page_id: this.readerPageCurrent,
         commentable_id: this.idChapter,
       })
     }
@@ -102,7 +102,7 @@ export default {
   methods: {
     closeComments() {
       this.$store.commit('reader/SET_OPEN_COMMENTS', false)
-      // 
+      //
     },
     // loadMore() {},
 

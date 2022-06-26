@@ -66,9 +66,9 @@ export default {
       this.$store.commit('reader/SET_OPEN_COMMENTS', !this.showComments)
 
       if(this.showComments) {
-        await this.$store.dispatch('comments/FETCH_COMMENTS', { 
+        await this.$store.dispatch('comments/FETCH_COMMENTS', {
           type: 'reader',
-          page_id: this.pageCur, 
+          page_id: this.pageCur,
           commentable_id: this.idChapter,
         })
       }

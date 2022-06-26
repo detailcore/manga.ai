@@ -9,7 +9,7 @@
     </div>
 
     <div class="bookmarks__list" v-show="showBookmarkList">
-      <span class="bookmark" v-for="item in bookmarks" :key="item.id" @click="createBookmark(item.id)">
+      <span class="bookmark" :class="{ active: (item.name === bookmarkName) }" v-for="item in bookmarks" :key="item.id" @click="createBookmark(item.id)">
         <mdi-Plus :title="'Добавить в '+ item.name" v-if="item.name !== bookmarkName" />
         <mdi-Minus :title="'Удалить из '+ item.name" v-if="item.name === bookmarkName" />
         {{ item.name }}
@@ -135,6 +135,11 @@ export default {
         .material-design-icon {
           margin: 0 6px;
           font-size: 1.2rem;
+        }
+        &.active {
+          &:before {
+            opacity: 0.1;
+          }
         }
       }
       .bookmark.del {

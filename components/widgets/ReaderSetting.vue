@@ -9,13 +9,13 @@
           <div class="value" :class="{ selected: !isHorizontal }" @click="setMode('vertically')"> Вертикальный </div>
           <div class="value" :class="{ selected: isHorizontal }" @click="setMode('horizontally')"> Горизонтальный </div>
         </div>
-        <div class="title"> Комментарии в читалке </div>
+        <!-- <div class="title"> Комментарии в читалке </div>
         <div class="values">
           <div class="value" :class="{ selected: !commentsShow }" @click="setComments('hide')"> Отключены </div>
           <div class="value" :class="{ selected: commentsShow }" @click="setComments('show')"> Включены </div>
-        </div>
+        </div> -->
       </div>
-      
+
     </div>
   </div>
 </template>
@@ -50,7 +50,7 @@ export default {
         if(value === 'show') { // получить актуальные комментарии
           await this.$store.dispatch('comments/FETCH_COMMENTS', {
             type: 'reader',
-            page_id: this.pageCur, 
+            page_id: this.pageCur,
             commentable_id: this.idChapter,
           })
         }

@@ -14,7 +14,7 @@
 
     <LazyWidgetsReaderSetting v-if="isOpenSetting" />
     <LazyWidgetsComplaint v-if="isOpenComplaint" :id="chapter.id" :page="pageCur" :type="'reader'" />
-    
+
     <!-- <small>
       <mdi-Account />
       <mdi-AccountDetails />
@@ -125,11 +125,14 @@ export default {
       let mode = localStorage.getItem('mode'),
           comments = localStorage.getItem('commentsInReader')
 
-      if(!comments) {
-        localStorage.setItem('commentsInReader', 'hide')
-      } else {
-        this.$store.commit('reader/SET_SETTING_COMMENTS', comments)
-      }
+      localStorage.setItem('commentsInReader', 'show') // TODO: Удалить если буду делать скрытие комментариев
+
+      // FIXME: Ниже идут строки инициализации скрытия комментариев
+      // if(!comments) {
+      //   localStorage.setItem('commentsInReader', 'hide')
+      // } else {
+      //   this.$store.commit('reader/SET_SETTING_COMMENTS', comments)
+      // }
 
       if(!mode) {
         localStorage.setItem('mode', 'horizontally')

@@ -9,7 +9,7 @@
 export default {
   props: {
     sort: { type: Number, default: 1 },
-    link: { type: String, default: 'https://mangaclub.ru/engine/skins/images/loading.gif' },
+    link: { type: String, default: 'https://mangaclub.ru/engine/skins/images/loading.gif' }, // TODO: Изменить ссылку! FIXME: Обязательно заменить ссылку
     url: { type: String, required: true },
     page: { type: Number, required: true },
   },

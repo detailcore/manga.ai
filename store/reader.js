@@ -1,9 +1,9 @@
-import { 
+import {
     getComments,
     chapterGetById,
     chapterListGetById,
   } from '~/services/api'
-  
+
   export const state = () => ({
     alias: null,
     remove: [],
@@ -20,11 +20,11 @@ import {
     },
     duplicateIdPages: [],
   })
-    
+
   export const mutations = {
     SET_CHAPTER(state, payload) {
       state.chapter = payload
-      
+
       let teams = state.chapter.teams
       if(teams.length > 0) {
         teams.forEach(item => {
@@ -36,17 +36,17 @@ import {
       state.pageCurrent = 1
     },
     SET_PAGE_CURRENT_VERTICALLY(state, num) {
-      if(state.readerSetting.comments === 'show' && // вкл отображение
-         state.pageCurrent !== num &&               // страница не одна и та же
+      // if(state.readerSetting.comments === 'show' && // вкл отображение
+      if(state.pageCurrent !== num &&               // страница не одна и та же
          state.readerSetting.openComments) {        // открыто окно коментов
         this.dispatch('reader/FETCH_CHAPTER_COMMENTS', num) // хз на сколько это правильно
       }
       state.pageCurrent = num
     },
     SET_PAGE_CURRENT(state, { num, id, alias }) {
-      if(state.readerSetting.comments === 'show') {
+      // if(state.readerSetting.comments === 'show') {
         this.dispatch('reader/FETCH_CHAPTER_COMMENTS', num) // хз на сколько это правильно
-      }
+      // }
 
       state.pageCurrent = num
       this.$router.push({  // добавляем хеш в url при перелистывании страницы
@@ -131,7 +131,7 @@ import {
       })
     },
   }
-  
+
   export const actions = {
     async FETCH_CHAPTER({ commit }, params) {
       try {
@@ -146,17 +146,15 @@ import {
       commit('SET_CHAPTER_LIST', res)
     },
     async FETCH_CHAPTER_COMMENTS({ commit, state }, pageNum) {
-      if(pageNum !== 1) {
         const comments = await getComments({
           type: 'reader',
-          page_id: pageNum, 
+          page_id: pageNum,
           commentable_id: state.chapter.id,
         })
         this.commit('comments/SET_COMMENTS', comments)
-      }
     },
   }
-  
+
   export const getters = {
     GET_POST(state) {
       if(state.chapter.post) return state.chapter.post
