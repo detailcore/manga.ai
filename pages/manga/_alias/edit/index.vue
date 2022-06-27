@@ -430,13 +430,18 @@ export default {
       }
 
       let response = await editPostById(this.data.id, post)
-      // console.log('Отправляю =>',this.data.id, post)
-      // console.log('Получаю <=', response)
       if(response.status === 'ok') {
         this.$notify({
           text: response.msg,
           type: 'success',
           duration: 5000,
+        })
+        await this.$store.dispatch('post/FETCH_POST', this.alias)
+        this.$router.push({
+          name: 'manga-alias',
+          params: {
+            alias: this.alias,
+          }
         })
       } else {
         this.$notify({
