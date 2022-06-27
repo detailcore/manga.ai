@@ -58,6 +58,7 @@
       <Paginator v-show="pagination.pageMax > 1" />
     </div>
 
+    <notifications />
   </div>
   <div class="create container" v-else>
     <div class="block__title">У вас нет доступа к этой странице</div>

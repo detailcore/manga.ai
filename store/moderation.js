@@ -17,6 +17,9 @@ export const mutations = {
   SET_CONTENT(state, payload) {
     state.content = payload
   },
+  SET_REMOVE_CONTENT(state, id) {
+    state.content = state.content.filter(item => item.id !== id)
+  },
   SET_PAGINATION(state, { current_page, last_page, links }) {
     state.pagination.pageMax = last_page
     state.pagination.pageCurrent = current_page

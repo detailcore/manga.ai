@@ -19,6 +19,9 @@
         <div class="btn" @click.prevent="editChapter">
           <mdi-Pencil />
         </div>
+        <div class="btn" v-if="$route.query.statuses == 5" @click.prevent="removeChapter">
+          <mdi-TrashCan />
+        </div>
       </div>
     </div>
 
@@ -28,6 +31,9 @@
 </template>
 
 <script>
+import { notify } from '~/services/util';
+import { editRemoveAllChapter } from '~/services/api';
+
 export default {
   props: {
     item: { type: Object, default: () => ({}) },
@@ -66,6 +72,13 @@ export default {
   },
 
   methods: {
+    async removeChapter() {
+      let res = await editRemoveAllChapter(this.item.id)
+      this.$notify(notify(res))
+      if(res.status === 'ok') {
+        this.$store.commit('moderation/SET_REMOVE_CONTENT', this.item.id)
+      }
+    },
     openEditStatus(id) {
       if(id === this.item.id) {
         this.isOpenStatus = !this.isOpenStatus
@@ -75,28 +88,6 @@ export default {
       this.$router.push({
         path: `${this.aliasChapter}/edit`
       })
-    },
-
-    async removeAll() {
-      let res = await editRemoveAllChapter(this.chapter.id)
-
-      if(res.status === 'ok') {
-        this.$router.push({
-          name: 'manga-alias',
-          params: {
-            alias: this.$route.params.alias,
-          }
-        })
-        this.$notify({
-          text: res.msg,
-          type: 'success',
-        })
-      } else {
-        this.$notify({
-          text: res.msg,
-          type: 'error',
-        })
-      }
     },
   },
 };
@@ -129,21 +120,25 @@ export default {
       align-items: center;
       overflow: hidden;
       min-width: 210px;
-      max-width: calc(100% - 230px);
+      max-width: calc(100% - 270px);
     }
     &__info {
       display: flex;
       align-items: center;
-      max-width: 230px;
+      max-width: 270px;
       .date {
         width: 65px;
-        font-size: .85rem;
+        font-size: .75rem;
         font-weight: 200;
         text-align: right;
       }
-      .btn.active {
-        &:before {
-          opacity: 0.1;
+      .btn {
+        width: 32px;
+        height: 32px;
+        &.active {
+          &:before {
+            opacity: 0.1;
+          }
         }
       }
     }

@@ -28,7 +28,7 @@
 
             <div class="chapter_team">
               <multiselect track-by="name" label="name" placeholder="Введите название команды или выберите из списка"
-                v-model="selectedTeams" 
+                v-model="selectedTeams"
                 :options="teams"
                 :multiple="true"
                 :max-height="600"
@@ -179,12 +179,12 @@ export default {
 
       let response = null,
           formData = new FormData()
-      
+
       for (const item of this.uploadPageFiles) {
         formData.append('file', item)
         formData.append('page', item.page)
         response = await editUploadPages(this.chapter.id, formData) //* загружаю файлы по очереди в цикле
-        
+
         if(response.status === 'ok') {
           this.$notify({
             text: response.msg,
@@ -250,8 +250,8 @@ export default {
           duration: 5000,
         })
       } else {
-        this.$store.commit('reader/SET_CHAPTER_PAGE_DUPLICATE_STATUS', { ids: duplicateIds }) // отметить дубликаты нумерации страниц    
-        this.$store.commit('reader/SET_EDIT_CHAPTER_TEAMS', this.selectedTeams)  
+        this.$store.commit('reader/SET_CHAPTER_PAGE_DUPLICATE_STATUS', { ids: duplicateIds }) // отметить дубликаты нумерации страниц
+        this.$store.commit('reader/SET_EDIT_CHAPTER_TEAMS', this.selectedTeams)
         this.changeStatus()
         this.$notify({
           text: `Изменения сохранены`,
@@ -272,7 +272,7 @@ export default {
       let pages = this.$store.state.reader.chapter.pages
 
       this.pageIds = pages.reduce((acc, item) => {
-        const page = 'page_' + item.page;        
+        const page = 'page_' + item.page;
         (acc[page] = acc[page] || []).push(item.id);
 
         return acc;
@@ -310,8 +310,8 @@ export default {
     },
     goToCreateChapter() {
       this.$router.push({
-        path: '/create/chapter', 
-        query: { 
+        path: '/create/chapter',
+        query: {
           manga: this.postId,
          }
       })
@@ -346,8 +346,7 @@ export default {
   @include multiselect;
   @include progress_bar;
   @include create_chapter;
-
-
+.create {
   .chapter_controls {
     margin: 16px 0;
     .status {
@@ -396,4 +395,5 @@ export default {
       }
     }
   }
+}
 </style>

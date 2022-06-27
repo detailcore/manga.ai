@@ -101,9 +101,31 @@ export default {
 
   mounted() {
     this.loadImages()
+    this.keyBoardControl()
   },
 
   methods: {
+    keyBoardControl() {
+      document.onkeydown = ((e) => {
+        // console.log(e)
+        if((e.code === 'ArrowLeft' || e.code === 'KeyA') && !this.isFirst) this.prev()
+        if(e.code === 'ArrowRight' || e.code === 'KeyD') this.next()
+        if(e.code === 'ArrowDown' || e.code === 'KeyS') { // FIXME: не учтено, что пользователь уже мог прокрутить до нижней части страницы
+          window.scrollBy({
+            top: window.innerHeight / 2,
+            left: 0,
+            behavior: 'smooth'
+          })
+        }
+        if((e.code === 'ArrowUp' || e.code === 'KeyW') && window.pageYOffset != 0) {
+          window.scrollBy({
+            top: -window.innerHeight / 2,
+            left: 0,
+            behavior: 'smooth'
+          })
+        }
+      })
+    },
     handleScroll() {
       if(this.mode === 'vertically') {
         // console.log('scrollY => ', window.scrollY)
