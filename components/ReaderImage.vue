@@ -88,43 +88,44 @@ export default {
     isLast() {
       return this.pageCur === this.lastPage
     },
+    isReader() {
+      return this.$route.name === 'manga-alias-id'
+    },
   },
 
   beforeMount() {
     this.handleDebouncedScroll = debounce(this.handleScroll, 150)
     window.addEventListener('scroll', this.handleDebouncedScroll)
+    window.addEventListener('keydown', this.keyBoardControl)
   },
 
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleDebouncedScroll)
+    window.removeEventListener('keydown', this.keyBoardControl)
   },
 
   mounted() {
     this.loadImages()
-    this.keyBoardControl()
   },
 
   methods: {
-    keyBoardControl() {
-      document.onkeydown = ((e) => {
-        // console.log(e)
-        if((e.code === 'ArrowLeft' || e.code === 'KeyA') && !this.isFirst) this.prev()
-        if(e.code === 'ArrowRight' || e.code === 'KeyD') this.next()
-        if(e.code === 'ArrowDown' || e.code === 'KeyS') { // FIXME: не учтено, что пользователь уже мог прокрутить до нижней части страницы
-          window.scrollBy({
-            top: window.innerHeight / 2,
-            left: 0,
-            behavior: 'smooth'
-          })
-        }
-        if((e.code === 'ArrowUp' || e.code === 'KeyW') && window.pageYOffset != 0) {
-          window.scrollBy({
-            top: -window.innerHeight / 2,
-            left: 0,
-            behavior: 'smooth'
-          })
-        }
-      })
+    keyBoardControl(e) {
+      if((e.code === 'ArrowLeft' || e.code === 'KeyA') && !this.isFirst) this.prev()
+      if(e.code === 'ArrowRight' || e.code === 'KeyD') this.next()
+      if(e.code === 'ArrowDown' || e.code === 'KeyS') { // FIXME: не учтено, что пользователь уже мог прокрутить до нижней части страницы
+        window.scrollBy({
+          top: window.innerHeight / 1.1,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
+      if((e.code === 'ArrowUp' || e.code === 'KeyW') && window.pageYOffset != 0) {
+        window.scrollBy({
+          top: -window.innerHeight / 1.1,
+          left: 0,
+          behavior: 'smooth'
+        })
+      }
     },
     handleScroll() {
       if(this.mode === 'vertically') {
