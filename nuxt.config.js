@@ -56,17 +56,17 @@ export default {
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    // extractCSS: true,
-    // splitChunks: { // деление компонентов
-    //   layouts: false,
-    //   pages: true,
-    //   commons: true
-    // },
-    // extend (config, ctx) {
-    //   if (ctx && ctx.isClient) {
-    //     config.optimization.splitChunks.maxSize = 200000
-    //   }
-    // }
+    extractCSS: true,
+    splitChunks: { // деление компонентов
+      layouts: false,
+      pages: true,
+      commons: true
+    },
+    extend (config, ctx) {
+      if (ctx && ctx.isClient) {
+        config.optimization.splitChunks.maxSize = 200000
+      }
+    }
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -78,32 +78,32 @@ export default {
     // https://github.com/Developmint/nuxt-purgecss
     // 'nuxt-purgecss',
     // https://pwa.nuxtjs.org
-    // '@nuxtjs/pwa',
+    '@nuxtjs/pwa',
   ],
 
-  // pwa: {
-  //   icon: {
-  //     purpose: 'any'
-  //   },
-  //   meta: {
-  //     author: false,
-  //     ogType: false,
-  //     ogTitle: false,
-  //     ogSiteName: false,
-  //   },
-  //   manifest: {
-  //     lang: 'ru',
-  //     name: 'MangaClub Reincarnated',
-  //     short_name: 'MangaClub Re',
-  //     background_color: '#121212',
-  //   },
-  // },
+  pwa: {
+    icon: {
+      purpose: 'any'
+    },
+    meta: {
+      author: false,
+      ogType: false,
+      ogTitle: false,
+      ogSiteName: false,
+    },
+    manifest: {
+      lang: 'ru',
+      name: 'MangaClub Reincarnated',
+      short_name: 'MangaClub Re',
+      background_color: '#121212',
+    },
+  },
 
   moment: {
     locales: ['ru'],
-    defaultLocale: 'ru', 
-    // timezone: false, 
-    // defaultTimezone: 'Europe/Samara', 
+    defaultLocale: 'ru',
+    // timezone: false,
+    // defaultTimezone: 'Europe/Samara',
     // plugins: [ // You can import plugins to moment. See a list of plugins: https://momentjs.com/docs/#/plugins/
       // 'moment-strftime',
     // ]
@@ -126,45 +126,45 @@ export default {
     // https://auth.nuxtjs.org/
     '@nuxtjs/auth-next',
     // https://github.com/frenchrabbit/nuxt-precompress
-    // ['nuxt-precompress'],
+    ['nuxt-precompress'],
   ],
 
-  // nuxtPrecompress: {
-  //   enabled: true, // Enable in production
-  //   report: false, // set true to turn one console messages during module init
-  //   test: /\.(js|css|html|txt|xml|svg)$/, // files to compress on build
-  //   // Serving options
-  //   middleware: {
-  //     // You can disable middleware if you serve static files using nginx...
-  //     enabled: true,
-  //     // Enable if you have .gz or .br files in /static/ folder
-  //     enabledStatic: true, 
-  //     // Priority of content-encodings, first matched with request Accept-Encoding will me served
-  //     encodingsPriority: ['br', 'gzip'],
-  //   },
- 
-  //   // build time compression settings
-  //   gzip: {
-  //     // should compress to gzip?
-  //     enabled: true,
-  //     // compression config
-  //     // https://www.npmjs.com/package/compression-webpack-plugin
-  //     filename: '[path].gz[query]', // middleware will look for this filename
-  //     threshold: 10240,
-  //     minRatio: 0.8,
-  //     compressionOptions: { level: 9 },
-  //   },
-  //   brotli: {
-  //     // should compress to brotli?
-  //     enabled: true,
-  //     // compression config
-  //     // https://www.npmjs.com/package/compression-webpack-plugin
-  //     filename: '[path].br[query]', // middleware will look for this filename
-  //     compressionOptions: { level: 11 },
-  //     threshold: 10240,
-  //     minRatio: 0.8,
-  //   },
-  // },
+  nuxtPrecompress: {
+    enabled: true, // Enable in production
+    report: false, // set true to turn one console messages during module init
+    test: /\.(js|css|html|txt|xml|svg)$/, // files to compress on build
+    // Serving options
+    middleware: {
+      // You can disable middleware if you serve static files using nginx...
+      enabled: true,
+      // Enable if you have .gz or .br files in /static/ folder
+      enabledStatic: true,
+      // Priority of content-encodings, first matched with request Accept-Encoding will me served
+      encodingsPriority: ['br', 'gzip'],
+    },
+
+    // build time compression settings
+    gzip: {
+      // should compress to gzip?
+      enabled: true,
+      // compression config
+      // https://www.npmjs.com/package/compression-webpack-plugin
+      filename: '[path].gz[query]', // middleware will look for this filename
+      threshold: 10240,
+      minRatio: 0.8,
+      compressionOptions: { level: 9 },
+    },
+    brotli: {
+      // should compress to brotli?
+      enabled: true,
+      // compression config
+      // https://www.npmjs.com/package/compression-webpack-plugin
+      filename: '[path].br[query]', // middleware will look for this filename
+      compressionOptions: { level: 11 },
+      threshold: 10240,
+      minRatio: 0.8,
+    },
+  },
 
   // Axios module configuration
   axios: {
@@ -243,7 +243,7 @@ export default {
     urlCoverUser: process.env.FILES_DOMAIN + 'users/',
     urlCoverTeam: process.env.FILES_DOMAIN + 'teams/',
     urlCoverTitle: process.env.FILES_DOMAIN + 'titles/',
-    urlMangaReader: process.env.FILES_DOMAIN + 'manga/',
+    urlMangaReader: process.env.IMG_DOMAIN + '/',
     jsDomain: process.env.JS_DOMAIN,
     apiDomain: process.env.API_DOMAIN,
   },
