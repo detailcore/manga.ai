@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="action">
-      <div class="save" @click.prevent="send()">Сохранить</div>
+      <button class="save" @click.prevent="send()" :disabled="disabled">Сохранить</button>
       <Nuxt-link to="/" class="cancel"> Отмена </Nuxt-link>
     </div>
 
@@ -31,6 +31,7 @@ import { createPublisher } from '~/services/api'
 export default {
   data() {
     return {
+      disabled: false,
       maxText: 1024,
       publisher: {
         name_eng: '',
@@ -40,7 +41,7 @@ export default {
       }
     }
   },
-  
+
   computed: {
     lengthText() {
       return this.publisher.description.length
@@ -49,9 +50,10 @@ export default {
 
   methods: {
     async send() {
+      this.disabled = true
       if(this.publisher.name_eng || this.publisher.name_rus) {
         let response = await createPublisher(this.publisher) // создаём
-        
+
         if(response.status === 'ok') {
           this.$notify({
             text: response.msg,
@@ -71,6 +73,7 @@ export default {
           type: 'error',
         })
       }
+      this.disabled = false
     },
   },
 };

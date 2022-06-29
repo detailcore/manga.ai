@@ -1,7 +1,7 @@
 <template>
   <div class="create container">
     <div class="block__title">
-      Добавление глав в 
+      Добавление глав в
       <mdi-MenuRight />
       <Nuxt-link :to="alias" class="cancel"> {{ title }} </Nuxt-link>
     </div>
@@ -21,7 +21,8 @@
         Добавить еще
         <mdi-Plus />
       </div>
-      <div class="save" @click.prevent="sendDownload">Начать загрузку</div>
+      <div class="save" v-show="disabled">Ожидайте, идёт загрузка!</div>
+      <button class="save" v-show="!disabled" @click.prevent="sendDownload" :disabled="disabled">Начать загрузку</button>
     </div>
 
     <notifications />
@@ -42,6 +43,7 @@ export default {
       post: null,
       postTeams: [],
       lastChapter: [],
+      disabled: false,
     }
   },
 
@@ -62,6 +64,7 @@ export default {
 
   methods: {
     async sendDownload() {
+      this.disabled = true
       for (const item of this.chapters) {
         let formData = new FormData(),
             { id, vol, ch, name, teams, file } = item,
@@ -84,7 +87,6 @@ export default {
               text: `Глава ${ch} добавлена`,
               type: 'success',
             })
-            console.log(res)
           } else {
             this.$notify({
               text: `Во время загрузки главы ${ch} произошла ошибка`,
@@ -99,6 +101,7 @@ export default {
           })
         }
       }
+      this.disabled = false
     },
 
     addMore() {
@@ -119,7 +122,7 @@ export default {
       let res = await createChapterGetInfo(this.$route.query.manga),
           vol = res.chapter.volume ? res.chapter.volume : 1,
           ch = +res.chapter.chapter
-      
+
       this.post = res.post
       this.postTeams = res.teams
       this.lastChapter = res.chapter

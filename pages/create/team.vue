@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="action">
-      <div class="save" @click.prevent="send()">Сохранить</div>
+      <button class="save" @click.prevent="send()" :disabled="disabled">Сохранить</button>
       <Nuxt-link to="/" class="cancel"> Отмена </Nuxt-link>
     </div>
 
@@ -46,6 +46,7 @@ import { teamCreate } from '~/services/api'
 export default {
   data() {
     return {
+      disabled: false,
       maxText: 1536,
       team: {
         // bg: '',
@@ -70,6 +71,7 @@ export default {
 
   methods: {
     async send() {
+      this.disabled = true
       let data = {
         name: this.team.name,
         name_alt: this.team.name_alt ? this.team.name_alt : '',
@@ -104,6 +106,7 @@ export default {
           type: 'error',
         })
       }
+      this.disabled = false
     },
   },
 };

@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="action">
-      <div class="save" @click.prevent="send()">Сохранить</div>
+      <button class="save" @click.prevent="send()" :disabled="disabled">Сохранить</button>
       <Nuxt-link to="/" class="cancel"> Отмена </Nuxt-link>
     </div>
 
@@ -38,6 +38,7 @@ import { createPeople } from '~/services/api'
 export default {
   data() {
     return {
+      disabled: false,
       maxText: 1024,
       people: {
         name_eng: '',
@@ -47,7 +48,7 @@ export default {
       }
     }
   },
-  
+
   computed: {
     lengthText() {
       return this.people.description.length
@@ -56,9 +57,10 @@ export default {
 
   methods: {
     async send() {
+      this.disabled = true
       if(this.people.name_eng) {
         let response = await createPeople(this.people) // создаём
-        
+
         if(response.status === 'ok') {
           this.$notify({
             text: response.msg,
@@ -78,6 +80,7 @@ export default {
           type: 'error',
         })
       }
+      this.disabled = false
     },
   },
 };

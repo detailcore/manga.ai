@@ -20,7 +20,7 @@ export default {
 
   mounted() {
     this.widthViewport = window.innerWidth
-    // reloadPage()
+    reloadPage()
   },
 
   methods: {

@@ -186,6 +186,8 @@ export default {
     text-align: center;
   }
   .btn__action {
+    color: #ffffff;
+    background-color: #121212;
     max-height: 34px;
     text-transform: uppercase;
     cursor: pointer;

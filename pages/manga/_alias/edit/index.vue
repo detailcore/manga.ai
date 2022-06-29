@@ -242,7 +242,7 @@
     </div>
 
     <div class="action">
-      <div class="save" @click.prevent="updatePost">Сохранить изменения</div>
+      <button class="save" @click.prevent="updatePost" :disabled="disabled">Сохранить изменения</button>
       <Nuxt-link to="/" class="cancel"> Отмена </Nuxt-link>
     </div>
 
@@ -268,6 +268,7 @@ export default {
 
   data() {
     return {
+      disabled: false,
       alias: null,
 
       artists: [],
@@ -387,6 +388,7 @@ export default {
       this.selectedAdult = this.info.adult_ranks.filter((item => item.id === this.data.adult_rank.id))[0].id
     },
     async updatePost() {
+      this.disabled = true
       let post = new FormData();
       post.append('id_type', this.selectedType ? +this.selectedType : '');
       post.append('id_artist', this.selectedArtists ? this.getIdsField(this.selectedArtists) : '');
@@ -430,6 +432,8 @@ export default {
       }
 
       let response = await editPostById(this.data.id, post)
+      this.disabled = false
+
       if(response.status === 'ok') {
         this.$notify({
           text: response.msg,

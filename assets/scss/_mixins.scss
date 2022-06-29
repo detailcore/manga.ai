@@ -434,6 +434,12 @@
         text-transform: uppercase;
         border: thin solid rgba(255, 255, 255, 0.12);
       }
+      button.save,
+      button.more,
+      button.cancel {
+        color: #ffffff;
+        background-color: #121212;
+      }
       .save {
         border-bottom: thin solid rgba(0, 255, 34, 0.25);
         &:hover {

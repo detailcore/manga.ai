@@ -52,7 +52,7 @@
     </div>
 
     <div class="action">
-      <div class="save" @click="saveAndUpload">Сохранить</div>
+      <button class="save" @click="saveAndUpload" :disabled="disabled">Сохранить</button>
       <!-- <div class="cancel">Отмена</div> -->
     </div>
 
@@ -68,6 +68,7 @@ import { teamUpdate } from "~/services/api"
 export default {
   data() {
     return {
+      disabled: false,
       data: {
         avatar: '',
         cover_bg: '',
@@ -96,6 +97,7 @@ export default {
 
   methods: {
     async saveAndUpload() {
+      this.disabled = true
       let form = new FormData()
       if(this.data.avatar) form.append('avatar', this.data.avatar)
       if(this.data.cover_bg) form.append('cover_bg', this.data.cover_bg)
@@ -107,6 +109,7 @@ export default {
       form.append('link_discord', this.data.link_discord ? this.data.link_discord.trim() : '')
 
       let res = await teamUpdate(this.team.id, form)
+      this.disabled = false
 
       if(res.status == 'ok' || res.id) {
         res.cover.avatar = res.cover.mid ? this.$config.urlCoverTeam + this.team.id + '/' + res.cover.mid : ''
@@ -188,6 +191,10 @@ export default {
       border-radius: 6px;
       border: thin solid rgba(255, 255, 255, 0.12);
     }
+      button.save {
+        color: #ffffff;
+        background-color: #121212;
+      }
     .save {
       border-bottom: thin solid rgba(0, 255, 34, 0.25);
       &:hover {

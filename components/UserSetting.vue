@@ -21,7 +21,7 @@
         <div> Фоновое изображение обрежется по высоте в 330 пикселей и выровняется по центру </div>
       </div>
       <div class="action">
-        <div class="save" @click="uploadImages">Сохранить</div>
+        <button class="save" @click="uploadImages" :disabled="disabled">Сохранить</button>
         <div class="cancel">Отмена</div>
       </div>
     </div>
@@ -59,7 +59,7 @@
         <textarea v-model="info.about" placeholder="Введите несколько строк о себе"></textarea>
       </div>
       <div class="action">
-        <div class="save" @click="updateInformation">Сохранить</div>
+        <button class="save" @click="updateInformation" :disabled="disabled">Сохранить</button>
         <div class="cancel" @click="settingsShow = false">Отмена</div>
       </div>
     </div>
@@ -78,7 +78,7 @@
         <input class="text" type="password" v-model.trim="changePassword.reNew" placeholder="Повторите новый пароль">
       </div>
       <div class="action">
-        <div class="save" @click="updatePassword">Сохранить</div>
+        <button class="save" @click="updatePassword" :disabled="disabled">Сохранить</button>
         <div class="cancel" @click="settingsShow = false">Отмена</div>
       </div>
     </div>
@@ -98,6 +98,7 @@ export default {
 
   data() {
     return {
+      disabled: false,
       changePassword: {
         current: '',
         new: '',
@@ -160,11 +161,13 @@ export default {
       }
     },
     async uploadImages() {
+      this.disabled = true
       let images = new FormData()
       images.append('cover', this.cover)
       images.append('cover_bg', this.cover_bg)
 
       let res = await userUploadCover(images)
+      this.disabled = false
 
       if(res.cover) {
         let user = { ...this.$auth.user }
@@ -175,6 +178,7 @@ export default {
       if(res.cover_bg) this.$store.commit('user/SET_COVER_BG', res.cover_bg)
     },
     async updateInformation() {
+      this.disabled = true
       await updateUser({
         name: this.info.name,
         site: this.info.site,
@@ -183,8 +187,10 @@ export default {
         gender: +this.info.gender,
         residence: this.info.residence,
       })
+      this.disabled = false
     },
     async updatePassword() {
+      this.disabled = true
       if(this.changePassword.new === this.changePassword.reNew && this.changePassword.new.length > 7) {
         await changePassword({
           current_password: this.changePassword.current,
@@ -209,6 +215,7 @@ export default {
           type: 'error',
         })
       }
+      this.disabled = false
     },
     setUser() {
       let { id, name, email, cover, cover_bg, gender, site, residence, about } = this.$store.state.auth.user

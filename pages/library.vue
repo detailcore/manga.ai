@@ -17,7 +17,7 @@
           :key="item.id" />
       </div>
       <div class="more" v-show="!lastPage">
-        <span class="more__button" @click="nextPage">Показать еще</span>
+        <span class="more__button" @click="nextPage" v-show="!disabled">Показать еще</span>
       </div>
     </div>
 
@@ -107,7 +107,7 @@
 
           <div class="buttons two-columns">
             <div class="button cancel" @click="sendCancel"> Сбросить </div>
-            <div class="button submit" @click="sendFilter()"> Показать </div>
+            <div class="button submit" v-show="!disabled" @click="sendFilter()"> Показать </div>
           </div>
         <div class="filter_title">В планах добавить фильтр по рейтингу, возрасту, кол-ву глав</div>
         </div>
@@ -122,7 +122,7 @@
           <div class="checkbox-list">
             <Widgets-CheckboxList v-for="item in filter.genres" :key="'genres'+item.id" :id="item.id" :type="'genres'" :name="item.name" :reset="reset" />
           </div>
-          <div class="button submit" @click="sendFilter()"> Выбрать </div>
+          <div class="button submit" v-show="!disabled" @click="sendFilter()"> Выбрать </div>
         </div>
       </div>
 
@@ -165,6 +165,7 @@ export default {
 
   data() {
     return {
+      disabled: false,
       reset: false,
       tagsOpen: false,
       genresOpen: false,
@@ -198,6 +199,7 @@ export default {
 
   methods: {
     async sendFilter() {
+      this.disabled = true
       this.curPage = 1
       this.tagsOpen = false
       this.genresOpen = false
@@ -206,13 +208,16 @@ export default {
       let res = await libraryGetFilter(this.curPage, this.getDataFilter())
       this.$store.commit('library/SET_POSTS', { data: res.data, add: false })
       this.$store.commit('library/SET_LAST_PAGE', (res.current_page === res.last_page))
+      this.disabled = false
     },
 
     async nextPage() {
+      this.disabled = true
       ++this.curPage
       let res = await libraryGetFilter(this.curPage, this.getDataFilter())
       this.$store.commit('library/SET_POSTS', { data: res.data, add: true })
       this.$store.commit('library/SET_LAST_PAGE', (res.current_page === res.last_page))
+      this.disabled = false
     },
 
     async sendCancel() {

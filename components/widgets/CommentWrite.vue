@@ -11,7 +11,7 @@
             <label for="switch-1" class="switch-label"></label>
           </div>
         </div> -->
-        <div class="btn__action" @click="sendComment">Отправить</div>
+        <button class="btn__action" @click="sendComment" :disabled="disabled">Отправить</button>
       </div>
     </div>
   </div>
@@ -36,6 +36,7 @@ export default {
       addText: '',
       maxText: 512,
       spoiler: false,
+      disabled: false,
     }
   },
 
@@ -90,19 +91,21 @@ export default {
       let comment = {
         content: this.addText,
         commentable_type: this.isType,
-        commentable_id: idTmp, 
+        commentable_id: idTmp,
         page_id: pageTmp,
         captcha: "",
         permalink: this.$config.jsDomain + this.$route.fullPath,
         root_id: this.root,
         parent_id: this.id === null ? '' : this.id,
       }
+      this.disabled = true
       let response = await commentCreate(comment)
       this.$store.commit('comments/SET_ADD_COMMENT', response)
       if(this.action) {
         this.$store.commit('comments/SET_WRITE_COMMENT', { id: this.id, value: !this.action })
       }
       this.addText = ''
+      this.disabled = false
     },
   },
 }

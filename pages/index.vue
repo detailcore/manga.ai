@@ -17,8 +17,8 @@
           :rating="item.rating"
           :title="item.title" />
 
-        <div class="more" v-if="home.nextPageUrl !== null">
-          <span class="more__button" @click.prevent="loadMore">Показать еще</span>
+        <div class="more" v-show="home.nextPageUrl !== null">
+          <span class="more__button" v-show="!disabled" @click.prevent="loadMore">Показать еще</span>
         </div>
       </div>
 
@@ -55,6 +55,12 @@ export default {
     }
   },
 
+  data() {
+    return {
+      disabled: false,
+    }
+  },
+
   computed: {
     ...mapState(['home']),
     ...mapGetters('home', { newReleases: 'GET_NEW' }),
@@ -63,8 +69,10 @@ export default {
   },
 
   methods: {
-    loadMore() {
-      this.$store.dispatch('home/FETCH_LATEST')
+    async loadMore() {
+      this.disabled = true
+      await this.$store.dispatch('home/FETCH_LATEST')
+      this.disabled = false
     },
   },
 }

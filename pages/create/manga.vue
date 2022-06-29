@@ -245,7 +245,7 @@
     </div>
 
     <div class="action">
-      <div class="save" @click.prevent="createPost">Отправить на модерацию</div>
+      <button class="save" @click.prevent="createPost" :disabled="disabled">Отправить на модерацию</button>
       <Nuxt-link to="/" class="cancel"> Отмена </Nuxt-link>
     </div>
 
@@ -270,6 +270,7 @@ export default {
 
   data() {
     return {
+      disabled: false,
 
       artists: [],
       authors: [],
@@ -311,6 +312,7 @@ export default {
 
   methods: {
     async createPost() {
+      this.disabled = true
       let response = null
       let post = {
         id_status: 2,
@@ -350,8 +352,9 @@ export default {
         (post.title_rus || post.title_eng)
       ) {
         post.alias = this.getAliasTranslit(this.formData.title_rus, this.formData.title_eng)
+
         response = await createManga(post)
-        console.log('response =>', response)
+
         if(response.status === 'ok') {
           this.$notify({
             text: response.msg,
@@ -368,6 +371,7 @@ export default {
           type: 'error',
         })
       }
+      this.disabled = false
     },
     onChangeCover(e) {
       let file = (e.target.files.length > 0) ? e.target.files[0] : false,
@@ -471,6 +475,7 @@ export default {
 
 <style lang="scss">
 @include multiselect;
+@include action_save;
 
 .mobile .create {
   padding: 0 10px;
@@ -600,46 +605,7 @@ export default {
   }
 
   .action {
-    display: flex;
     margin-bottom: 20px;
-    flex-direction: row;
-    justify-content: space-around;
-    .save,
-    .cancel {
-      padding: 8px;
-      margin: 6px 0;
-      cursor: pointer;
-      max-height: 34px;
-      position: relative;
-      border-radius: 6px;
-      text-decoration: none;
-      text-transform: uppercase;
-      border: thin solid rgba(255, 255, 255, 0.12);
-    }
-    .save {
-      border-bottom: thin solid rgba(0, 255, 34, 0.25);
-      &:hover {
-        border: thin solid rgba(0, 255, 34, 0.25);
-        &:before {
-          opacity: 0.1;
-        }
-      }
-      &:before {
-        @include before;
-      }
-    }
-    .cancel {
-      border-bottom: thin solid rgba(255, 0, 0, 0.25);
-      &:hover {
-        border: thin solid rgba(255, 0, 0, 0.25);
-        &:before {
-          opacity: 0.1;
-        }
-      }
-      &:before {
-        @include before;
-      }
-    }
   }
 }
 </style>

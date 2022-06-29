@@ -76,7 +76,7 @@
               <input id="file" type="file" class="hidden" accept="image/*" @change="changeUploadFiles" multiple>
               <span class="subtitle">Добавить</span>
             </label>
-            <label @click="upload">
+            <label @click="upload" v-show="!disabled">
               <div class="btn" title="Загрузить новые страницы">
                 <mdi-CloudDownload title="Загрузить новые страницы" />
               </div>
@@ -86,9 +86,9 @@
         </div>
 
         <div class="action">
-          <div class="cancel" @click.prevent="removeAll()">Удалить главу целиком</div>
-          <div class="more" @click.prevent="save(true)">Сохранить в черновик</div>
-          <div class="save" @click.prevent="save()">Сохранить</div>
+          <button class="cancel" @click.prevent="removeAll()" :disabled="disabled">Удалить главу целиком</button>
+          <button class="more" @click.prevent="save(true)" :disabled="disabled">Сохранить в черновик</button>
+          <button class="save" @click.prevent="save()" :disabled="disabled">Сохранить</button>
         </div>
 
       </div>
@@ -110,6 +110,7 @@ export default {
 
   data() {
     return {
+      disabled: false,
       teams: [],
       pageIds: {},
       selectedTeams: [],
@@ -169,11 +170,13 @@ export default {
 
   methods: {
     async upload() {
+      this.disabled = true
       if(this.emptyToUpload) {
         this.$notify({
           text: 'Страницы для загрузки не выбраны',
           type: 'error',
         })
+        this.disabled = false
         return ''
       }
 
@@ -203,9 +206,11 @@ export default {
         this.$store.commit('upload/SET_UPLOAD_REMOVE_ALLPAGE') //* удаляем все страницы подготовленные к загрузке
         this.wholePage()
       }
+      this.disabled = false
     },
 
     async save(draft = false) {
+      this.disabled = true
       // console.log(draft)
       // return draft
       if(!this.emptyToUpload) {
@@ -214,6 +219,7 @@ export default {
           type: 'error',
           duration: 5000,
         })
+        this.disabled = false
         return ''
       }
       // удаление страниц из главы
@@ -266,6 +272,7 @@ export default {
         await editChapterById(this.chapter.id, data) // сохранить описание в БД
         await this.$store.dispatch('reader/FETCH_CHAPTER', this.chapter.id) // Получить изменения картинок
       }
+      this.disabled = false
     },
 
     wholePage() { // объект с массивами ID страниц
@@ -317,6 +324,7 @@ export default {
       })
     },
     async removeAll() {
+      this.disabled = true
       let res = await editRemoveAllChapter(this.chapter.id)
 
       if(res.status === 'ok') {
@@ -336,6 +344,7 @@ export default {
           type: 'error',
         })
       }
+      this.disabled = false
     },
   },
 }
