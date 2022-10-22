@@ -407,28 +407,28 @@ export default {
       post.append('description', this.formData.description ? this.formData.description : '');
 
       if(this.getUserId) {
-        post.append('id_user', this.getUserId ? this.getUserId : '');
+        post.append('id_user', this.getUserId ? this.getUserId : false);
       }
       if(this.getUserId === 1) {
-        post.append('alias', this.alias ? this.alias : '');
+        post.append('alias', this.alias ? this.alias : false);
       }
       if(!this.identicCover) {
         post.append('image', this.selectedCover);
       }
       if(!this.identicFormats) {
-        post.append('id_formats', this.selectedFormats ? this.getIdsField(this.selectedFormats) : '');
+        post.append('id_formats', (this.selectedFormats.length > 0) ? this.getIdsField(this.selectedFormats) : false);
       }
       if(!this.identicGenres) {
-        post.append('id_genres', this.selectedGenres ? this.getIdsField(this.selectedGenres) : null);
+        post.append('id_genres', (this.selectedGenres.length > 0) ? this.getIdsField(this.selectedGenres) : false);
       }
       if(!this.identicPublishers) {
-        post.append('id_publishers', this.selectedPublishers ? this.getIdsField(this.selectedPublishers) : '');
+        post.append('id_publishers', (this.selectedPublishers.length > 0) ? this.getIdsField(this.selectedPublishers) : false);
       }
       if(!this.identicTags) {
-        post.append('id_tags', this.selectedTags ? this.getIdsField(this.selectedTags) : '');
+        post.append('id_tags', (this.selectedTags.length > 0) ? this.getIdsField(this.selectedTags) : false);
       }
       if(!this.identicTeams) {
-        post.append('id_teams', this.selectedTranslators ? this.getIdsField(this.selectedTranslators) : '');
+        post.append('id_teams', (this.selectedTranslators.length > 0) ? this.getIdsField(this.selectedTranslators) : false);
       }
 
       let response = await editPostById(this.data.id, post)
@@ -455,11 +455,11 @@ export default {
       }
     },
     getIdsField(obj) {
-      let res = []
-      obj.forEach(item => {
-        res.push(item.id)
-      })
-      return res.join() // '1,2,3,4'
+      // let res = []
+      // obj.forEach(item => {
+      //   res.push(item.id)
+      // })
+      return obj.map(i => i.id).join() // '1,2,3,4'
     },
     async findAuthors (query) {
       let res = null

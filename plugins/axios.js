@@ -39,8 +39,10 @@ export default function ({ app, $axios, redirect }) {
         if (typeof reqConfig.data[key] === 'object') {
           if (reqConfig.data[key] instanceof FileList || reqConfig.data[key] instanceof File || reqConfig.data[key] instanceof Blob) {
             hasFile = true
-          } else if (reqConfig.data[key].constructor === Object) {
-            reqConfig.data[key] = JSON.stringify(reqConfig.data[key])
+          } else if (reqConfig.data[key] != null) {
+            if(reqConfig.data[key].constructor === Object) {
+              reqConfig.data[key] = JSON.stringify(reqConfig.data[key])
+            }
           }
         }
       })

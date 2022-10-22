@@ -111,32 +111,45 @@ export function notify({ status, msg }) {
 
 
 /**
- * Объединить одинаковые главы в массив
+ * Объединить одинаковые тома и главы в массив
  * @param [Array] []
  * @return [Array] []
  */
- export function mergeDuplicates(array) {
-  let result = []
+export function mergeDuplicates(arr) {
+  let sortVol = [], sortCh = [], result = []
 
-  if(array) {
-    result = Object.values(
-      array.reduce((r, cur) => {
-        const key = 'k' + cur['chapter']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам
-        (r[key] = r[key] || []).push(cur);
-
-        return r;
+  if(arr) {
+    // Сортировка по томам
+    sortVol = Object.values(
+      arr.reduce((prev, cur) => {
+        const vol = 'h' + cur['volume']; // символ "h" добавлен, чтобы автоматически не сортировало по цифровым ключам
+        (prev[vol] = prev[vol] || []).push(cur)
+        return prev
       }, {})
-    );
+    )
+
+    // Сортировка по главам
+    for (const chapters of sortVol) {
+      sortCh = Object.values(
+        chapters.reduce((prev, cur) => {
+          const ch = 'k' + cur['chapter']; // символ "k" добавлен, чтобы автоматически не сортировало по цифровым ключам
+          (prev[ch] = prev[ch] || []).push(cur)
+          return prev
+        }, {})
+      )
+
+      result.push(sortCh)
+    }
   }
 
-  return result
+  return result.flat()
 }
 
 
 /**
  * Перезагрузить страницу 1 раз, если слетела авторизация, но есть токен!
  */
- export function reloadPage() {
+export function reloadPage() {
   let storage = localStorage.getItem('auth._token.laravelSanctum'),
       loggedIn = window.$nuxt.$store.state.auth.loggedIn;
 

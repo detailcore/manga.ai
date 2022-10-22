@@ -117,7 +117,7 @@ export default {
       '~/assets/scss/_variables.scss',
     ],
     hoistUseStatements: true  // Hoists the "@use" imports. Applies only to "sass", "scss" and "less". Default: false.
-   },
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
