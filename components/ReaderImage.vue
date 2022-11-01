@@ -95,14 +95,13 @@ export default {
 
   beforeMount() {
     this.handleDebouncedScroll = debounce(this.handleScroll, 150)
-    this.keyBoardDebouncedControl = debounce(this.keyBoardControl, 150)
     window.addEventListener('scroll', this.handleDebouncedScroll)
-    window.addEventListener('keydown', this.keyBoardDebouncedControl)
+    window.addEventListener('keydown', this.keyBoardControl)
   },
 
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleDebouncedScroll)
-    window.removeEventListener('keydown', this.keyBoardDebouncedControl)
+    window.removeEventListener('keydown', this.keyBoardControl)
   },
 
   mounted() {
