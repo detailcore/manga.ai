@@ -246,6 +246,7 @@ export default {
     urlMangaReader: process.env.IMG_DOMAIN + '/',
     jsDomain: process.env.JS_DOMAIN,
     apiDomain: process.env.API_DOMAIN,
+    noImage: process.env.FILES_DOMAIN + 'no-image.png.webp',
   },
   privateRuntimeConfig: {
   }

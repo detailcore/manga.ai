@@ -4,7 +4,7 @@
       <div class="cover" :style="{ backgroundImage: `url(${bgCover})` }">
         <div class="shadow"></div>
         <div class="container user_info">
-          <div class="cover__avatar" :style="{ backgroundImage: `url(${team.cover ? team.cover.avatar+'.webp' : ''})` }"></div>
+          <div class="cover__avatar" :style="{ backgroundImage: `url(${avatar})` }"></div>
           <div class="user_line">
             <span class="login">{{ team.name }}</span>
           </div>
@@ -138,8 +138,11 @@ export default {
       return this.descTeam.length
     },
 
+    avatar() {
+      return this.team.cover.avatar ? (this.$config.urlCoverTeam + this.team.id +'/'+ this.team.cover.avatar + '.webp') : ''
+    },
     bgCover() {
-      return this.team.cover ? (this.team.cover.bg ? this.team.cover.bg : '') : ''
+      return this.team.cover.bg ? this.team.cover.bg : ''
     },
     canEdit() {
       return (this.$store.state.auth.user ? this.$store.state.auth.user.id : false ) == this.team.id_owner ||

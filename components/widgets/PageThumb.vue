@@ -11,11 +11,11 @@
     <div class="thumb" :style="`background-image: url(${chapterFolder + currentPage.link})`"></div>
     <div class="name"> {{ currentPage.link }} </div>
     <div class="number">
-      <input class="num" 
+      <input class="num"
              type="text"
              :value="currentPage.page"
              @change="changePage"
-             :title="`${currentPage.sort}-я часть ${currentPage.page}-й страницы`" 
+             :title="`${currentPage.sort}-я часть ${currentPage.page}-й страницы`"
              :disabled="disabled">
       <div class="sort">часть: {{ currentPage.sort }}</div>
     </div>

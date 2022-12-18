@@ -27,13 +27,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   props: {
-    likes: { type: Number, defualt: 0 }
+    likes: { type: Number, default: 0 }
   },
 
   computed: {
     ...mapGetters('reader', { teams: 'GET_TEAMS_CURREN' }),
   },
-  
+
 };
 </script>
 
