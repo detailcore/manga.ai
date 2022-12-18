@@ -119,22 +119,26 @@ export default {
     },
 
     async lastChapterLoad() {
-      let res = await createChapterGetInfo(this.$route.query.manga),
-          vol = res.chapter.volume ? res.chapter.volume : 1,
-          ch = +res.chapter.chapter
+      const res = await createChapterGetInfo(this.$route.query.manga),
+          vol = res.chapter == null ? 1 : res.chapter.volume,
+          ch = res.chapter == null ? 1 : +res.chapter.chapter
+
+      console.log('RES =>', res)
 
       this.post = res.post
       this.postTeams = res.teams
-      this.lastChapter = res.chapter
+      this.lastChapter = { volume: vol, chapter: ch }
 
-      this.$store.commit('create/SET_CHAPTERS', {
-        id: 0,
-        vol: +vol,
-        ch: +ch.toFixed(0),
-        name: '',
-        teams: [],
-        file: '',
-      })
+      if(this.chapters.length < 1) {
+        this.$store.commit('create/SET_CHAPTERS', {
+          id: 0,
+          vol: +vol,
+          ch: +ch.toFixed(0) + 1,
+          name: '',
+          teams: [],
+          file: '',
+        })
+      }
     }
   },
 };
