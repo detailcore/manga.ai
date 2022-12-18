@@ -180,10 +180,9 @@ export default {
         return ''
       }
 
-      let response = null,
-          formData = new FormData()
-
+      let response = null
       for (const item of this.uploadPageFiles) {
+        let formData = new FormData()
         formData.append('file', item)
         formData.append('page', item.page)
         response = await editUploadPages(this.chapter.id, formData) //* загружаю файлы по очереди в цикле
@@ -224,7 +223,7 @@ export default {
       }
       // удаление страниц из главы
       if(this.chapter.remove) {
-        let remove = await editRemovePageInChapter(this.chapter.id, this.chapter.remove)
+        const remove = await editRemovePageInChapter(this.chapter.id, this.chapter.remove)
         if(remove.status === 'ok') {
           this.$notify({
             text: remove.msg,
@@ -320,7 +319,7 @@ export default {
         path: '/create/chapter',
         query: {
           manga: this.postId,
-         }
+        }
       })
     },
     async removeAll() {

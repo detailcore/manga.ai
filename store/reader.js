@@ -28,7 +28,11 @@ import {
       let teams = state.chapter.teams
       if(teams.length > 0) {
         teams.forEach(item => {
-          item.cover = this.$config.urlCoverTeam + item.id +'/'+ item.cover
+          if(item.cover != '') {
+            item.cover = this.$config.urlCoverTeam + item.id +'/'+ item.cover
+          } else {
+            item.cover = this.$config.noImage
+          }
         })
       }
     },
@@ -96,6 +100,13 @@ import {
           }
         })
       }
+      if(!state.chapter.rename) { // создать если нету
+        state.chapter.rename = []
+      }
+      state.chapter.rename.push({
+        id: +payload.id,
+        num: +payload.num,
+      })
     },
     SET_CHAPTER_PAGE_DUPLICATE_STATUS(state, { ids }) {
       state.duplicateIdPages = ids
