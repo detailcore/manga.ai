@@ -123,8 +123,6 @@ export default {
           vol = res.chapter == null ? 1 : res.chapter.volume,
           ch = res.chapter == null ? 1 : +res.chapter.chapter
 
-      console.log('RES =>', res)
-
       this.post = res.post
       this.postTeams = res.teams
       this.lastChapter = { volume: vol, chapter: ch }
