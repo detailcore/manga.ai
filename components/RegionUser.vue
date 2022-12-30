@@ -4,7 +4,7 @@
       <mdi-Account title="Аккаунт" />
     </div>
 
-    <div class="btn" @click="openLogin" v-if="!loggedIn" >
+    <div class="btn" @click="actionLogin(!isOpenLogin)" v-if="!loggedIn" >
       <mdi-Login title="Вход" />
     </div>
 
@@ -76,8 +76,8 @@
         <div class="item" @click.prevent="login"> Вход </div>
       </div>
       <div class="modal__recovery">
-        <div class="item" @click="isOpenRecovery = true, isOpenLogin = false"> Забыл пароль? </div>
-        <div class="item" @click="isOpenRegistry = true, isOpenLogin = false"> Регистрация </div>
+        <div class="item" @click="isOpenRecovery = true, actionLogin(false)"> Забыл пароль? </div>
+        <div class="item" @click="isOpenRegistry = true, actionLogin(false)"> Регистрация </div>
       </div>
     </div>
 
@@ -149,7 +149,7 @@
                 isOpenRecovery == true ||
                 isOpenRegistry == true"
           @click="isOpen = false,
-                  isOpenLogin = false,
+                  actionLogin(false),
                   isOpenRecovery = false,
                   isOpenRegistry = false">
     </div>
@@ -159,13 +159,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { register, findUserAndSetRole } from '~/services/api'
 
 export default {
   data() {
     return {
       isOpen: false,
-      isOpenLogin:false,
       isOpenRecovery: false,
       isOpenRegistry: false,
       user: {},
@@ -184,6 +184,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters( 'region', { isOpenLogin: 'GET_OPEN_LOGIN' }),
     isAdmin() {
       return this.userData ? (this.userData.id_role === 1) : false
     },
@@ -191,8 +192,8 @@ export default {
       return this.$store.state.auth.loggedIn
     },
     userData() {
-      // return this.$store.state.auth.user
-      let { id, name, cover, id_role } = this.$store.state.auth.user
+      if(this.$store.state.auth.user == null) return false
+      const { id, name, cover, id_role } = this.$store.state.auth.user
       return {
         id: id,
         login: name,
@@ -222,7 +223,7 @@ export default {
         name: 'user-id',
         params: {
           id: this.userData.id,
-         }
+        }
       })
       this.close()
     },
@@ -244,7 +245,7 @@ export default {
       .then(() => {
         this.auth.login = ''  //обнуление введунных данных
         this.auth.password = '' //обнуление введунных данных
-        this.isOpenLogin = false
+        this.actionLogin(false)
       })
       .catch((e) => {
         console.log('ОШИБКА ВХОДА')
@@ -260,7 +261,7 @@ export default {
     async registration() {
       await register( this.reg )
         .then(async (res) => {
-          this.isOpenLogin = false
+          this.actionLogin(false)
           this.isOpenRegistry = false
           if(res.status === 201) {
             await findUserAndSetRole({ name: this.reg.name, email: this.reg.email, }) // Найти пользователя и установить ему роль
@@ -281,20 +282,20 @@ export default {
         })
     },
 
-    openLogin() {
-      this.isOpenLogin = !this.isOpenLogin
-    },
-
     openUser() {
       this.isOpen = !this.isOpen
     },
 
     close() {
       this.isOpen = false
-      this.isOpenLogin = false
       this.isOpenRecovery = false
       this.isOpenRegistry = false
+      this.actionLogin(false)
     },
+
+    actionLogin(value) {
+      this.$store.commit('region/SET_OPEN_LOGIN', value)
+    }
   },
 }
 </script>

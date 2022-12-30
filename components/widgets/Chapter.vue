@@ -60,7 +60,7 @@ export default {
         let timeReplace = time.replace('.000000Z', '')
         return this.$moment(timeReplace).fromNow()
       }
-      return 'Когда-то...'
+      return 'Еще не загружена...'
     },
   },
 };

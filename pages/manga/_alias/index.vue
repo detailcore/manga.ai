@@ -1,5 +1,5 @@
 <template>
-  <div class="region_manga">
+  <div class="region_manga" :class="{ adult: (isAdult && !loggedIn) }">
     <div class="pseudo_parallax_cover">
       <picture>
         <source type="image/webp" :srcset="urlCover +'.webp'" media="(min-width: 1060px)">
@@ -7,6 +7,7 @@
         <source type="image/webp" :srcset="urlCover +'.webp'" media="(max-width: 700px)">
         <img :src="urlCover" :alt="title">
       </picture>
+      <div class="mark" v-show="isAdult">{{ this.rank }}</div>
     </div>
 
     <div class="manga_block" v-if="data.rating">
@@ -43,6 +44,7 @@
               :description="item.description"
               type="translator" />
         </div>
+        <div class="mark" v-show="isAdult">{{ this.rank }}</div>
       </div>
       <div class="block__information">
         <div class="release_name">
@@ -59,7 +61,7 @@
           <meta itemprop="description" :content="data.description">
           <div class="description"> {{ data.description }} </div>
         </div>
-        
+
         <div class="stat">
           <div class="item rating" v-if="isRatingEmpty" @click="openModalRating">
             <mdi-Star title="Рейтинг" />
@@ -158,6 +160,16 @@
       </div>
     </div>
 
+
+    <div class="modal adult" v-if="isAdult && !loggedIn">
+      <div class="title"> Доступ ограничен <div class="mark">{{ this.rank }}</div></div>
+      <div class="desc"> Страница возможно содержит контент {{ this.rank }} который могут просматривать только авторизованные пользователи. </div>
+      <div class="line">
+        <Nuxt-link to="/" class="btn home"><mdi-Home title="Главная страница" @click="openAuth(false)" /></Nuxt-link>
+        <div class="button success" @click="openAuth(true)"> Авторизоваться </div>
+      </div>
+    </div>
+
     <div class="background__close" :class="{ hidden: !openSetRating }" @click="close"></div>
 
     <LazyWidgets-Complaint v-if="isOpenComplaint" :id="idPost" :type="'post'" :action="complaintShow" />
@@ -219,6 +231,14 @@ export default {
     yourRate() {
       return this.data.rating ? this.data.rating.your : null
     },
+    rank() {
+      switch ((this.data.adult_rank.max >= this.data.adult_rank.id) ? this.data.adult_rank.max : this.data.adult_rank.id) {
+        case 1: return 'Нет'
+        case 2: return '16+'
+        case 3: return '18+'
+        default: return 'Нет'
+      }
+    },
     isRatingEmpty() {
       return this.data.rating ? this.data.rating.amount < 10 : false
     },
@@ -227,6 +247,9 @@ export default {
     },
     isOpenComplaint() {
       return this.openComplaint.value && (this.openComplaint.type === 'post')
+    },
+    isAdult() {
+      return (this.rank != 'Нет') ? true : false
     },
   },
 
@@ -301,23 +324,32 @@ export default {
     readFirstChapter() {
       this.$router.push({
         name: 'manga-alias-id',
-        params: { 
+        params: {
           id: 'ch' + this.data.chapter_first,
           alias: this.data.alias,
-         }
+        }
       })
     },
 
     close() {
       this.openSetRating = false
     },
+
+    openAuth(value) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
+      this.$store.commit('region/SET_OPEN_LOGIN', value)
+    }
   },
 }
 </script>
 
 <style lang="scss">
   .mobile {
-    .region_manga {      
+    .region_manga {
       .pages_story {
         position: absolute;
         top: 0;
@@ -326,6 +358,26 @@ export default {
         height: 129px;
         background-color: #121212;
       }
+      .pseudo_parallax_cover .mark {
+        right: inherit;
+        display: flex;
+      }
+      .block__cover .mark {
+        display: none;
+      }
+    }
+  }
+  .region_manga.adult {
+    &::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 4;
+      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.7);
     }
   }
   .region_manga {
@@ -369,6 +421,7 @@ export default {
       .block__cover {
         width: 100%;
         max-width: 300px;
+        position: relative;
         margin-top: -200px;
         margin-right: 20px;
         img {
@@ -619,6 +672,43 @@ export default {
           }
         }
       }
+    }
+    .modal.adult {
+      max-width: 330px;
+      .desc {
+        margin: 8px 0;
+        text-align: center;
+      }
+      .line {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+      }
+      .mark {
+        margin: 0;
+        display: inline-flex;
+        position: relative;
+      }
+    }
+    .mark {
+      width: 32px;
+      height: 32px;
+      margin: 4px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.12rem;
+      padding-bottom: 1px;
+      background-color: red;
+      border: 2px solid #fff;
+    }
+    .pseudo_parallax_cover .mark {
+      display: none;
     }
   }
 </style>
