@@ -56,15 +56,15 @@ export default {
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    extractCSS: true,
+    extractCSS: false,
     splitChunks: { // деление компонентов
       layouts: false,
-      pages: true,
+      pages: false,
       commons: true
     },
     extend (config, ctx) {
       if (ctx && ctx.isClient) {
-        config.optimization.splitChunks.maxSize = 200000
+        config.optimization.splitChunks.maxSize = 153600
       }
     }
   },
@@ -75,8 +75,6 @@ export default {
     '@nuxtjs/style-resources',
     // https://www.npmjs.com/package/@nuxtjs/moment
     '@nuxtjs/moment',
-    // https://github.com/Developmint/nuxt-purgecss
-    // 'nuxt-purgecss',
     // https://pwa.nuxtjs.org
     '@nuxtjs/pwa',
   ],
@@ -125,6 +123,8 @@ export default {
     '@nuxtjs/axios',
     // https://auth.nuxtjs.org/
     '@nuxtjs/auth-next',
+    // https://github.com/Developmint/nuxt-purgecss
+    // 'nuxt-purgecss',
     // https://github.com/frenchrabbit/nuxt-precompress
     ['nuxt-precompress'],
   ],
@@ -132,11 +132,11 @@ export default {
   nuxtPrecompress: {
     enabled: true, // Enable in production
     report: false, // set true to turn one console messages during module init
-    test: /\.(js|css|html|txt|xml|svg)$/, // files to compress on build
+    test: /\.(js|css|html|txt|xml|svg|ttf|eot|otf|icon|ico|png)$/, // files to compress on build
     // Serving options
     middleware: {
       // You can disable middleware if you serve static files using nginx...
-      enabled: true,
+      enabled: false,
       // Enable if you have .gz or .br files in /static/ folder
       enabledStatic: true,
       // Priority of content-encodings, first matched with request Accept-Encoding will me served
@@ -150,8 +150,8 @@ export default {
       // compression config
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].gz[query]', // middleware will look for this filename
-      threshold: 10240,
-      minRatio: 0.8,
+      threshold: 2048, // Only assets bigger than this size are processed. In bytes.
+      minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
       compressionOptions: { level: 9 },
     },
     brotli: {
@@ -161,8 +161,8 @@ export default {
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].br[query]', // middleware will look for this filename
       compressionOptions: { level: 11 },
-      threshold: 10240,
-      minRatio: 0.8,
+      threshold: 4096, // Only assets bigger than this size are processed. In bytes.
+      minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
     },
   },
 
