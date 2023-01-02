@@ -149,18 +149,18 @@ export function mergeDuplicates(arr) {
 /**
  * Перезагрузить страницу 1 раз, если слетела авторизация, но есть токен!
  */
-export function reloadPage() {
-  let storage = localStorage.getItem('auth._token.laravelSanctum'),
-      loggedIn = window.$nuxt.$store.state.auth.loggedIn;
+// export function reloadPage() {
+//   let storage = localStorage.getItem('auth._token.laravelSanctum'),
+//       loggedIn = window.$nuxt.$store.state.auth.loggedIn;
 
-  if(storage === 'true' && loggedIn == false) {
+//   if(storage === 'true' && loggedIn == false) {
 
-    if (!localStorage.getItem("reload")) {
-      localStorage.setItem("reload", "true")
-      location.reload()
-    }
-    else {
-      localStorage.removeItem("reload")
-    }
-  }
-}
+//     if (!localStorage.getItem("reload")) {
+//       localStorage.setItem("reload", "true")
+//       location.reload()
+//     }
+//     else {
+//       localStorage.removeItem("reload")
+//     }
+//   }
+// }

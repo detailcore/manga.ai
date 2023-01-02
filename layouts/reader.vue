@@ -9,7 +9,7 @@
 
 <script>
 import { headroom } from "vue-headroom"
-import { reloadPage } from "~/services/util"
+// import { reloadPage } from "~/services/util"
 
 export default {
   name: "reader",
@@ -26,7 +26,7 @@ export default {
 
   mounted() {
     this.widthViewport = window.innerWidth
-    reloadPage()
+    // reloadPage()
   },
 
   methods: {
