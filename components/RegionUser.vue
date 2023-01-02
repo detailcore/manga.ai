@@ -243,9 +243,7 @@ export default {
         })
       })
       .then(() => {
-        this.auth.login = ''  //обнуление введунных данных
-        this.auth.password = '' //обнуление введунных данных
-        this.actionLogin(false)
+        location.reload()
       })
       .catch((e) => {
         console.log('ОШИБКА ВХОДА')

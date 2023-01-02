@@ -64,7 +64,7 @@ export default {
     },
     extend (config, ctx) {
       if (ctx && ctx.isClient) {
-        config.optimization.splitChunks.maxSize = 153600
+        config.optimization.splitChunks.maxSize = 204800
       }
     }
   },
@@ -150,7 +150,7 @@ export default {
       // compression config
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].gz[query]', // middleware will look for this filename
-      threshold: 2048, // Only assets bigger than this size are processed. In bytes.
+      threshold: 8192, // Only assets bigger than this size are processed. In bytes.
       minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
       compressionOptions: { level: 9 },
     },
@@ -161,7 +161,7 @@ export default {
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].br[query]', // middleware will look for this filename
       compressionOptions: { level: 11 },
-      threshold: 4096, // Only assets bigger than this size are processed. In bytes.
+      threshold: 10240, // Only assets bigger than this size are processed. In bytes.
       minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
     },
   },
