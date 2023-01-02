@@ -1,6 +1,6 @@
 <template>
   <div class="reader-image">
-    <div class="pages" v-if="mode === 'horizontally'">
+    <div class="pages" v-if="mode !== 'vertically'">
       <WidgetsImage v-for="(image, index) of pageImages" :key="index"
         :url="urlImage"
         :sort="image.sort"
@@ -32,7 +32,7 @@ import debounce from 'lodash.debounce'
 
 export default {
   props: {
-    pages: { type: Array, defualt: [] },
+    pages: { type: Array, default: [] },
   },
 
   data() {
@@ -51,7 +51,7 @@ export default {
     pageImages() { // массив т.к. картинки могут быть нарезаны на несколько part
       let result = []
 
-      if(this.mode === 'horizontally') { //* Горизонтальный режим
+      if(this.mode !== 'vertically') { //* Горизонтальный режим
         this.pages.forEach(item => {
           if( this.pageCur == item.page ) {
             result.push({

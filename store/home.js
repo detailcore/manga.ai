@@ -16,6 +16,7 @@ export const mutations = {
   SET_LATEST(state, payload) {
     let data = payload.data.filter(item => {
       item.type = item.type ? item.type.name : ''
+      item.type = item.type == 'Комикс западный' ? 'Комикс' : item.type
       item.cover = item.cover ? item.cover.low : ''
       item.adult_rank = item.adult_rank ? item.adult_rank.name : ''
       item.title = item.title_rus ? item.title_rus : (item.title_eng ? item.title_eng : '')
