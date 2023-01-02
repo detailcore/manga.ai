@@ -4,7 +4,7 @@
       <img loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="title" />
       <div class="rank" v-show="rank !== 'Нет'"> {{ rank }} </div>
       <div class="cat"> {{ category }} </div>
-    </div>    
+    </div>
     <div class="info">
       <div class="title"> {{ title }} </div>
       <div class="chapter">
@@ -63,8 +63,8 @@ export default {
     text-decoration: none;
   }
   .cover {
-    width: 76px;
-    height: 114px;
+    width: 72px;
+    height: 106px;
     font-size: 0.9rem;
     position: relative;
     border-radius: 6px 0px 0px 6px;

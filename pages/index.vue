@@ -17,9 +17,9 @@
           :rating="item.rating"
           :title="item.title" />
 
-        <div class="more" v-show="home.nextPageUrl !== null">
+        <!-- <div class="more" v-show="home.nextPageUrl !== null">
           <span class="more__button" v-show="!disabled" @click.prevent="loadMore">Показать еще</span>
-        </div>
+        </div> -->
       </div>
 
       <RegionSide :newReleases='newReleases' :topReleases='topReleases' />
@@ -55,11 +55,11 @@ export default {
     }
   },
 
-  data() {
-    return {
-      disabled: false,
-    }
-  },
+  // data() {
+  //   return {
+  //     disabled: false,
+  //   }
+  // },
 
   computed: {
     ...mapState(['home']),
@@ -68,13 +68,13 @@ export default {
     ...mapGetters('home', { latestData: 'GET_LATEST' }),
   },
 
-  methods: {
-    async loadMore() {
-      this.disabled = true
-      await this.$store.dispatch('home/FETCH_LATEST')
-      this.disabled = false
-    },
-  },
+  // methods: {
+  //   async loadMore() {
+  //     this.disabled = true
+  //     await this.$store.dispatch('home/FETCH_LATEST')
+  //     this.disabled = false
+  //   },
+  // },
 }
 </script>
 

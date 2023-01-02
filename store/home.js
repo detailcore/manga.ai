@@ -9,9 +9,9 @@ export const state = () => ({
   top: [],
   latest: [],
   created_at: 0, // время запроса, ms
-  nextPageUrl: '',
+  // nextPageUrl: '',
 })
-  
+
 export const mutations = {
   SET_LATEST(state, payload) {
     let data = payload.data.filter(item => {
@@ -29,7 +29,7 @@ export const mutations = {
     } else {
       state.latest = [...state.latest, ...data]
     }
-    state.nextPageUrl = payload.next_page_url
+    // state.nextPageUrl = payload.next_page_url
   },
   SET_NEW(state, payload) {
     state.new = payload
@@ -45,14 +45,15 @@ export const mutations = {
 export const actions = {
   async FETCH_ALL({ commit }) {
     const { latest, side } = await getHomeAll()
-    commit('SET_LATEST', { data: latest.data, next_page_url: latest.next_page_url })
+    // commit('SET_LATEST', { data: latest, next_page_url: latest.next_page_url })
+    commit('SET_LATEST', { data: latest })
     commit('SET_TOP', side.top_releases)
     commit('SET_NEW', side.new_releases)
   },
-  async FETCH_LATEST({ commit, state }) {
-    const { data, next_page_url } = await getHomeLatestData(state.nextPageUrl)
-    commit('SET_LATEST', { data, next_page_url })
-  },
+  // async FETCH_LATEST({ commit, state }) {
+  //   const { data, next_page_url } = await getHomeLatestData(state.nextPageUrl)
+  //   commit('SET_LATEST', { data, next_page_url })
+  // },
   // async FETCH_SIDE({ commit }) {
   //   const res = await getHomeSide()
   //   commit('SET_TOP', res.top_releases)
