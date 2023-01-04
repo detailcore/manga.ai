@@ -1,7 +1,7 @@
 <template>
   <div class="library_item">
     <Nuxt-link :to="'/manga/'+alias" class="cover">
-      <img loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="title" />
+      <img loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="title" v-lazy-load />
       <div class="type"> {{ type }} </div>
       <div class="title"> {{ title }} </div>
     </Nuxt-link>

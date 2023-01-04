@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <LazyWidgetsModerationStatus v-if="isOpenStatus" :id="item.id" />
+    <WidgetsModerationStatus v-if="isOpenStatus" :id="item.id" />
 
   </div>
 </template>

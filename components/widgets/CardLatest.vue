@@ -1,7 +1,7 @@
 <template>
   <nuxt-link :to="'/manga/'+alias" class="chapter item">
     <div class="cover">
-      <img loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="title" />
+      <img loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="title" v-lazy-load />
       <div class="rank" v-show="rank !== 'Нет'"> {{ rank }} </div>
       <div class="cat"> {{ category }} </div>
     </div>

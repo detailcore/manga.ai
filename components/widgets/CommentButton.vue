@@ -27,11 +27,11 @@
       </div>
     </div>
 
-    <LazyWidgets-CommentWrite class="reply" v-if="isOpenComment" :id="id" :id_root="id_root" :action="writeShow" />
+    <Widgets-CommentWrite class="reply" v-if="isOpenComment" :id="id" :id_root="id_root" :action="writeShow" />
 
-    <LazyWidgets-CommentEdit class="reply" v-if="isOpenEditComment" :id="id" :text="text" />
+    <Widgets-CommentEdit class="reply" v-if="isOpenEditComment" :id="id" :text="text" />
 
-    <LazyWidgets-Complaint v-if="isOpenComplaint" :id="id" :id_user="id_user" :type="'comment'" :content="text" :action="complaintShow" />
+    <Widgets-Complaint v-if="isOpenComplaint" :id="id" :id_user="id_user" :type="'comment'" :content="text" :action="complaintShow" />
   </div>
 </template>
 
@@ -80,7 +80,7 @@ export default {
     },
     hasEdit() {
       return this.$store.state.auth.loggedIn ? this.$store.state.auth.user.id_role === 1 : false
-      // return (this.$store.state.auth.loggedIn ? this.$store.state.auth.user.id : 0) || 
+      // return (this.$store.state.auth.loggedIn ? this.$store.state.auth.user.id : 0) ||
       //        (this.$store.state.auth.loggedIn ? this.$store.state.auth.user.id_role === 1 : false)
     },
   },

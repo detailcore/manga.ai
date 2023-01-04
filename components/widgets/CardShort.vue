@@ -1,6 +1,6 @@
 <template>
   <nuxt-link :to="urlResult"  class="short">
-    <img class="cover" loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="dataResult.title" />
+    <img class="cover" loading="lazy" :srcset="imageUrl+'.webp'" :src="imageUrl" :alt="dataResult.title" v-lazy-load />
 
     <div class="info">
       <div class="title"> {{ dataResult.title }} </div>
@@ -67,7 +67,7 @@ export default {
             title: this.title,
             count: this.count,
           }
-      
+
         default:
           break;
       }

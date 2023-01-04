@@ -24,7 +24,7 @@
               <mdi-BookOpenPage title="Читать с первой главы" />
               <span>Читать</span>
             </div>
-            <LazyListBookmark v-if="loggedIn" :id_post="idPost" />
+            <ListBookmark v-if="loggedIn" :id_post="idPost" />
             <div class="space_evenly action">
               <mdi-Plus class="btn" title="Добавить новую главу" @click="goToAddChapter" />
               <mdi-Pencil class="btn" title="Редактировать тайтл" @click="goToEdit" />
@@ -37,7 +37,7 @@
         </div>
         <div class="cover__translation" v-show="data.teams.length">
           <div class="block__title">Переводчики</div>
-            <LazyWidgetsCardShort v-for="(item, index) in data.teams" :key="index"
+            <WidgetsCardShort v-for="(item, index) in data.teams" :key="index"
               :id="item.id"
               :cover="item.cover"
               :title="item.name"
@@ -134,11 +134,11 @@
         </div>
 
 
-        <LazyList-Chapters v-if="(page === 'chapters' && chapterCount > 0)" :id='data.id' />
+        <List-Chapters v-if="(page === 'chapters' && chapterCount > 0)" :id='data.id' />
 
         <!-- <List-Relateds class="relateds_list" v-if="page === 'related'" :id='data.id' /> -->
 
-        <LazyList-Comments class="comments" v-if="page === 'comments'" />
+        <List-Comments class="comments" v-if="page === 'comments'" />
 
         <!-- <List-Covers class="covers" v-if="page === 'covers'" /> -->
 
@@ -172,7 +172,7 @@
 
     <div class="background__close" :class="{ hidden: !openSetRating }" @click="close"></div>
 
-    <LazyWidgets-Complaint v-if="isOpenComplaint" :id="idPost" :type="'post'" :action="complaintShow" />
+    <Widgets-Complaint v-if="isOpenComplaint" :id="idPost" :type="'post'" :action="complaintShow" />
     <notifications />
   </div>
 </template>

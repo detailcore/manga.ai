@@ -5,7 +5,7 @@
         <Nuxt-link to="/" class="btn"><mdi-Home title="Главная страница" /></Nuxt-link>
         <Nuxt-link to="/library" class="btn"><mdi-Bookshelf title="Каталог" /></Nuxt-link>
 
-        <LazyRegion-Search />
+        <Region-Search />
 
       </div>
       <div class="header__control">

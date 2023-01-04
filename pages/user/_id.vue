@@ -16,10 +16,10 @@
       </div>
     </div>
 
-    <LazyUserBookmark v-show="tabBookmark" :tabBookmark="tabBookmark" />
+    <UserBookmark v-show="tabBookmark" :tabBookmark="tabBookmark" />
 
-    <LazyUserSetting v-if="tabSetting"  :settingsShow="tabSetting" />
-    
+    <UserSetting v-if="tabSetting"  :settingsShow="tabSetting" />
+
   </div>
 </template>
 

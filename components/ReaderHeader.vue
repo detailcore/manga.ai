@@ -12,19 +12,19 @@
         </Nuxt-link>
       </div>
 
-      
+
       <div class="btn-line">
         <button @click="prevChapter">
           <mdi-MenuLeft title="Предыдущая глава" />
         </button>
-        <LazyWidgetsSelectChapterMain />
+        <WidgetsSelectChapterMain />
         <button @click="nextChapter">
           <mdi-MenuRight title="Слудующая глава" />
         </button>
       </div>
 
       <div class="header__control">
-        <LazyListBookmark v-if="$store.state.auth.loggedIn" :id_chapter="selected.id" :id_post="idPost" />
+        <ListBookmark v-if="$store.state.auth.loggedIn" :id_chapter="selected.id" :id_post="idPost" />
         <!-- <span class="divider"> | </span> -->
         <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />
@@ -33,11 +33,11 @@
           <mdi-Cog title="Настройки" />
         </div>
         <!-- <span class="divider"> | </span> -->
-        <LazyRegion-User />
+        <Region-User />
         <!-- <div class="btn">
           <mdi-Account title="Пользователь" />
         </div> -->
-        
+
       </div>
     </div>
     <notifications />

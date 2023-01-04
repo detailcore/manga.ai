@@ -1,7 +1,7 @@
 <template>
   <div class="library_item">
     <Nuxt-link :to="'/manga/'+alias" class="cover">
-      <img loading="lazy" :srcset="cover+'.webp'" :src="cover" :alt="title" />
+      <img loading="lazy" :srcset="cover+'.webp'" :src="cover" :alt="title" v-lazy-load />
       <div class="type">
         <!-- <mdi-CardsHeart /> {{ likes }} -->
         <mdi-Star /> {{ rating }}

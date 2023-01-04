@@ -15,6 +15,7 @@
     "core-js": "^3.27.1",
     "lodash.throttle": "^4.1.1",
     "nuxt": "^2.15.8",
+    "nuxt-lazy-load": "^1.2.9",
     "nuxt-precompress": "^0.5.9",
     "vue-headroom": "^0.10.1",
     "vue-material-design-icons": "^5.1.2",
