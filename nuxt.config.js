@@ -1,4 +1,4 @@
-export default {
+export default async () => ({
   // loading: false,
   loading: {
     height: '5px',
@@ -59,17 +59,33 @@ export default {
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    extractCSS: false,
+    // extractCSS: false,
     splitChunks: { // деление компонентов
-      layouts: false,
-      pages: false,
+      layouts: true,
+      pages: true,
       commons: true
     },
+    cache: true,
     extend (config, ctx) {
       if (ctx && ctx.isClient) {
         config.optimization.splitChunks.maxSize = 204800
       }
-    }
+    },
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: true,
+        minifyJS: true,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true,
+        preserveLineBreaks: false,
+        collapseWhitespace: true,
+      },
+    },
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -119,7 +135,7 @@ export default {
       '~/assets/scss/_mixins.scss',
       '~/assets/scss/_variables.scss',
     ],
-    hoistUseStatements: true  // Hoists the "@use" imports. Applies only to "sass", "scss" and "less". Default: false.
+    // hoistUseStatements: true  // Hoists the "@use" imports. Applies only to "sass", "scss" and "less". Default: false.
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -132,6 +148,15 @@ export default {
     // 'nuxt-purgecss',
     // https://github.com/frenchrabbit/nuxt-precompress
     ['nuxt-precompress'],
+    // https://gitlab.com/broj42/nuxt-lazy-load
+    ['nuxt-lazy-load', {
+      loadingClass: 'isLazyLoading',
+      loadedClass: 'isLazyLoaded',
+      appendClass: 'lazyLoad',
+      directiveOnly: true,
+      defaultImage: '~/assets/images/no-image.png.webp',
+    }]
+
   ],
 
   nuxtPrecompress: {
@@ -255,4 +280,4 @@ export default {
   },
   privateRuntimeConfig: {
   }
-}
+})
