@@ -53,7 +53,7 @@ export default {
       return this.chapters[0].chapter
     },
   },
-  
+
   methods: {
     updateTime(time) {
       if(time != null) {

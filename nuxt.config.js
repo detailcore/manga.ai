@@ -2,7 +2,7 @@ export default {
   // loading: false,
   loading: {
     height: '5px',
-    color: '#ff6820', // ораньжевый
+    color: '#ff6820', // оранжевый
     // throttle: 200, // задержка перед показом полоски
   },
   ssr: false,
@@ -29,12 +29,15 @@ export default {
   },
 
   router: {
-    prefetchLinks: false // отключить предварительную загрузку компонета, глобально (для nuxt-link)
+    prefetchLinks: false // отключить предварительную загрузку компонента, глобально (для nuxt-link)
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '~/assets/scss/main.scss',
+    {
+      src: '~/assets/scss/main.scss',
+      lang: 'scss',
+    },
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -98,13 +101,15 @@ export default {
   },
 
   moment: {
+    plugin: true, // Отключение плагина false | true
     locales: ['ru'],
     defaultLocale: 'ru',
-    // timezone: false,
-    // defaultTimezone: 'Europe/Samara',
-    // plugins: [ // You can import plugins to moment. See a list of plugins: https://momentjs.com/docs/#/plugins/
-      // 'moment-strftime',
-    // ]
+    timezone: true,
+    defaultTimezone: 'Europe/Samara',
+    timezone: {
+      startYear: 2021,
+      endYear: 2025
+    }
   },
 
   styleResources: {
