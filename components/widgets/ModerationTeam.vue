@@ -61,8 +61,7 @@ export default {
     updateTime() {
       let time = this.item.updated_at
       if(time != null) {
-        let timeReplace = time.replace('.000000Z', '')
-        return this.$moment(timeReplace).fromNow()
+        return this.$moment(time).fromNow()
       }
       return 'Когда-то...'
     },

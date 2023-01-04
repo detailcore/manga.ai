@@ -57,8 +57,7 @@ export default {
   methods: {
     updateTime(time) {
       if(time != null) {
-        let timeReplace = time.replace('.000000Z', '')
-        return this.$moment(timeReplace).fromNow()
+        return this.$moment(time).fromNow()
       }
       return 'Еще не загружена...'
     },
