@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container region_main">
     <!-- <Line-Popular /> -->
     <div class="main__content">
       <div class="content">
@@ -79,6 +79,9 @@ export default {
 </script>
 
 <style lang="scss">
+.region_main {
+  margin-top: 60px;
+}
 .main__content {
   display: flex;
   margin: 0 auto;

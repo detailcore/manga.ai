@@ -62,9 +62,13 @@ export default {
     color: #919191;
     margin-top: -10px;
   }
+  .block.top {
+    padding-right: 6px;
+  }
   .block.new {
     top: 0;
     position: sticky;
+    padding-left: 6px;
   }
 }
 </style>
