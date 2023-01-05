@@ -61,31 +61,31 @@ export default async () => ({
     // },
     // extractCSS: false,
     splitChunks: { // деление компонентов
-      layouts: true,
-      pages: true,
+      layouts: false,
+      pages: false,
       commons: true
     },
-    cache: true,
+    // cache: true,
     extend (config, ctx) {
       if (ctx && ctx.isClient) {
         config.optimization.splitChunks.maxSize = 204800
       }
     },
-    html: {
-      minify: {
-        collapseBooleanAttributes: true,
-        decodeEntities: true,
-        minifyCSS: true,
-        minifyJS: true,
-        processConditionalComments: true,
-        removeEmptyAttributes: true,
-        removeRedundantAttributes: true,
-        trimCustomFragments: true,
-        useShortDoctype: true,
-        preserveLineBreaks: false,
-        collapseWhitespace: true,
-      },
-    },
+    // html: {
+    //   minify: {
+    //     collapseBooleanAttributes: true,
+    //     decodeEntities: true,
+    //     minifyCSS: true,
+    //     minifyJS: true,
+    //     processConditionalComments: true,
+    //     removeEmptyAttributes: true,
+    //     removeRedundantAttributes: true,
+    //     trimCustomFragments: true,
+    //     useShortDoctype: true,
+    //     preserveLineBreaks: false,
+    //     collapseWhitespace: true,
+    //   },
+    // },
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -120,12 +120,12 @@ export default async () => ({
     plugin: true, // Отключение плагина false | true
     locales: ['ru'],
     defaultLocale: 'ru',
-    timezone: true,
-    defaultTimezone: 'Europe/Samara',
-    timezone: {
-      startYear: 2021,
-      endYear: 2025
-    }
+    // timezone: true,
+    // defaultTimezone: 'Europe/Samara',
+    // timezone: {
+    //   startYear: 2021,
+    //   endYear: 2025
+    // }
   },
 
   styleResources: {
