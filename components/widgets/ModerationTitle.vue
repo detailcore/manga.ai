@@ -24,7 +24,7 @@
       <div class="line description"> <b>Описание</b>:  {{ description }} </div>
     </div>
 
-    <WidgetsModerationStatus v-if="isOpenStatus" :id="item.id" />
+    <LazyWidgetsModerationStatus v-if="isOpenStatus" :id="item.id" />
 
   </div>
 </template>

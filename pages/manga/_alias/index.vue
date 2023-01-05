@@ -24,7 +24,7 @@
               <mdi-BookOpenPage title="Читать с первой главы" />
               <span>Читать</span>
             </div>
-            <ListBookmark v-if="loggedIn" :id_post="idPost" />
+            <LazyListBookmark v-if="loggedIn" :id_post="idPost" />
             <div class="space_evenly action">
               <mdi-Plus class="btn" title="Добавить новую главу" @click="goToAddChapter" />
               <mdi-Pencil class="btn" title="Редактировать тайтл" @click="goToEdit" />
@@ -37,7 +37,7 @@
         </div>
         <div class="cover__translation" v-show="data.teams.length">
           <div class="block__title">Переводчики</div>
-            <WidgetsCardShort v-for="(item, index) in data.teams" :key="index"
+            <LazyWidgetsCardShort v-for="(item, index) in data.teams" :key="index"
               :id="item.id"
               :cover="item.cover"
               :title="item.name"
@@ -134,13 +134,13 @@
         </div>
 
 
-        <List-Chapters v-if="(page === 'chapters' && chapterCount > 0)" :id='data.id' />
+        <LazyList-Chapters v-if="(page === 'chapters' && chapterCount > 0)" :id='data.id' />
 
-        <!-- <List-Relateds class="relateds_list" v-if="page === 'related'" :id='data.id' /> -->
+        <!-- <LazyList-Relateds class="relateds_list" v-if="page === 'related'" :id='data.id' /> -->
 
-        <List-Comments class="comments" v-if="page === 'comments'" />
+        <LazyList-Comments class="comments" v-if="page === 'comments'" />
 
-        <!-- <List-Covers class="covers" v-if="page === 'covers'" /> -->
+        <!-- <LazyList-Covers class="covers" v-if="page === 'covers'" /> -->
 
       </div>
     </div>

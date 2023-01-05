@@ -2,7 +2,7 @@
   <div class="posts">
     <Pagination :sourceLinks="teamPosts.links" :type="'TEAM_POSTS'" v-if="isMany" />
 
-    <Widgets-CardPopular
+    <LazyWidgets-CardPopular
       :alias="item.alias"
       :cover="item.cover"
       :title="item.title"

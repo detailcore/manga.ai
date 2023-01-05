@@ -27,11 +27,11 @@
       </div>
     </div>
 
-    <Widgets-CommentWrite class="reply" v-if="isOpenComment" :id="id" :id_root="id_root" :action="writeShow" />
+    <LazyWidgets-CommentWrite class="reply" v-if="isOpenComment" :id="id" :id_root="id_root" :action="writeShow" />
 
-    <Widgets-CommentEdit class="reply" v-if="isOpenEditComment" :id="id" :text="text" />
+    <LazyWidgets-CommentEdit class="reply" v-if="isOpenEditComment" :id="id" :text="text" />
 
-    <Widgets-Complaint v-if="isOpenComplaint" :id="id" :id_user="id_user" :type="'comment'" :content="text" :action="complaintShow" />
+    <LazyWidgets-Complaint v-if="isOpenComplaint" :id="id" :id_user="id_user" :type="'comment'" :content="text" :action="complaintShow" />
   </div>
 </template>
 

@@ -1,19 +1,19 @@
 <template>
   <div class="reader">
-    <ReaderLineInfo :idChapter="chapter.id" v-if="mode === 'horizontally'" />
+    <LazyReaderLineInfo :idChapter="chapter.id" v-if="mode === 'horizontally'" />
 
     <ReaderImage :pages="chapter.pages" />
 
     <ReaderLineTeam :likes="chapter.likes" />
 
-    <ListComments class="comments" :class="{ vertically: isOpenComments, container: (mode === 'horizontally')}" />
+    <LazyListComments class="comments" :class="{ vertically: isOpenComments, container: (mode === 'horizontally')}" />
 
     <headroom :footroom="true" v-if="mode === 'vertically'">
-      <ReaderLineInfo :idChapter="chapter.id" :class="{ vertically: (mode === 'vertically')}" />
+      <LazyReaderLineInfo :idChapter="chapter.id" :class="{ vertically: (mode === 'vertically')}" />
     </headroom>
 
-    <WidgetsReaderSetting v-if="isOpenSetting" />
-    <WidgetsComplaint v-if="isOpenComplaint" :id="chapter.id" :page="pageCur" :type="'reader'" />
+    <LazyWidgetsReaderSetting v-if="isOpenSetting" />
+    <LazyWidgetsComplaint v-if="isOpenComplaint" :id="chapter.id" :page="pageCur" :type="'reader'" />
 
     <!-- <small>
       <mdi-Account />

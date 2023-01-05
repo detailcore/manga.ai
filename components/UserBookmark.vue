@@ -5,12 +5,12 @@
       <div class="item" :class="{ active: tab === item.id }" v-for="item in bookmarks" :key="item.id" @click.prevent="selectTab(item.id)">
         {{ item.name }}
         <span class="count" v-if="postLoaded"> {{ posts.bookmarksCount[item.id] }} </span>
-      </div>      
+      </div>
       <!-- <div class="btn"><mdi-Plus class="add_bookmark" /></div> -->
     </div>
 
     <div class="container cards">
-      <Widgets-CardLibrary
+      <LazyWidgets-CardLibrary
         :id="item.id"
         :type="item.type"
         :alias="item.alias"
@@ -19,7 +19,7 @@
         v-for="item in posts.data"
         :key="item.id" />
 
-      <Pagination :sourceLinks="posts.links" :type="'USER_BOOKMARKS'" v-if="postLoaded" />
+      <LazyPagination :sourceLinks="posts.links" :type="'USER_BOOKMARKS'" v-if="postLoaded" />
     </div>
 
   </div>

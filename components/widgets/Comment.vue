@@ -16,7 +16,7 @@
     </div>
 
     <div class="comment__children" v-if="hasReplies">
-      <Widgets-Comment v-for="(item, index) in replies" :key="index"
+      <LazyWidgets-Comment v-for="(item, index) in replies" :key="index"
         :id="item.id"
         :id_root="item.root_id"
         :id_user="item.user_id"

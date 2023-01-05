@@ -1,7 +1,7 @@
 <template>
   <div class="page_reader" :class="{ mobile: widthViewport <= 710 }">
     <headroom>
-      <ReaderHeader />
+      <LazyReaderHeader />
     </headroom>
     <Nuxt />
   </div>

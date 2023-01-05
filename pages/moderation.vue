@@ -45,17 +45,17 @@
 
       <div class="result" v-if="content.length > 0">
         <div class="items" v-if="type === 'manga'">
-          <WidgetsModerationTitle v-for="item in content" :key="item.id" :item="item" />
+          <LazyWidgetsModerationTitle v-for="item in content" :key="item.id" :item="item" />
         </div>
         <div class="items" v-if="type === 'chapter'">
-          <WidgetsModerationChapter v-for="item in content" :key="item.id" :item="item" />
+          <LazyWidgetsModerationChapter v-for="item in content" :key="item.id" :item="item" />
         </div>
         <div class="items" v-if="type === 'team'">
-          <WidgetsModerationTeam v-for="item in content" :key="item.id" :item="item" />
+          <LazyWidgetsModerationTeam v-for="item in content" :key="item.id" :item="item" />
         </div>
       </div>
 
-      <Paginator v-show="pagination.pageMax > 1" />
+      <LazyPaginator v-show="pagination.pageMax > 1" />
     </div>
 
     <notifications />

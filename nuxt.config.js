@@ -59,7 +59,7 @@ export default async () => ({
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    extractCSS: true,
+    extractCSS: false,
     splitChunks: { // деление компонентов
       layouts: true,
       pages: true,
@@ -68,7 +68,7 @@ export default async () => ({
     // cache: true,
     extend (config, ctx) {
       if (ctx && ctx.isClient) {
-        config.optimization.splitChunks.maxSize = 204800
+        config.optimization.splitChunks.maxSize = 249856
       }
     },
     html: {

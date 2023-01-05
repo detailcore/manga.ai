@@ -1,10 +1,10 @@
 <template>
   <div class="chapters">
-    <Pagination :sourceLinks="chapters.links" :type="'POST_CHAPTER_LIST'" :sort="sort" v-if="isLoaded" />
+    <LazyPagination :sourceLinks="chapters.links" :type="'POST_CHAPTER_LIST'" :sort="sort" v-if="isLoaded" />
 
     <Widgets-Chapter v-for="(item, index) in currentChapters" :key="index" :chapters="item" />
 
-    <Pagination :sourceLinks="chapters.links" :type="'POST_CHAPTER_LIST'" :sort="sort" v-if="isLoaded" />
+    <LazyPagination :sourceLinks="chapters.links" :type="'POST_CHAPTER_LIST'" :sort="sort" v-if="isLoaded" />
   </div>
 </template>
 

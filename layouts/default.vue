@@ -1,6 +1,6 @@
 <template>
   <div class="page_main" :class="{ mobile: widthViewport <= 710 }">
-    <RegionHeader />
+    <LazyRegionHeader />
     <Nuxt />
     <LazyRegionFooter />
   </div>

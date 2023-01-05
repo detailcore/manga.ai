@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Widgets-CommentWrite />
+    <LazyWidgets-CommentWrite />
 
     <div class="action" v-show="showComments" @click="closeComments">
       <div class="cancel">Закрыть</div>
@@ -17,7 +17,7 @@
 
 
     <div class="comment__list" v-if="!isEmpty">
-      <Widgets-Comment v-for="(item, index) in comments" :key="index"
+      <LazyWidgets-Comment v-for="(item, index) in comments" :key="index"
         :id="item.id"
         :id_root="item.root_id"
         :id_user="item.user_id"

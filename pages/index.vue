@@ -6,7 +6,7 @@
         <div class="block__title">Новые главы</div>
         <div class="block__subtitle">Последние добавленные в мангу главы</div>
 
-        <Widgets-CardLatest v-for="(item, index) in latestData" :key="index"
+        <LazyWidgets-CardLatest v-for="(item, index) in latestData" :key="index"
           :id="item.id"
           :alias="item.alias"
           :rank="item.adult_rank"
@@ -22,7 +22,7 @@
         </div> -->
       </div>
 
-      <RegionSide :newReleases='newReleases' :topReleases='topReleases' />
+      <LazyRegionSide :newReleases='newReleases' :topReleases='topReleases' />
     </div>
 
   </div>

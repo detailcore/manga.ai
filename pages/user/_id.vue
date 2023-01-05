@@ -16,9 +16,9 @@
       </div>
     </div>
 
-    <UserBookmark v-show="tabBookmark" :tabBookmark="tabBookmark" />
+    <LazyUserBookmark v-show="tabBookmark" :tabBookmark="tabBookmark" />
 
-    <UserSetting v-if="tabSetting"  :settingsShow="tabSetting" />
+    <LazyUserSetting v-if="tabSetting"  :settingsShow="tabSetting" />
 
   </div>
 </template>

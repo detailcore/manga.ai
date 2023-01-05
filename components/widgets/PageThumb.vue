@@ -12,11 +12,11 @@
     <div class="name"> {{ currentPage.link }} </div>
     <div class="number">
       <input class="num"
-             type="text"
-             :value="currentPage.page"
-             @change="changePage"
-             :title="`${currentPage.sort}-я часть ${currentPage.page}-й страницы`"
-             :disabled="disabled">
+            type="text"
+            :value="currentPage.page"
+            @change="changePage"
+            :title="`${currentPage.sort}-я часть ${currentPage.page}-й страницы`"
+            :disabled="disabled">
       <div class="sort">часть: {{ currentPage.sort }}</div>
     </div>
   </div>

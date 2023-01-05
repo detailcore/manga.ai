@@ -24,7 +24,7 @@
       </div>
 
       <div class="header__control">
-        <ListBookmark v-if="$store.state.auth.loggedIn" :id_chapter="selected.id" :id_post="idPost" />
+        <LazyListBookmark v-if="$store.state.auth.loggedIn" :id_chapter="selected.id" :id_post="idPost" />
         <!-- <span class="divider"> | </span> -->
         <!-- <div class="btn">
           <mdi-Bell title="Уведомления" />

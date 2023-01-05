@@ -84,8 +84,8 @@
           </div>
         </div>
 
-        <TeamPosts v-if="page === 'posts'" />
-        <TeamSetting v-if="viewEdit" />
+        <LazyTeamPosts v-if="page === 'posts'" />
+        <LazyTeamSetting v-if="viewEdit" />
       </div>
     </div>
   </div>
