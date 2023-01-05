@@ -61,8 +61,8 @@ export default async () => ({
     // },
     // extractCSS: false,
     splitChunks: { // деление компонентов
-      layouts: false,
-      pages: false,
+      layouts: true,
+      pages: true,
       commons: true
     },
     // cache: true,
@@ -71,21 +71,21 @@ export default async () => ({
         config.optimization.splitChunks.maxSize = 204800
       }
     },
-    // html: {
-    //   minify: {
-    //     collapseBooleanAttributes: true,
-    //     decodeEntities: true,
-    //     minifyCSS: true,
-    //     minifyJS: true,
-    //     processConditionalComments: true,
-    //     removeEmptyAttributes: true,
-    //     removeRedundantAttributes: true,
-    //     trimCustomFragments: true,
-    //     useShortDoctype: true,
-    //     preserveLineBreaks: false,
-    //     collapseWhitespace: true,
-    //   },
-    // },
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: true,
+        minifyJS: true,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true,
+        preserveLineBreaks: false,
+        collapseWhitespace: true,
+      },
+    },
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -162,7 +162,7 @@ export default async () => ({
   nuxtPrecompress: {
     enabled: true, // Enable in production
     report: false, // set true to turn one console messages during module init
-    test: /\.(js|css|html|txt|xml|svg|ttf|eot|otf|icon|ico|png)$/, // files to compress on build
+    test: /\.(js|css|html|txt|xml|svg|ttf|eot|otf)$/, // files to compress on build
     // Serving options
     middleware: {
       // You can disable middleware if you serve static files using nginx...
@@ -181,8 +181,8 @@ export default async () => ({
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].gz[query]', // middleware will look for this filename
       threshold: 8192, // Only assets bigger than this size are processed. In bytes.
-      minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
-      compressionOptions: { level: 9 },
+      minRatio: 0.8, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
+      compressionOptions: { level: 9 }, // You can change this from 1–9.
     },
     brotli: {
       // should compress to brotli?
@@ -190,9 +190,9 @@ export default async () => ({
       // compression config
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].br[query]', // middleware will look for this filename
-      compressionOptions: { level: 11 },
-      threshold: 10240, // Only assets bigger than this size are processed. In bytes.
-      minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
+      compressionOptions: { level: 9 }, // You can change this from 1–11. 4–9 offers good performance balance.
+      threshold: 8192, // Only assets bigger than this size are processed. In bytes.
+      minRatio: 0.8, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
     },
   },
 
