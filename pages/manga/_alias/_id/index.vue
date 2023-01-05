@@ -97,6 +97,9 @@ export default {
   },
 
   mounted() {
+    if(!(localStorage.getItem('mode'))) {
+      localStorage.setItem('mode', 'horizontally')
+    }
     this.setFirstPage()
     this.initLocalStorage()
   },
@@ -122,8 +125,8 @@ export default {
       this.$store.commit('reader/SET_RESET_PAGE')
     },
     initLocalStorage() {
-      let mode = localStorage.getItem('mode'),
-          comments = localStorage.getItem('commentsInReader')
+      const mode = localStorage.getItem('mode'),
+            comments = localStorage.getItem('commentsInReader')
 
       localStorage.setItem('commentsInReader', 'show') // TODO: Удалить если буду делать скрытие комментариев
 
@@ -134,11 +137,7 @@ export default {
       //   this.$store.commit('reader/SET_SETTING_COMMENTS', comments)
       // }
 
-      if(!mode) {
-        localStorage.setItem('mode', 'horizontally')
-      } else {
-        this.$store.commit('reader/SET_SETTING_MODE', mode)
-      }
+      this.$store.commit('reader/SET_SETTING_MODE', mode)
     },
   },
 }
