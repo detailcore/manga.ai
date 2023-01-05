@@ -640,6 +640,16 @@ export default {
       align-items: center;
       flex-direction: column;
       justify-content: space-evenly;
+      min-width: 320px;
+      max-width: 98%;
+      min-height: 100px;
+      top: 50%;
+      left: 50%;
+      padding: 12px;
+      z-index: 99999;
+      background-color: #1e1e1e;
+      transform: translate(-50%, -50%);
+      border: thin solid rgba(255, 255, 255, 0.12);
       .title {
         font-weight: 300;
         font-size: 1.4rem;
@@ -703,7 +713,7 @@ export default {
       justify-content: center;
       font-weight: bold;
       font-size: 1.12rem;
-      padding-bottom: 1px;
+      // padding-bottom: 1px;
       background-color: red;
       border: 2px solid #fff;
     }

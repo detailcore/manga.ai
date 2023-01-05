@@ -42,11 +42,11 @@ export default async () => ({
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/vue-headroom', ssr: true },
-    { src: '~/plugins/click-outside', ssr: true },
-    { src: '~/plugins/vue-multiselect', ssr: true },
-    { src: '~/plugins/axios', ssr: true },
-    { src: '~/plugins/vue-mdi', ssr: true },
+    { src: '~/plugins/vue-headroom', ssr: false },
+    { src: '~/plugins/click-outside', ssr: false },
+    { src: '~/plugins/vue-multiselect', ssr: false },
+    { src: '~/plugins/axios', ssr: false },
+    { src: '~/plugins/vue-mdi', ssr: false },
     { src: '~/plugins/notify-ssr', ssr: true },
     { src: '~/plugins/notify-client', ssr: false },
   ],
@@ -59,7 +59,7 @@ export default async () => ({
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    // extractCSS: false,
+    extractCSS: true,
     splitChunks: { // деление компонентов
       layouts: true,
       pages: true,
@@ -120,12 +120,12 @@ export default async () => ({
     plugin: true, // Отключение плагина false | true
     locales: ['ru'],
     defaultLocale: 'ru',
-    // timezone: true,
-    // defaultTimezone: 'Europe/Samara',
-    // timezone: {
-    //   startYear: 2021,
-    //   endYear: 2025
-    // }
+    timezone: true,
+    defaultTimezone: 'Europe/Samara',
+    timezone: {
+      startYear: 2021,
+      endYear: 2025
+    }
   },
 
   styleResources: {
@@ -150,9 +150,9 @@ export default async () => ({
     ['nuxt-precompress'],
     // https://gitlab.com/broj42/nuxt-lazy-load
     ['nuxt-lazy-load', {
-      loadingClass: 'isLazyLoading',
-      loadedClass: 'isLazyLoaded',
-      appendClass: 'lazyLoad',
+      loadingClass: 'isLazyLoading', // в процессе загрузки
+      loadedClass: 'isLazyLoaded', // загружено
+      appendClass: 'lazyLoad', // не загружено
       directiveOnly: true,
       defaultImage: '~/assets/images/no-image.png.webp',
     }]
@@ -180,8 +180,8 @@ export default async () => ({
       // compression config
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].gz[query]', // middleware will look for this filename
-      threshold: 8192, // Only assets bigger than this size are processed. In bytes.
-      minRatio: 0.8, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
+      threshold: 4096, // Only assets bigger than this size are processed. In bytes.
+      minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
       compressionOptions: { level: 9 }, // You can change this from 1–9.
     },
     brotli: {
@@ -191,8 +191,8 @@ export default async () => ({
       // https://www.npmjs.com/package/compression-webpack-plugin
       filename: '[path].br[query]', // middleware will look for this filename
       compressionOptions: { level: 9 }, // You can change this from 1–11. 4–9 offers good performance balance.
-      threshold: 8192, // Only assets bigger than this size are processed. In bytes.
-      minRatio: 0.8, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
+      threshold: 4096, // Only assets bigger than this size are processed. In bytes.
+      minRatio: 1, // Only assets that compress better than this ratio are processed (minRatio = Compressed Size / Original Size).
     },
   },
 

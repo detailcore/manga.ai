@@ -79,9 +79,6 @@ export default {
 </script>
 
 <style lang="scss">
-.region_main {
-  margin-top: 60px;
-}
 .main__content {
   display: flex;
   margin: 0 auto;
