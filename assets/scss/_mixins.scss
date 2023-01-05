@@ -18,10 +18,18 @@
 }
 
 @mixin modal() {
-  background: #1e1e1e;
-  position: fixed;
+  min-width: 320px;
+  max-width: 98%;
   min-height: 100px;
+  top: 50%;
+  left: 50%;
+  padding: 12px;
+  z-index: 99999;
+  position: fixed;
   border-radius: 6px;
+  background-color: #1e1e1e;
+  transform: translate(-50%, -50%);
+  border: thin solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 5px 5px -3px rgb(0 0 0 / 20%), 0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%);
   .button {
     &.success { border-bottom: thin solid rgba(0, 255, 34, 0.25); }
