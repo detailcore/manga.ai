@@ -16,7 +16,7 @@
 
     <div class="pages" v-if="mode === 'vertically'">
       <div v-for="(images, i) of pageImages" :key="i" :id="images[0].page" :data-p="images[0].page" ref="page">
-        <WidgetsImage v-for="(img, k) of images" :key="k"
+        <LazyWidgetsImage v-for="(img, k) of images" :key="k"
           :url="urlImage"
           :sort="img.sort"
           :link="img.link"

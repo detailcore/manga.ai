@@ -145,7 +145,7 @@ export default async () => ({
     // https://auth.nuxtjs.org/
     '@nuxtjs/auth-next',
     // https://github.com/Developmint/nuxt-purgecss
-    // 'nuxt-purgecss',
+    ['nuxt-purgecss', { safelist: ['material-design-icon', 'material-design-icon__svg'] }],
     // https://github.com/frenchrabbit/nuxt-precompress
     ['nuxt-precompress'],
     // https://gitlab.com/broj42/nuxt-lazy-load

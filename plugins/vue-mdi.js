@@ -3,6 +3,7 @@
 */
 
 import Vue from 'vue';
+import '~/assets/scss/_mdi.scss' ;
 // import 'vue-material-design-icons/styles.css';
 
 
@@ -83,7 +84,7 @@ export default function materialIcons() {
   Vue.component('MdiDiceMultiple', DiceMultiple);
   Vue.component('MdiLogout', Logout);
   Vue.component('MdiCardsHeart', CardsHeart);
-  Vue.component('MdiHeartOutline', HeartOutline);  
+  Vue.component('MdiHeartOutline', HeartOutline);
   Vue.component('MdiMagnify', Magnify);
   Vue.component('MdiStar', Star);
   Vue.component('MdiBookOpenPage', BookOpenPageVariantOutline);
