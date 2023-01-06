@@ -6,6 +6,7 @@ export default async () => ({
     // throttle: 200, // задержка перед показом полоски
   },
   ssr: false,
+  modern: true, // true = создаёт 2 бандла клиента, 1 для старых браузеров, другой для новых
 
   server: {
     port: 3000,
