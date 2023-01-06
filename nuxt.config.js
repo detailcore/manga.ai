@@ -94,7 +94,7 @@ export default async () => ({
     // https://github.com/nuxt-community/style-resources-module
     '@nuxtjs/style-resources',
     // https://www.npmjs.com/package/@nuxtjs/moment
-    '@nuxtjs/moment',
+    // '@nuxtjs/moment',
     // https://pwa.nuxtjs.org
     '@nuxtjs/pwa',
   ],
@@ -117,17 +117,17 @@ export default async () => ({
     },
   },
 
-  moment: {
-    plugin: true, // Отключение плагина false | true
-    locales: ['ru'],
-    defaultLocale: 'ru',
-    timezone: true,
-    defaultTimezone: 'Europe/Moscow',
-    timezone: {
-      startYear: 2021,
-      endYear: 2025
-    }
-  },
+  // moment: {
+  //   plugin: true, // Отключение плагина false | true
+  //   locales: ['ru'],
+  //   defaultLocale: 'ru',
+  //   timezone: true,
+  //   defaultTimezone: 'Europe/Moscow',
+  //   timezone: {
+  //     startYear: 2021,
+  //     endYear: 2025
+  //   }
+  // },
 
   styleResources: {
     scss: [
@@ -156,8 +156,9 @@ export default async () => ({
       appendClass: 'lazyLoad', // не загружено
       directiveOnly: true,
       defaultImage: '~/assets/images/no-image.png.webp',
-    }]
-
+    }],
+    // https://image.nuxtjs.org/getting-started/installation
+    // '@nuxt/image',
   ],
 
   nuxtPrecompress: {

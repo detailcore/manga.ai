@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { showDate } from '~/services/util'
+
 export default {
   props: {
     item: { type: Object, default: () => ({}) },
@@ -61,7 +63,8 @@ export default {
     updateTime() {
       let time = this.item.updated_at
       if(time != null) {
-        return this.$moment(time).fromNow()
+        return showDate(time)
+        // return this.$moment(time).fromNow()
       }
       return 'Когда-то...'
     },

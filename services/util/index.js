@@ -164,3 +164,39 @@ export function mergeDuplicates(arr) {
 //     }
 //   }
 // }
+
+
+/**
+ * Отображение даты "сегодня" || "вчера" || "30.01.2022"
+ */
+export function showDate(time) {
+  return showMessageDateTime(time)
+
+  function showMessageDateTime(dateTime) {
+    let today = new Date(), // присвоение и форматирование текущей даты
+        yesterday = new Date(), // присвоение и форматирование текущей даты - 1 день
+        latestDate = new Date(dateTime); // присвоение и форматирование даты последнего сообщения
+
+    yesterday.setDate(today.getDate() -1)
+
+    dropHMS(today)
+    dropHMS(yesterday)
+    dropHMS(latestDate)
+
+    if(dateTime) {
+      if (today.getTime() === latestDate.getTime()) {
+        return 'Сегодня'
+      } else if (yesterday.getTime() === latestDate.getTime()) {
+        return 'Вчера'
+      } else {
+        return new Intl.DateTimeFormat('ru').format(latestDate)
+      }
+    }
+  }
+
+  function dropHMS(t){
+    t.setHours(0)
+    t.setMinutes(0)
+    t.setSeconds(0, 0)
+  }
+}

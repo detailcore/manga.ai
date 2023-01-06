@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import { showDate } from '~/services/util'
+
 export default {
   props: {
     id: { type: Number, required: true },
@@ -42,7 +44,8 @@ export default {
     updateTime() {
       let time = this.chapter.updated_at
       if(time != null) {
-        return this.$moment(time).fromNow()
+        return showDate(time)
+        // return this.$moment(time).fromNow()
       }
       return 'Когда-то...'
     },

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { showDate } from '~/services/util';
 export default {
   props: {
     chapters: { type: Array, default: [] }
@@ -57,7 +58,8 @@ export default {
   methods: {
     updateTime(time) {
       if(time != null) {
-        return this.$moment(time).fromNow()
+        return showDate(time)
+        // return this.$moment(time).fromNow()
       }
       return 'Еще не загружена...'
     },

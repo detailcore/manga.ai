@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import { showDate } from '~/services/util'
 import { setUpVoteComment, setDownVoteComment } from '~/services/api'
 
 export default {
@@ -55,7 +56,8 @@ export default {
     updateTime() {
       let time = this.date
       if(time != null) {
-        return this.$moment(time).fromNow()
+        return showDate(time)
+        // return this.$moment(time).fromNow()
       }
       return 'Когда-то...'
     },

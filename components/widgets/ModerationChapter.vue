@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { notify } from '~/services/util';
+import { notify, showDate } from '~/services/util';
 import { editRemoveAllChapter } from '~/services/api';
 
 export default {
@@ -64,7 +64,8 @@ export default {
     updateTime() {
       let time = this.item.updated_at
       if(time != null) {
-        return this.$moment(time).fromNow()
+        return showDate(time)
+        // return this.$moment(time).fromNow()
       }
       return 'Когда-то...'
     },
