@@ -122,7 +122,8 @@ export default async () => ({
     locales: ['ru'],
     defaultLocale: 'ru',
     timezone: true,
-    defaultTimezone: 'Europe/Samara',
+    defaultTimezone: 'Europe/Moscow',
+    // defaultTimezone: 'Europe/Samara',
     timezone: {
       startYear: 2021,
       endYear: 2025

@@ -176,6 +176,9 @@ export default {
         this.$store.commit('user/SET_COVER', res.cover)
       }
       if(res.cover_bg) this.$store.commit('user/SET_COVER_BG', res.cover_bg)
+      // Обнуление аватарки и фона после загрузки
+      this.$refs.avatar.style.backgroundImage = `url()`
+      this.$refs.background.style.backgroundImage = `url()`
     },
     async updateInformation() {
       this.disabled = true
