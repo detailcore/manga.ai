@@ -123,7 +123,6 @@ export default async () => ({
     defaultLocale: 'ru',
     timezone: true,
     defaultTimezone: 'Europe/Moscow',
-    // defaultTimezone: 'Europe/Samara',
     timezone: {
       startYear: 2021,
       endYear: 2025
@@ -147,7 +146,7 @@ export default async () => ({
     // https://auth.nuxtjs.org/
     '@nuxtjs/auth-next',
     // https://github.com/Developmint/nuxt-purgecss
-    ['nuxt-purgecss', { safelist: ['material-design-icon', 'material-design-icon__svg'] }],
+    // ['nuxt-purgecss', { safelist: ['material-design-icon', 'material-design-icon__svg'] }], //! т.к. удаляет лишнее (нужно переделывать вёрстку либо, добавлять много исключений)
     // https://github.com/frenchrabbit/nuxt-precompress
     ['nuxt-precompress'],
     // https://gitlab.com/broj42/nuxt-lazy-load
