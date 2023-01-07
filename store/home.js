@@ -1,5 +1,6 @@
 import {
   getHomeAll,
+  getHomeMore,
   // getHomeSide,
   getHomeLatestData,
 } from '~/services/api'
@@ -9,12 +10,11 @@ export const state = () => ({
   top: [],
   latest: [],
   created_at: 0, // время запроса, ms
-  // nextPageUrl: '',
 })
 
 export const mutations = {
-  SET_LATEST(state, payload) {
-    let data = payload.data.filter(item => {
+  SET_LATEST(state, { data }) {
+    const items = data.filter(item => {
       item.type = item.type ? item.type.name : ''
       item.type = item.type == 'Комикс западный' ? 'Комикс' : item.type
       item.cover = item.cover ? item.cover.low : ''
@@ -26,11 +26,10 @@ export const mutations = {
     })
 
     if(state.latest.length === 0) {
-      state.latest = data
+      state.latest = items
     } else {
-      state.latest = [...state.latest, ...data]
+      state.latest = [...state.latest, ...items]
     }
-    // state.nextPageUrl = payload.next_page_url
   },
   SET_NEW(state, payload) {
     state.new = payload
@@ -46,20 +45,14 @@ export const mutations = {
 export const actions = {
   async FETCH_ALL({ commit }) {
     const { latest, side } = await getHomeAll()
-    // commit('SET_LATEST', { data: latest, next_page_url: latest.next_page_url })
     commit('SET_LATEST', { data: latest })
     commit('SET_TOP', side.top_releases)
     commit('SET_NEW', side.new_releases)
   },
-  // async FETCH_LATEST({ commit, state }) {
-  //   const { data, next_page_url } = await getHomeLatestData(state.nextPageUrl)
-  //   commit('SET_LATEST', { data, next_page_url })
-  // },
-  // async FETCH_SIDE({ commit }) {
-  //   const res = await getHomeSide()
-  //   commit('SET_TOP', res.top_releases)
-  //   commit('SET_NEW', res.new_releases)
-  // },
+  async FETCH_MORE({ commit, state }) {
+    const data = await getHomeMore()
+    commit('SET_LATEST', { data: data })
+  },
 }
 
 export const getters = {

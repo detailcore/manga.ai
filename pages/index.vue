@@ -17,9 +17,10 @@
           :rating="item.rating"
           :title="item.title" />
 
-        <!-- <div class="more" v-show="home.nextPageUrl !== null">
-          <span class="more__button" v-show="!disabled" @click.prevent="loadMore">Показать еще</span>
-        </div> -->
+        <div class="more">
+          <span class="more__button" v-if="disabled.name" @click.prevent="loadMore">Показать еще</span>
+          <mdi-Loading v-if="disabled.spinner" class="spinner" title="Ожидайте идёт загрузка..." />
+        </div>
       </div>
 
       <LazyRegionSide :newReleases='newReleases' :topReleases='topReleases' />
@@ -55,11 +56,14 @@ export default {
     }
   },
 
-  // data() {
-  //   return {
-  //     disabled: false,
-  //   }
-  // },
+  data() {
+    return {
+      disabled: {
+        name: true,
+        spinner: false,
+      },
+    }
+  },
 
   computed: {
     ...mapState(['home']),
@@ -68,13 +72,14 @@ export default {
     ...mapGetters('home', { latestData: 'GET_LATEST' }),
   },
 
-  // methods: {
-  //   async loadMore() {
-  //     this.disabled = true
-  //     await this.$store.dispatch('home/FETCH_LATEST')
-  //     this.disabled = false
-  //   },
-  // },
+  methods: {
+    async loadMore() { // кнопка отобразиться только 1 раз
+      this.disabled.name = false
+      this.disabled.spinner = true
+      await this.$store.dispatch('home/FETCH_MORE')
+      this.disabled.spinner = false
+    },
+  },
 }
 </script>
 

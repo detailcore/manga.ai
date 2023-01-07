@@ -64,6 +64,7 @@ import TrashCan from 'vue-material-design-icons/TrashCan.vue';
 import CloudDownload from 'vue-material-design-icons/CloudDownload.vue';
 import FilterMenu from 'vue-material-design-icons/FilterMenu.vue';
 import KeyboardBackspace from 'vue-material-design-icons/KeyboardBackspace.vue';
+import Loading from 'vue-material-design-icons/Loading.vue';
 
 
 // import DominoMask from 'vue-material-design-icons/DominoMask.vue';
@@ -129,6 +130,7 @@ export default function materialIcons() {
   Vue.component('MdiCloudDownload', CloudDownload);
   Vue.component('MdiFilterMenu', FilterMenu);
   Vue.component('MdiKeyboardBackspace', KeyboardBackspace);
+  Vue.component('MdiLoading', Loading);
 
 
 

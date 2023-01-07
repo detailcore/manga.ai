@@ -8,6 +8,10 @@ import { apiAny } from '.'
 export async function getHomeAll() {
   return await apiAny.get(`home/all`)
 }
+// Получить latest и side за один запрос
+export async function getHomeMore() {
+  return await apiAny.get(`home/more`)
+}
 
 // Получить ленту последних обновлений главной страницы
 export async function getHomeLatestData(page='') {
