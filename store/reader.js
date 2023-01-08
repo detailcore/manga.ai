@@ -23,6 +23,10 @@ import {
 
   export const mutations = {
     SET_CHAPTER(state, payload) {
+      payload.pages.forEach(i => {
+        i.loaded = false
+      })
+
       state.chapter = payload
 
       let teams = state.chapter.teams
@@ -35,6 +39,11 @@ import {
           }
         })
       }
+    },
+    SET_PAGE_LOADED(state, { id, loaded }) {
+      state.chapter.pages.forEach(i => {
+        if(i.id == id) i.loaded = loaded
+      })
     },
     SET_RESET_PAGE(state) {
       state.pageCurrent = 1

@@ -1,8 +1,9 @@
 <template>
   <div class="reader-image">
-    <div class="pages" v-if="mode !== 'vertically'">
-      <WidgetsImage v-for="(image, index) of pageImages" :key="index"
+    <div class="pages" v-if="mode === 'horizontally'">
+      <LazyWidgetsImage v-for="(image, index) of pageImages" :key="index"
         :url="urlImage"
+        :loaded="image.loaded"
         :sort="image.sort"
         :link="image.link"
         :page="image.page" />
@@ -18,6 +19,7 @@
       <div v-for="(images, i) of pageImages" :key="i" :id="images[0].page" :data-p="images[0].page" ref="page">
         <LazyWidgetsImage v-for="(img, k) of images" :key="k"
           :url="urlImage"
+          :loaded="img.loaded"
           :sort="img.sort"
           :link="img.link"
           :page="img.page" />
@@ -51,13 +53,14 @@ export default {
     pageImages() { // массив т.к. картинки могут быть нарезаны на несколько part
       let result = []
 
-      if(this.mode !== 'vertically') { //* Горизонтальный режим
+      if(this.mode === 'horizontally') { //* Горизонтальный режим
         this.pages.forEach(item => {
           if( this.pageCur == item.page ) {
             result.push({
               link: item.link,
               page: item.page,
               sort: item.sort,
+              loaded: item.loaded,
             })
           }
         })
@@ -104,8 +107,8 @@ export default {
     window.removeEventListener('keydown', this.keyBoardControl)
   },
 
-  mounted() {
-    this.loadImages()
+  async mounted() {
+    await this.loadImages()
   },
 
   methods: {
@@ -176,47 +179,27 @@ export default {
     setPage(num, id=this.idChapter, alias=this.$route.params.alias) {
       this.$store.commit('reader/SET_PAGE_CURRENT', { num: num, id: id, alias: alias })
     },
-    loadImages() {
-      let newImageObj = [],
-          urlImage = this.urlImage
 
+    // FIXME: Картинки на телефоне грузятся одновременно не дожидаясь загрузки предыдущих изображений, что забивает весь канал при плохой сети
+    async loadImages() {
       for (const item of this.pages) {
-        newImageObj.push(item)
+        const loaded = await loadImage(this.urlImage, item)
+        this.$store.commit('reader/SET_PAGE_LOADED', { id: item.id, loaded: loaded })
+        await new Promise(r => setTimeout(r, 200)) // пауза между загрузками картинок
       }
 
-      function loadImage(url, httpFolder) {
-        return new Promise(function(resolve, reject)
-        {
+      async function loadImage(http, item) {
+        return await new Promise((resolve, reject) => {
           let img = new Image()
           img.onload = function() {
-            //в случае успешной загрузки изображения, результат "обещания" будет url этого изображения
-            return resolve(url)
+            return resolve(true)
           }
           img.onerror = function() {
-            //в случае не успешной загрузки изображения, результат "обещания" будет url этого изображения
-            return reject(url)
+            return reject(false)
           }
-          img.src = httpFolder + url.link;
-        });
+          img.src = http + item.link;
+        })
       }
-
-      function displayImages(images) {
-        let imgSrc = images.shift(); // проходим по массиву с изображениями
-        if (!imgSrc) return; //если в результате рекурсии прошлись по всему массиву
-
-        //если в массиве еще есть изображение, загружаем его
-        return loadImage(imgSrc, urlImage)
-          .then((url) => {
-            //загружает картинку по очереди
-            return displayImages(images); //рекурсия
-          })
-          .catch((url) => {
-            console.log('ОШИБКА', url);
-            return displayImages(images); //рекурсия
-            // если какое-то из изображений не загрузилось, переходим к следующему изображению
-          });
-      }
-      displayImages(newImageObj)
     },
   },
 };

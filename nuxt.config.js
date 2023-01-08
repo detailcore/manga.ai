@@ -155,7 +155,8 @@ export default async () => ({
       loadedClass: 'isLazyLoaded', // загружено
       appendClass: 'lazyLoad', // не загружено
       directiveOnly: true,
-      defaultImage: '~/assets/images/no-image.png.webp',
+      defaultImage: process.env.JS_DOMAIN + '/_nuxt/assets/images/loading.gif',
+      // defaultImage: '~/assets/images/no-image.png.webp',
     }],
     // https://image.nuxtjs.org/getting-started/installation
     // '@nuxt/image',
