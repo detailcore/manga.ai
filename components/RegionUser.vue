@@ -90,13 +90,13 @@
         Восстановление
       </div>
       <div class="modal__recovery_text">
-        Чтобы восстановить пароль, укажите почту, на которую зарегестрирован Ваш аккаунт
+        Чтобы восстановить пароль, укажите почту, на которую зарегистрирован Ваш аккаунт
       </div>
       <div class="modal__input">
         <input type="text" v-model.trim="recoveryMail" placeholder="E-mail">
       </div>
       <div class="modal__btn">
-        <div class="item"> Восстановить </div>
+        <div class="item" @click="recoveryUser"> Восстановить </div>
       </div>
     </div>
 
@@ -293,7 +293,12 @@ export default {
 
     actionLogin(value) {
       this.$store.commit('region/SET_OPEN_LOGIN', value)
-    }
+    },
+
+    recoveryUser() {
+      console.log('Click recovery')
+      console.log(this.recoveryMail)
+    },
   },
 }
 </script>
