@@ -70,7 +70,7 @@ export default {
         name: 'manga-alias',
         params: {
           alias: alias,
-         }
+        }
       })
       this.close()
     },

@@ -20,7 +20,7 @@ export default {
     cover: { type: String, default: '' },
     title: { type: String, default: '' },
     description: { type: String, default: '' },
-    year: { type: Number, default: 0 },
+    year: { type: String, default: '' },
     count: { type: Number, default: 0 },
     category: { type: String, default: '' },
   },
