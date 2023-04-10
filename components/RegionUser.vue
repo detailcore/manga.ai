@@ -50,108 +50,20 @@
       <div class="block__title modal__title">
         Войти в аккаунт
       </div>
-      <!-- <div class="modal__social">
-        <div class="item">
-          <mdi-At title="Mail.ru" />
-          Mail.ru
-        </div>
-        <div class="item">
-          <mdi-Vk title="Vk" />
-          Вконтакте
-        </div>
-        <div class="item">
-          <mdi-Google title="Google" />
-          Google
-        </div>
-        <div class="item">
-          <mdi-YCombinator title="Yandex" />
-          Яндекс
-        </div>
-      </div> -->
-      <div class="modal__input">
-        <input type="text" v-model.trim="auth.login" placeholder="E-mail">
-        <input type="password" v-model.trim="auth.password" placeholder="Пароль">
-      </div>
-      <div class="modal__btn">
-        <div class="item" @click.prevent="login"> Вход </div>
-      </div>
-      <div class="modal__recovery">
-        <div class="item" @click="isOpenRecovery = true, actionLogin(false)"> Забыл пароль? </div>
-        <div class="item" @click="isOpenRegistry = true, actionLogin(false)"> Регистрация </div>
-      </div>
+
+      <div v-show="$route.name != 'auth-callback'" class="modal__subtitle">Через социальные сети:</div>
+      <WidgetsLoginSocial v-show="$route.name != 'auth-callback'" />
+
+      <div v-show="$route.name != 'auth-callback'" class="modal__subtitle">Через почту и пароль:</div>
+      <WidgetsLoginEmail />
+
     </div>
-
-
-    <div class="login__modal" v-if="isOpenRecovery">
-      <div class="btn close" @click="close">
-        <mdi-Close title="" />
-      </div>
-      <div class="block__title modal__title">
-        Восстановление
-      </div>
-      <div class="modal__recovery_text">
-        Чтобы восстановить пароль, укажите почту, на которую зарегистрирован Ваш аккаунт
-      </div>
-      <div class="modal__input">
-        <input type="text" v-model.trim="recoveryMail" placeholder="E-mail">
-      </div>
-      <div class="modal__btn">
-        <div class="item" @click="recoveryUser"> Восстановить </div>
-      </div>
-    </div>
-
-
-    <div class="login__modal" v-if="isOpenRegistry">
-      <div class="btn close" @click="close">
-        <mdi-Close title="" />
-      </div>
-      <div class="block__title modal__title">
-        Регистрация
-      </div>
-      <!-- <div class="modal__social">
-        <div class="item">
-          <mdi-At title="Mail.ru" />
-          Mail.ru
-        </div>
-        <div class="item">
-          <mdi-Vk title="Vk" />
-          Вконтакте
-        </div>
-        <div class="item">
-          <mdi-Google title="Google" />
-          Google
-        </div>
-        <div class="item">
-          <mdi-YCombinator title="Yandex" />
-          Яндекс
-        </div>
-      </div> -->
-      <div class="modal__input">
-        <input type="text" v-model.trim="reg.name" placeholder="Ваш ник">
-        <input type="email" v-model.trim="reg.email" placeholder="Почта">
-        <input type="password" v-model.trim="reg.password" placeholder="Пароль">
-        <input type="password" v-model.trim="reg.password_confirmation" placeholder="Еще раз пароль">
-      </div>
-
-      <div class="modal__recovery_text">
-        Регистрируясь, вы соглашаетесь с нашими <Nuxt-link to="#">Правилами и устоями</Nuxt-link>.
-      </div>
-
-      <div class="modal__btn">
-        <div class="item" @click.prevent="registration"> Зарегистрироваться </div>
-      </div>
-    </div>
-
 
     <div class="background__close"
           v-if="isOpen == true ||
-                isOpenLogin == true ||
-                isOpenRecovery == true ||
-                isOpenRegistry == true"
+                isOpenLogin == true"
           @click="isOpen = false,
-                  actionLogin(false),
-                  isOpenRecovery = false,
-                  isOpenRegistry = false">
+                  actionLogin(false)">
     </div>
 
     <notifications />
@@ -160,30 +72,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { register, findUserAndSetRole } from '~/services/api'
 
 export default {
   data() {
     return {
       isOpen: false,
-      isOpenRecovery: false,
-      isOpenRegistry: false,
       user: {},
-      auth: {
-        login: '',
-        password: ''
-      },
-      reg: {
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-      },
-      recoveryMail: '',
     }
   },
 
   computed: {
+    ...mapGetters('user', { auth: 'GET_AUTH' }),
     ...mapGetters( 'region', { isOpenLogin: 'GET_OPEN_LOGIN' }),
     isAdmin() {
       return this.userData ? (this.userData.id_role === 1) : false
@@ -227,48 +126,6 @@ export default {
       })
       this.close()
     },
-    async login() {
-      await this.$auth.loginWith('laravelSanctum', {
-        data: {
-          email: this.auth.login,
-          password: this.auth.password,
-          remember: true,
-        },
-      })
-      .then(() => {
-        this.$notify({
-          text: `Вход выполнен успешно!`,
-          type: 'success',
-          duration: 1500
-        })
-      })
-      .then(() => {
-        location.reload()
-      })
-      .catch((e) => {
-        console.log('ОШИБКА ВХОДА')
-        this.$notify({
-          title: `E-mail или пароль введены неверно!`,
-          text: `Проверьте правильность ввода почты или пароля!`,
-          type: 'error',
-          duration: 5000
-        })
-      })
-    },
-
-    async registration() {
-      await register( this.reg )
-        .then(async (res) => {
-          this.actionLogin(false)
-          this.isOpenRegistry = false
-          if(res.status === 201) {
-            await findUserAndSetRole({ name: this.reg.name, email: this.reg.email, }) // Найти пользователя и установить ему роль
-          }
-        })
-        .catch((e) => {
-          console.log('ОШИБКА РЕГИСТРАЦИИ')
-        })
-    },
 
     async logout() {
       await this.$auth.logout('laravelSanctum')
@@ -286,18 +143,11 @@ export default {
 
     close() {
       this.isOpen = false
-      this.isOpenRecovery = false
-      this.isOpenRegistry = false
       this.actionLogin(false)
     },
 
     actionLogin(value) {
       this.$store.commit('region/SET_OPEN_LOGIN', value)
-    },
-
-    recoveryUser() {
-      console.log('Click recovery')
-      console.log(this.recoveryMail)
     },
   },
 }
@@ -394,64 +244,8 @@ export default {
     .modal__title {
       padding: 12px;
     }
-    .modal__social {
-      display: flex;
-      .item {
-        width: 25%;
-        padding: 0;
-        display: flex;
-        cursor: pointer;
-        margin: 12px 8px;
-        align-items: center;
-        flex-direction: column;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-    .modal__recovery_text {
-      padding: 2px;
-      margin: 12px 0;
-    }
-    .modal__input {
-      input {
-        width: 100%;
-        color: #fff;
-        height: 36px;
-        margin: 4px 0;
-        padding: 0 8px;
-        font-size: inherit;
-        border-radius: 6px;
-        background: #1e1e1e;
-        border: thin solid rgba(255, 255, 255, 0.12);
-      }
-    }
-    .modal__btn {
-      cursor: pointer;
-      margin-top: 16px;
-      border-radius: 6px;
-      border: thin solid rgba(255, 255, 255, 0.12);
-      border-bottom: thin solid rgba(0, 255, 34, 0.25);
-      &:hover {
-        border: thin solid rgba(0, 255, 34, 0.25);
-      }
-      .item {
-        padding: 6px;
-        text-align: center;
-      }
-    }
-    .modal__recovery {
-      display: flex;
-      flex-direction: row;
-      margin: 16px 0 6px 0;
-      justify-content: space-around;
-      .item {
-        padding: 0;
-        cursor: pointer;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
+    .modal__subtitle {
+      padding: auto;
     }
   }
 }

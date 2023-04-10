@@ -2,6 +2,10 @@ import { getUserById } from '~/services/api'
 
 export const state = () => ({
   user: [],
+  auth: {
+    login: '',
+    password: ''
+  },
   roles: [
     { id: 1, name: 'Администратор' },
     { id: 2, name: 'Модератор' },
@@ -14,6 +18,12 @@ export const state = () => ({
 export const mutations = {
   SET_USER(state, payload) {
     state.user = payload
+  },
+  SET_AUTH_LOG(state, payload) {
+    state.auth.login = payload
+  },
+  SET_AUTH_PASS(state, payload) {
+    state.auth.password = payload
   },
   SET_COVER(state, payload) {
     state.user.cover = payload
@@ -33,5 +43,8 @@ export const actions = {
 export const getters = {
   GET_USER(state) {
     return state.user
+  },
+  GET_AUTH(state) {
+    return state.auth
   },
 }
