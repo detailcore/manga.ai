@@ -74,6 +74,15 @@ export default function ({ app, $axios, redirect }) {
     ) {
       return res.data
     }
+    return res.response
+  })
+
+
+  /**
+   * При возникновении ошибки, возвращаем response
+   */
+  $axios.onError(error => {
+    return error.response
   })
 
 
