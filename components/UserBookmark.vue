@@ -20,6 +20,8 @@
         :key="item.id" />
 
       <LazyPagination :sourceLinks="posts.links" :type="'USER_BOOKMARKS'" v-if="postLoaded" />
+
+      <div class="block__title" v-if="total == 0">Страница закладок пуста.</div>
     </div>
 
   </div>
@@ -27,7 +29,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getBookmarksList, getUserBookmarks } from '~/services/api'
 
 export default {
   props: {
@@ -39,24 +40,6 @@ export default {
       tab: 0,
     }
   },
-
-  // async fetch() {
-    // await this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 })
-    // if(this.bookmarks.length === 0) await this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
-
-    // let a = this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 }),
-    //     b = this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST');
-    // Promise.all(Array(a,b)).then( values => {
-    //   console.log('values =>', values)
-    // });
-
-    // Array(a,b).forEach(el => el)
-
-    // Promise.all(Array(
-    //   this.$store.dispatch('bookmark/FETCH_USER_BOOKMARKS', { id: +this.$route.params.id, type: 0 }),
-    //   this.$store.dispatch('bookmark/FETCH_BOOKMARK_LIST')
-    // ))
-  // },
 
   computed: {
     ...mapGetters( 'bookmark', { posts: 'GET_USER_BOOKMARKS' }),
@@ -88,6 +71,9 @@ export default {
 
 <style lang="scss">
   .bookmarks {
+    .block__title {
+      margin: 0 auto;
+    }
     .cards {
       display: flex;
       flex-wrap: wrap;

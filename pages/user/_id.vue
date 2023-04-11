@@ -7,7 +7,7 @@
           <div class="cover__avatar" :style="{ backgroundImage: `url(${cover})` }"></div>
           <div class="user_line">
             <span class="login"> {{ user.name }} </span>
-            <div v-if="isOwner">
+            <div class="btn" v-if="isOwner">
               <mdi-Cog class="btn settings" @click="showSetting" v-if="tabBookmark" />
               <mdi-BookmarkMultiple class="btn settings" @click="showBookmark" v-if="tabSetting" />
             </div>
