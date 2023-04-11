@@ -1,7 +1,7 @@
 import { getUserById } from '~/services/api'
 
 export const state = () => ({
-  user: [],
+  user: {},
   auth: {
     login: '',
     password: ''
@@ -30,6 +30,14 @@ export const mutations = {
   },
   SET_COVER_BG(state, payload) {
     state.user.cover_bg = payload
+  },
+  SET_USER_INFO({ user }, { name, email, gender, site, residence, about }) {
+    if(user.name != name) user.name = name
+    if(user.email != email) user.email = email
+    if(user.gender != gender) user.gender = gender
+    if(user.site != site) user.site = site
+    if(user.residence != residence) user.residence = residence
+    if(user.about != about) user.about = about
   },
 }
 

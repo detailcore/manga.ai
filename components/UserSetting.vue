@@ -29,11 +29,11 @@
     <div class="container" v-if="showInformation">
       <div class="value">
         <div class="title">Ваш ник (виден всем):</div>
-        <input class="text" name="name" type="text" v-model="info.name">
+        <input class="text" :class="{ error: errors.includes('name') }" name="name" type="text" v-model="info.name">
       </div>
       <div class="value">
         <div class="title">Email (виден только вам):</div>
-        <input class="text" name="email" type="email" v-model="info.email">
+        <input class="text" :class="{ error: errors.includes('email') }" name="email" type="email" v-model="info.email">
       </div>
       <div class="value">
         <div class="title">Пол:</div>
@@ -120,6 +120,7 @@ export default {
       },
       cover: '',
       cover_bg: '',
+      errors: [],
     }
   },
 
@@ -182,7 +183,7 @@ export default {
     },
     async updateInformation() {
       this.disabled = true
-      await updateUser({
+      let res = await updateUser({
         name: this.info.name,
         site: this.info.site,
         about: this.info.about,
@@ -190,6 +191,18 @@ export default {
         gender: +this.info.gender,
         residence: this.info.residence,
       })
+      if(res.status != 200) {
+        this.$notify({
+          title: `Ошибка ${res.status}`,
+          text: res.data.message,
+          type: 'error',
+          duration: 2500
+        })
+        this.errors = Object.keys(res.data.errors)
+      } else {
+        this.errors = []
+        this.$store.commit('user/SET_USER_INFO', this.info)
+      }
       this.disabled = false
     },
     async updatePassword() {

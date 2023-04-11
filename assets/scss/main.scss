@@ -519,3 +519,11 @@ input {
     }
   }
 }
+
+
+// Ошибки
+input {
+  &.error {
+    border: 2px dashed #ff6820;
+  }
+}
