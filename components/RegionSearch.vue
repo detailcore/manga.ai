@@ -13,12 +13,20 @@
       <div class="btn close" @click="close">
         <mdi-Close title="Закрыть поиск" />
       </div>
-      <div class="result" v-show="searchResult.length > 0">
+      <div class="result" v-if="searchResult.length > 0">
         <div v-for="(item, index) in searchResult" class="item" :key="index" @click="goTitle(item.alias)">
           <img :src="item.cover" alt="cover item">
           <div class="desc">
             <div class="title">{{ item.title }}</div>
             <div class="category">{{ item.type }} ({{ item.year }})</div>
+          </div>
+        </div>
+      </div>
+      <div class="result" v-if="searchNotResult">
+        <div class="item">
+          <div class="desc">
+            <div class="title">Поиск не дал результатов</div>
+            <div class="category">Введите на другом языке или только часть названия</div>
           </div>
         </div>
       </div>
@@ -38,12 +46,16 @@ export default {
       query: '',
       result: [],
       isOpen: false,
+      resultIsEmpty: false,
     }
   },
 
   computed: {
     searchResult() {
       return this.result
+    },
+    searchNotResult() {
+      return this.result.length == 0 && this.query.length > 2 && this.resultIsEmpty
     },
     throttledSend() {
       return throttle(this.sendSearch, 1200)
@@ -63,6 +75,7 @@ export default {
 
           return item
         })
+        if(this.result.length == 0) this.resultIsEmpty = true
       }
     },
     goTitle(alias) {
