@@ -104,6 +104,7 @@ export default {
       if(this.action) {
         this.$store.commit('comments/SET_WRITE_COMMENT', { id: this.id, value: !this.action })
       }
+      this.$store.commit('post/SET_COMM_CNT', this.$store.state.comments.total)
       this.addText = ''
       this.disabled = false
     },

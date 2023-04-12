@@ -1,5 +1,5 @@
-import { 
-  postGetByAlias, 
+import {
+  postGetByAlias,
   relatedGetById,
   chaptersGetById,
 } from '~/services/api'
@@ -12,7 +12,7 @@ export const state = () => ({
   idByChapter: 0,
   relatedsAndSimilars: [],
 })
-  
+
 export const mutations = {
   SET_POST(state, payload) {
     state.post = payload
@@ -25,12 +25,15 @@ export const mutations = {
     state.idByRelated = payload.id
     state.relatedsAndSimilars = payload.data
   },
+  SET_COMM_CNT({ post }, payload) {
+    post.comment_count = payload
+  },
   SET_RATING(state, payload) {
     if(payload.oldRate === null && +payload.newRate !== 0) {
       state.post.rating.amount++
       state.post.rating.your = +payload.newRate
       state.post.rating[`star_count${+payload.newRate}`]++
-    } 
+    }
     if(payload.oldRate !== null && +payload.newRate !== 0) {
       state.post.rating[`star_count${+payload.oldRate}`]--
       state.post.rating[`star_count${+payload.newRate}`]++
