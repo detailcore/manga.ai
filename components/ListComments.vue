@@ -66,7 +66,7 @@ export default {
     ...mapGetters( 'reader', { settingComments: 'GET_SETTING_COMMENTS' }),
 
     isEmpty() {
-      return this.$store.state.post.post.comment_count <= 0
+      return this.comments.length == 0
     },
     isEmptyTotal() {
       return this.$store.state.comments.total === 0
