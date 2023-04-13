@@ -33,7 +33,7 @@
     <div class="comments_info" v-if="isEmptyTotal">На этой странице еще нет комментариев, вы можете стать первым(ой)!</div>
     <div class="comments_info" v-if="!isShowСomments && isReader">Отображение комментариев отключено в настройках читалки!</div>
 
-    <!-- <div class="btn__action comments__more" @click="loadMore">Показать еще комментарии</div> -->
+    <div v-if="goNext" class="btn__action comments__more" @click="loadMore">Показать еще комментарии</div>
   </div>
 </template>
 
@@ -43,20 +43,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   async fetch() {
-    if(!this.isEmpty && this.isPost) {
-      await this.$store.dispatch('comments/FETCH_COMMENTS', {
-        type: 'post',
-        page_id: this.idPost,
-        commentable_id: this.idPost,
-      })
-    }
-    if(this.isReader && this.isShowСomments) {
-      await this.$store.dispatch('comments/FETCH_COMMENTS', {
-        type: 'reader',
-        page_id: this.readerPageCurrent,
-        commentable_id: this.idChapter,
-      })
-    }
+    await this.loadComments()
   },
 
   // data() {
@@ -97,6 +84,9 @@ export default {
       if(this.isPost) return 'post'
       if(this.isReader) return 'reader'
     },
+    goNext () {
+      return this.$store.state.comments.pagination?.current_page < this.$store.state.comments.pagination?.last_page
+    }
   },
 
   methods: {
@@ -104,7 +94,28 @@ export default {
       this.$store.commit('reader/SET_OPEN_COMMENTS', false)
       //
     },
-    // loadMore() {},
+    async loadMore() {
+      await this.loadComments(this.$store.state.comments.pagination?.next_page)
+    },
+
+    async loadComments(page=1) {
+      if(!this.isEmpty && this.isPost) {
+        await this.$store.dispatch('comments/FETCH_COMMENTS', {
+          page: page,
+          type: 'post',
+          page_id: this.idPost,
+          commentable_id: this.idPost,
+        })
+      }
+      if(this.isReader && this.isShowСomments) {
+        await this.$store.dispatch('comments/FETCH_COMMENTS', {
+          page: page,
+          type: 'reader',
+          page_id: this.readerPageCurrent,
+          commentable_id: this.idChapter,
+        })
+      }
+    },
 
     // filter(arr, str) {
     //   return (arr || [])

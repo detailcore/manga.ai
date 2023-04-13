@@ -46,7 +46,7 @@ export function removeComment(comments, id) {
  * @param  {Number} parentId
  * @return {Array}
  */
- export function hierarchical (comments, parentId) {
+export function hierarchical (comments, parentId) {
   const result = []
 
   comments.forEach(comment => {

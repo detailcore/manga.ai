@@ -12,16 +12,17 @@ export async function commentCreate(params) {
 }
 
 // Получить
-export async function getComments(params) {
-  let { page_id, commentable_id, type } = params
+export async function getComments({ page_id, commentable_id, type, page=1 }) {
   if(type === 'reader') {
     return await apiAny.get(
-      `comments?page_id=${commentable_id}.${page_id}&commentable_id=${commentable_id}&commentable_type=${type}`
+      `comments?page_id=${commentable_id}.${page_id}&commentable_id=${commentable_id}&commentable_type=${type}&page=${page}`
+      )
+    }
+  if(type === 'post') {
+    return await apiAny.get(
+      `comments?page_id=${page_id}&commentable_id=${commentable_id}&commentable_type=${type}&page=${page}`
     )
   }
-  return await apiAny.get(
-    `comments?page_id=${page_id}&commentable_id=${commentable_id}&commentable_type=${type}`
-  )
 }
 
 // Плюс голос

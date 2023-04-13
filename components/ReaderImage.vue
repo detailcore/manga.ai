@@ -99,12 +99,12 @@ export default {
   beforeMount() {
     this.handleDebouncedScroll = debounce(this.handleScroll, 150)
     window.addEventListener('scroll', this.handleDebouncedScroll)
-    window.addEventListener('keydown', this.keyBoardControl)
+    // window.addEventListener('keydown', this.keyBoardControl)
   },
 
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleDebouncedScroll)
-    window.removeEventListener('keydown', this.keyBoardControl)
+    // window.removeEventListener('keydown', this.keyBoardControl)
   },
 
   async mounted() {
@@ -112,24 +112,25 @@ export default {
   },
 
   methods: {
-    keyBoardControl(e) {
-      if((e.code === 'ArrowLeft' || e.code === 'KeyA') && !this.isFirst) this.prev()
-      if(e.code === 'ArrowRight' || e.code === 'KeyD') this.next()
-      if(e.code === 'ArrowDown' || e.code === 'KeyS') { // FIXME: не учтено, что пользователь уже мог прокрутить до нижней части страницы
-        window.scrollBy({
-          top: window.innerHeight / 1.1,
-          left: 0,
-          behavior: 'smooth'
-        })
-      }
-      if((e.code === 'ArrowUp' || e.code === 'KeyW') && window.pageYOffset != 0) {
-        window.scrollBy({
-          top: -window.innerHeight / 1.1,
-          left: 0,
-          behavior: 'smooth'
-        })
-      }
-    },
+    //! Отключено, т.к. при вводе комментариев будет перелистывание страницы
+    // keyBoardControl(e) {
+    //   if((e.code === 'ArrowLeft' || e.code === 'KeyA') && !this.isFirst) this.prev()
+    //   if(e.code === 'ArrowRight' || e.code === 'KeyD') this.next()
+    //   if(e.code === 'ArrowDown' || e.code === 'KeyS') { // FIXME: не учтено, что пользователь уже мог прокрутить до нижней части страницы
+    //     window.scrollBy({
+    //       top: window.innerHeight / 1.1,
+    //       left: 0,
+    //       behavior: 'smooth'
+    //     })
+    //   }
+    //   if((e.code === 'ArrowUp' || e.code === 'KeyW') && window.pageYOffset != 0) {
+    //     window.scrollBy({
+    //       top: -window.innerHeight / 1.1,
+    //       left: 0,
+    //       behavior: 'smooth'
+    //     })
+    //   }
+    // },
     handleScroll() {
       if(this.mode === 'vertically') {
         // console.log('scrollY => ', window.scrollY)

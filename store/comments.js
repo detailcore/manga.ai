@@ -15,7 +15,7 @@ export const state = () => ({
     value: false,
   },
 })
-  
+
 export const mutations = {
   SET_WRITE_COMMENT(state, payload) {
     state.writeComment = payload
@@ -34,6 +34,18 @@ export const mutations = {
 
     state.total = total
     state.comments = comments
+    state.pagination = pagination
+    state.page = pagination.current_page
+  },
+  SET_LOADMORE_COMMENTS(state, { comments, pagination }) {
+    comments.forEach(comment => {
+      comment.replies = hierarchical(comment.replies, comment.id)
+    })
+
+    for (const item of comments) {
+      state.comments.push(item)
+    }
+
     state.pagination = pagination
     state.page = pagination.current_page
   },
@@ -72,7 +84,12 @@ export const actions = {
   async FETCH_COMMENTS({ commit }, params) {
     try {
       const comments = await getComments(params)
-      commit('SET_COMMENTS', comments)
+      if(params.page == 1) {
+        commit('SET_COMMENTS', comments)
+
+      } else {
+        commit('SET_LOADMORE_COMMENTS', comments)
+      }
 
     } catch (err) {
       console.log(err)

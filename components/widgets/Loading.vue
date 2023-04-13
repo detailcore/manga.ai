@@ -12,8 +12,8 @@
     </span>
 
     <svg v-show="isError"
-      width="150px"
-      height="150px"
+      :width=widthStr
+      :height=heightStr
       viewBox="0 0 24 24">
         <path
           fill="currentColor"
@@ -23,8 +23,8 @@
     <svg v-show="!isError"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
-      width="150px"
-      height="150px"
+      :width=widthStr
+      :height=heightStr
       viewBox="0 0 100 100"
       preserveAspectRatio="xMidYMid"
     >
@@ -51,11 +51,22 @@
 export default {
   props: {
     text: { type: String, default: '' },
+    width: { type: Number, default: 150 },
+    height: { type: Number, default: 150 },
   },
 
   data: () => ({
     isError: false,
   }),
+
+  computed: {
+    widthStr () {
+      return this.width + 'px'
+    },
+    heightStr () {
+      return this.height + 'px'
+    },
+  },
 
   async mounted() {
     await this.err()
