@@ -1,14 +1,12 @@
 <template>
-  <div class="page_main" :class="{ mobile: widthViewport <= 710 }">
-    <LazyRegionHeader />
+  <div class="page_main" :class="{ mobile: isMobi }">
+    <RegionHeader />
     <Nuxt />
     <LazyRegionFooter />
   </div>
 </template>
 
 <script>
-// import { reloadPage } from '~/services/util'
-
 export default {
   name: "default",
 
@@ -20,13 +18,13 @@ export default {
 
   mounted() {
     this.widthViewport = window.innerWidth
-    // reloadPage()
   },
 
-  methods: {
-    getWidthViewport() {
-      return window.innerWidth
+  computed: {
+    isMobi() {
+      return this.widthViewport <= 710
     }
   },
+
 }
 </script>

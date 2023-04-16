@@ -1,7 +1,7 @@
 <template>
-  <div class="page_reader" :class="{ mobile: widthViewport <= 710 }">
+  <div class="page_reader" :class="{ mobile: isMobi }">
     <headroom>
-      <LazyReaderHeader />
+      <ReaderHeader />
     </headroom>
     <Nuxt />
   </div>
@@ -9,7 +9,6 @@
 
 <script>
 import { headroom } from "vue-headroom"
-// import { reloadPage } from "~/services/util"
 
 export default {
   name: "reader",
@@ -26,13 +25,13 @@ export default {
 
   mounted() {
     this.widthViewport = window.innerWidth
-    // reloadPage()
   },
 
-  methods: {
-    getWidthViewport() {
-      return window.innerWidth
+  computed: {
+    isMobi() {
+      return this.widthViewport <= 710
     }
   },
+
 }
 </script>

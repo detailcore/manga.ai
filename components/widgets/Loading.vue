@@ -1,5 +1,5 @@
 <template>
-  <div class="loading">
+  <div class="loading" :class="{ error: isError }">
     <span v-show="!text && !isError">
       Идёт загрузка...
     </span>
@@ -8,7 +8,7 @@
     </span>
 
     <span v-show="isError">
-      Произошла ошибка
+      {{ text }}
     </span>
 
     <svg v-show="isError"
@@ -53,11 +53,8 @@ export default {
     text: { type: String, default: '' },
     width: { type: Number, default: 150 },
     height: { type: Number, default: 150 },
+    isError: { type: Boolean, default: false },
   },
-
-  data: () => ({
-    isError: false,
-  }),
 
   computed: {
     widthStr () {
@@ -67,25 +64,18 @@ export default {
       return this.height + 'px'
     },
   },
-
-  async mounted() {
-    await this.err()
-  },
-
-  methods: {
-    async err() {
-      await new Promise(r => setTimeout(r, 10000)) // пауза в 10 сек. перед тем как отобразить сообщение об ошибке
-      this.isError = true
-    }
-  }
 };
 </script>
 
 <style lang="scss" scoped>
 .loading {
+  margin: 0 auto;
   display: flex;
   align-items: center;
   flex-direction: column;
+  &.error {
+    padding: 16px;
+  }
   span {
     text-align: center;
   }

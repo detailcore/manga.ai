@@ -24,7 +24,7 @@ import {
   export const mutations = {
     SET_CHAPTER(state, payload) {
       payload.pages.forEach(i => {
-        i.loaded = false
+        i.loaded = 0
       })
 
       state.chapter = payload

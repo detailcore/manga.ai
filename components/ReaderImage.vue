@@ -33,19 +33,26 @@ import { mapGetters } from 'vuex'
 import debounce from 'lodash.debounce'
 
 export default {
-  props: {
-    pages: { type: Array, default: [] },
-  },
-
   data() {
     return {
       count: 1
     }
   },
 
+  async mounted() {
+    await this.loadImages()
+  },
+
+  watch: {
+    pageCur() {
+      this.loadImages()
+    }
+  },
+
   computed: {
     ...mapGetters( 'reader', { mode: 'GET_MODE' }),
     ...mapGetters( 'reader', { idPost: 'GET_ID_POST' }),
+    ...mapGetters( 'reader', { pages: 'GET_CHAPTER_PAGES' }),
     ...mapGetters( 'reader', { pageCur: 'GET_PAGE_CURRENT' }),
     ...mapGetters( 'reader', { idChapter: 'GET_ID_CHAPTER' }),
     ...mapGetters( 'reader', { numbers: 'GET_PAGE_NUMBERS' }),
@@ -94,6 +101,14 @@ export default {
     isReader() {
       return this.$route.name === 'manga-alias-id'
     },
+    divider() {
+      if(this.lastPage <= 10) return Math.round(this.lastPage/3)
+      if(this.lastPage > 10 && this.lastPage <= 15) return Math.round(this.lastPage/4)
+      if(this.lastPage > 15 && this.lastPage <= 20) return Math.round(this.lastPage/5)
+      if(this.lastPage > 20 && this.lastPage <= 30) return Math.round(this.lastPage/6)
+      if(this.lastPage > 30 && this.lastPage <= 50) return Math.round(this.lastPage/7)
+      if(this.lastPage > 50) return Math.round(this.lastPage/9)
+    },
   },
 
   beforeMount() {
@@ -105,10 +120,6 @@ export default {
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleDebouncedScroll)
     // window.removeEventListener('keydown', this.keyBoardControl)
-  },
-
-  async mounted() {
-    await this.loadImages()
   },
 
   methods: {
@@ -183,22 +194,39 @@ export default {
 
     // FIXME: Картинки на телефоне грузятся одновременно не дожидаясь загрузки предыдущих изображений, что забивает весь канал при плохой сети
     async loadImages() {
-      for (const item of this.pages) {
-        const loaded = await loadImage(this.urlImage, item)
-        this.$store.commit('reader/SET_PAGE_LOADED', { id: item.id, loaded: loaded })
-        await new Promise(r => setTimeout(r, 200)) // пауза между загрузками картинок
+      const item = this.pages.filter((item, pos) =>
+        pos >= 0 &&
+        this.pageCur <= item.page && // Начинать с выбранной страницы
+        item.loaded == 0 && // Ранее еще не загружалась
+        item.page < this.pageCur + this.divider && // предзагрузка вперёд (кол-во динамическое)
+        pos <= this.pages.length - 1
+      )
+      .shift()
+
+      if(!item) return; // прерываем рекурсию
+
+      try {
+        await loadImage(this.urlImage, item)
+        this.$store.commit('reader/SET_PAGE_LOADED', { id: item.id, loaded: 1 })
+        await this.loadImages()
+
+      } catch (e) {
+        this.$store.commit('reader/SET_PAGE_LOADED', { id: item.id, loaded: -1 })
+        await this.loadImages()
       }
 
-      async function loadImage(http, item) {
-        return await new Promise((resolve, reject) => {
+      /**
+       *
+       * @param {String} http Example "http://img-server.ai/4/581259/"
+       * @param {*} item
+       * @returns Promise
+       */
+      function loadImage(http, { link }) {
+        return new Promise((resolve, reject) => {
           let img = new Image()
-          img.onload = function() {
-            return resolve(true)
-          }
-          img.onerror = function() {
-            return reject(false)
-          }
-          img.src = http + item.link;
+          img.onload = () => resolve(1)
+          img.onerror = () => reject('Error! Image not found.')
+          img.src = http + link
         })
       }
     },

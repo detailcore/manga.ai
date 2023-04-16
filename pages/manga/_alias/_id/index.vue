@@ -2,7 +2,7 @@
   <div class="reader">
     <LazyReaderLineInfo :idChapter="chapter.id" v-if="mode === 'horizontally'" />
 
-    <ReaderImage :pages="chapter.pages" />
+    <ReaderImage />
 
     <ReaderLineTeam :likes="chapter.likes" />
 
