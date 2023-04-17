@@ -9,6 +9,11 @@ export async function editPostById(id, data) {
   return await apiAny.post(`post/${id}`, data)
 }
 
+// Удалить пост целиком
+export async function editRemovePostById(id) {
+  return await apiAny.delete(`post/${id}`)
+}
+
 // Отредактировать главу
 export async function editChapterById(id, data) {
   return await apiAny.post(`chapter/${id}`, data)

@@ -99,7 +99,7 @@ export default {
     },
 
     async loadComments(page=1) {
-      if(!this.isEmpty && this.isPost) {
+      if(this.isPost && this.$store.state.post.post.comment_count > 0) {
         await this.$store.dispatch('comments/FETCH_COMMENTS', {
           page: page,
           type: 'post',

@@ -9,6 +9,9 @@
         <div class="btn" @click.prevent="editTitle">
           <mdi-Pencil />
         </div>
+        <div class="btn" v-if="$route.query.statuses == 5" @click.prevent="removeTitle">
+          <mdi-TrashCan />
+        </div>
       </div>
     </div>
 
@@ -31,6 +34,7 @@
 
 <script>
 import { showDate } from '~/services/util'
+import { editRemovePostById, deleteComment } from '~/services/api';
 
 export default {
   props: {
@@ -94,6 +98,18 @@ export default {
           id: this.item.id
         }
       })
+    },
+    async removeTitle() {
+      const res = await editRemovePostById(this.item.id)
+
+      // FIXME: Переделать, т.к. коментов может быть очень много
+      for (const id of res.ids_post_comment) {
+        await deleteComment(id)
+      }
+      for (const id of res.ids_reader_comment) {
+        await deleteComment(id)
+      }
+
     },
   },
 }

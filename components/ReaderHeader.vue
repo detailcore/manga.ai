@@ -88,7 +88,7 @@ export default {
   },
 
   methods: {
-    prevChapter() { //! FIX ГОВНОКОД
+    prevChapter() { //! FIXME: FIX ГОВНОКОД
       let toggle = true // для предотвращения нескольких срабатываний при глав больше 1
       if(this.testList.length-1 > this.currentIndex) { // Если есть предыдущие главы
 

@@ -122,7 +122,7 @@ export default {
         query: {
           type: type,
           statuses: this.statuses,
-         }
+        }
       })
       this.loadContent(type, this.statuses)
     },
@@ -133,7 +133,7 @@ export default {
         query: {
           type: this.type,
           statuses: status,
-         }
+        }
       })
       this.loadContent(this.type, status)
     },

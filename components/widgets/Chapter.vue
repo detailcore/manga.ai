@@ -31,6 +31,10 @@
           <mdi-ClockOutline title="Дата и время загрузки главы" />
           <span class="date"> {{ updateTime(item.updated_at) }} </span>
         </div>
+        <div class="admin_action" v-if="canEdit">
+          <Nuxt-link class="btn" :to="`${urlChapter+item.id}/edit`"><mdi-Pencil title="Редактировать" /></Nuxt-link>
+          <div class="btn" @click="removeChapter(item.id)"><mdi-TrashCan title="Удалить" /></div>
+        </div>
       </div>
     </div>
   </div>
@@ -38,6 +42,8 @@
 
 <script>
 import { showDate } from '~/services/util';
+import { editRemoveAllChapter } from '~/services/api';
+
 export default {
   props: {
     chapters: { type: Array, default: [] }
@@ -53,6 +59,9 @@ export default {
     chapter() {
       return this.chapters[0].chapter
     },
+    canEdit() {
+      return this.$store.state.auth?.loggedIn ? (this.$store.state.auth.user.id_role === 1) : false
+    },
   },
 
   methods: {
@@ -63,6 +72,9 @@ export default {
       }
       return 'Еще не загружена...'
     },
+    async removeChapter(id) {
+      await editRemoveAllChapter(id)
+    }
   },
 };
 </script>
@@ -170,6 +182,9 @@ export default {
         span:last-of-type {
           padding: 0 0 0 2px;
         }
+      }
+      .admin_action {
+        display: flex;
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="btn-select" v-click-outside="hide">
-    <div class="btn-selected" @click="isActive = !isActive">
+    <div class="btn-selected" @click="action">
       <span class="vol">Том {{ selected.volume }} </span> Глава {{ selected.chapter }}
     </div>
 
@@ -44,8 +44,8 @@ export default {
     setAlias(){
       this.$store.commit('reader/SET_ALIAS', this.$route.params.slug)
     },
-    show() {
-      this.isActive = true
+    action() {
+      this.isActive = !this.isActive
     },
     hide() {
       this.isActive = false
