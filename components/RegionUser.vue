@@ -81,6 +81,15 @@ export default {
     }
   },
 
+  async mounted() {
+    if(
+        Boolean(localStorage.getItem("auth._token.laravelSanctum")) &&
+        !this.loggedIn
+      ) {
+      await this.$auth.fetchUser()
+    }
+  },
+
   computed: {
     ...mapGetters('user', { auth: 'GET_AUTH' }),
     ...mapGetters( 'region', { isOpenLogin: 'GET_OPEN_LOGIN' }),
