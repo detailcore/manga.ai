@@ -4,7 +4,12 @@
 
     <ReaderImage />
 
-    <ReaderLineTeam :likes="chapter.likes" />
+    <LazyReaderLineTeam :likes="chapter.likes" />
+
+    <div class="btn-line" v-if="mode === 'vertically'">
+      <Widgets-BtnPrevChapter />
+      <Widgets-BtnNextChapter />
+    </div>
 
     <LazyListComments class="comments" :class="{ vertically: isOpenComments, container: (mode === 'horizontally')}" />
 
@@ -148,6 +153,20 @@ export default {
   .headroom--top {
     bottom: 0px !important;
     position: fixed !important;
+  }
+  .line-center {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .prev {
+      margin-right: 10px;
+    }
+    .next {
+      margin-left: 10px;
+    }
+  }
+  .btn-line {
+    justify-content: center;
   }
 }
 </style>

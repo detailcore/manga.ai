@@ -81,10 +81,14 @@ export default {
     this.$nuxt.$on('go-to-next-chapter', () => {
       this.nextChapter()
     })
+    this.$nuxt.$on('go-to-prev-chapter', () => {
+      this.prevChapter()
+    })
   },
 
   beforeDestroy(){
     this.$nuxt.$off('go-to-next-chapter')
+    this.$nuxt.$off('go-to-prev-chapter')
   },
 
   methods: {

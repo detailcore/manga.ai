@@ -101,14 +101,6 @@ export default {
     isReader() {
       return this.$route.name === 'manga-alias-id'
     },
-    divider() {
-      if(this.lastPage <= 10) return Math.round(this.lastPage/3)
-      if(this.lastPage > 10 && this.lastPage <= 15) return Math.round(this.lastPage/4)
-      if(this.lastPage > 15 && this.lastPage <= 20) return Math.round(this.lastPage/5)
-      if(this.lastPage > 20 && this.lastPage <= 30) return Math.round(this.lastPage/6)
-      if(this.lastPage > 30 && this.lastPage <= 50) return Math.round(this.lastPage/7)
-      if(this.lastPage > 50) return Math.round(this.lastPage/9)
-    },
   },
 
   beforeMount() {
@@ -198,7 +190,7 @@ export default {
         pos >= 0 &&
         this.pageCur <= item.page && // Начинать с выбранной страницы
         item.loaded == 0 && // Ранее еще не загружалась
-        item.page < this.pageCur + this.divider && // предзагрузка вперёд (кол-во динамическое)
+        item.page < this.pageCur + 3 && // предзагрузка вперёд (кол-во)
         pos <= this.pages.length - 1
       )
       .shift()
@@ -259,13 +251,13 @@ export default {
       bottom: 0;
       z-index: 1;
       .prev {
-        width: 40%;
+        width: 45%;
         top: 0;
         left: 0;
         position: inherit;
       }
       .next {
-        width: 40%;
+        width: 45%;
         top: 0;
         right: 0;
         position: inherit;

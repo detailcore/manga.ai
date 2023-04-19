@@ -51,7 +51,9 @@ export const actions = {
   },
   async FETCH_MORE({ commit, state }) {
     const data = await getHomeMore()
-    commit('SET_LATEST', { data: data })
+    if(data.status == 200) {
+      commit('SET_LATEST', { data: data })
+    }
   },
 }
 
