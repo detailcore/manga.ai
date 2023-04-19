@@ -117,7 +117,7 @@ export default {
   data() {
     return {
       users: [],
-      descTeam: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad eveniet ullam at, est obcaecati dolor dolorem quae totam fugiat. Quibusdam repudiandae beatae exercitationem veniam maiores modi nostrum alias facilis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad eveniet ullam at, est obcaecati dolor dolorem quae totam fugiat. Quibusdam repudiandae beatae exercitationem veniam maiores modi nostrum alias facilis! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ad e...',
+      descTeam: '',
       maxText: 512,
       tabTwo: false,
       changePassword: {
