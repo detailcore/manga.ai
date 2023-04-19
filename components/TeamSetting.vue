@@ -112,8 +112,8 @@ export default {
       this.disabled = false
 
       if(res.status == 'ok' || res.id) {
-        res.cover.avatar = res.cover.mid ? this.$config.urlCoverTeam + this.team.id + '/' + res.cover.mid : ''
-        res.cover.bg = res.cover.bg ? this.$config.urlCoverTeam + this.team.id + '/' + res.cover.bg : ''
+        res.cover.avatar = res.cover.mid ? res.cover.mid : ''
+        res.cover.bg = res.cover.bg ? res.cover.bg : ''
         this.$store.commit('team/SET_TEAM_UPDATE', res)
         this.$notify({
           text: "Изменения сохранены!",

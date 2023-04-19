@@ -17,14 +17,14 @@
         <div class="inner">
           <div class="block__title">Контакты</div>
           <div class="links">
-            <a :href="team.link_vk" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_vk"> VK </a>
-            <a :href="team.link_site" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_site"> <mdi-Earth title="Сайт" /> </a>
-            <a :href="team.link_discord" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_discord"> <mdi-Discord title="Дискорд" /> </a>
+            <a :href="team.link_vk" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_vk"> <IconsVk /> </a>
+            <a :href="team.link_site" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_site"> <IconsEarth /> </a>
+            <a :href="team.link_discord" target="_blank" rel="noopener nofollow noreferrer" class="btn" v-show="team.link_discord"> <IconsDiscord /> </a>
             <span v-show="(team.link_vk == null && team.link_site == null && team.link_discord == null)"> Контакты не указаны </span>
           </div>
-          <div class="block__title">Состав</div>
-          <div class="people_team">
-            <span class="no_users" v-show="users.length == 0"> Список пуст <br> (в разработке) </span>
+          <!-- <div class="block__title">Состав</div> -->
+          <!-- <div class="people_team"> -->
+            <!-- <span class="no_users" v-show="users.length == 0"> Список пуст <br> (в разработке) </span> -->
             <!-- <Nuxt-link class="people" to="/user/260">
               <div class="cover" :style="{ backgroundImage: `url(/_nuxt/assets/images/mid_cover.jpg)` }"></div>
               <div class="info">
@@ -39,7 +39,7 @@
                 <span class="role">Аплодер</span>
               </div>
             </Nuxt-link> -->
-          </div>
+          <!-- </div> -->
         </div>
       </div>
       <div class="content_team__inner">
@@ -142,7 +142,7 @@ export default {
       return this.team.cover.avatar ? (this.$config.urlCoverTeam + this.team.id +'/'+ this.team.cover.avatar + '.webp') : ''
     },
     bgCover() {
-      return this.team.cover.bg ? this.team.cover.bg : ''
+      return this.team.cover.bg ? (this.$config.urlCoverTeam + this.team.id +'/'+ this.team.cover.bg + '.webp') : ''
     },
     canEdit() {
       return (this.$store.state.auth.user ? this.$store.state.auth.user.id : false ) == this.team.id_owner ||
