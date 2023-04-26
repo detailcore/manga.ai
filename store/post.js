@@ -46,7 +46,7 @@ export const mutations = {
     }
 
     let sum = 0
-    for (let i = 1; i <= 5; i++) { // 5 - пятизвёздочный
+    for (let i = 1; i <= 10; i++) { // 10 - пятизвёздочный
       let el = state.post.rating[`star_count${i}`]
       sum += (el * i)
     }
