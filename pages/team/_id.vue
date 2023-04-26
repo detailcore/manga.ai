@@ -286,6 +286,7 @@ export default {
       .description {
         display: flex;
         margin: 12px 6px;
+        overflow: hidden;
         border-radius: 6px;
         flex-direction: column;
         padding-bottom: 12px;
