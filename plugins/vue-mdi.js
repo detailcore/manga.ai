@@ -45,7 +45,7 @@ import Login from 'vue-material-design-icons/Login.vue';
 import At from 'vue-material-design-icons/At.vue';
 // import Vk from 'vue-material-design-icons/Vk.vue';
 import Google from 'vue-material-design-icons/Google.vue';
-import Discord from 'vue-material-design-icons/Discord.vue';
+// import Discord from 'vue-material-design-icons/Discord.vue';
 // import YCombinator from 'vue-material-design-icons/YCombinator.vue';
 import Plus from 'vue-material-design-icons/Plus.vue';
 import Minus from 'vue-material-design-icons/Minus.vue';
@@ -111,7 +111,7 @@ export default function materialIcons() {
   Vue.component('MdiAt', At);
   // Vue.component('MdiVk', Vk);
   Vue.component('MdiGoogle', Google);
-  Vue.component('MdiDiscord', Discord);
+  // Vue.component('MdiDiscord', Discord);
   // Vue.component('MdiYCombinator', YCombinator);
   Vue.component('MdiPlus', Plus);
   Vue.component('MdiMinus', Minus);
