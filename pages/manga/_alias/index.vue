@@ -93,7 +93,7 @@
             <mdi-ImageText title="" />
             <span>Информация</span>
           </Nuxt-link>
-          <div class="item list_chapter" @click="goToChaptersList">
+          <div class="item list_chapter" @click="goToChaptersList" v-if="!(isAdult && !loggedIn)">
             <mdi-FormatListNumbered title="" />
             <span>Главы ({{ chapterCount }})</span>
           </div>
@@ -134,7 +134,7 @@
         </div>
 
 
-        <LazyList-Chapters v-if="(page === 'chapters' && chapterCount > 0)" :id='data.id' />
+        <LazyList-Chapters v-if="(page === 'chapters' && chapterCount > 0) && !(isAdult && !loggedIn)" :id='data.id' />
 
         <!-- <LazyList-Relateds class="relateds_list" v-if="page === 'related'" :id='data.id' /> -->
 
