@@ -102,14 +102,18 @@ export default {
     async removeTitle() {
       const res = await editRemovePostById(this.item.id)
 
-      // FIXME: Переделать, т.к. коментов может быть очень много
-      for (const id of res.ids_post_comment) {
-        await deleteComment(id)
-      }
-      for (const id of res.ids_reader_comment) {
-        await deleteComment(id)
-      }
+      if(res.status == 'ok') {
+        this.$store.commit('moderation/SET_REMOVE_CONTENT', this.item.id)
 
+      // TODO: Переделать
+      // FIXME: Переделать, т.к. коментов может быть очень много
+        for (const id of res.ids_post_comment) {
+          await deleteComment(id)
+        }
+        for (const id of res.ids_reader_comment) {
+          await deleteComment(id)
+        }
+      }
     },
   },
 }

@@ -21,6 +21,9 @@ export const mutations = {
     state.idByChapter = payload.id
     state.chapters = payload.res
   },
+  SET_REMOVE_CHAPTER(state, id) {
+    state.chapters.data = (state.chapters.data).filter(item => item.id !== id)
+  },
   SET_RELATED(state, payload) {
     state.idByRelated = payload.id
     state.relatedsAndSimilars = payload.data

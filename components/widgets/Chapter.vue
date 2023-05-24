@@ -74,6 +74,7 @@ export default {
     },
     async removeChapter(id) {
       await editRemoveAllChapter(id)
+      this.$store.commit('post/SET_REMOVE_CHAPTER', id)
     }
   },
 };
