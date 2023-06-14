@@ -82,11 +82,13 @@ export default {
 
           let res = await createChapterDownload(formData)
           if( res ? res.status === 'ok' : false ) {
-            this.$store.commit('create/SET_REMOVE_CHAPTER', id)
             this.$notify({
-              text: `Глава ${ch} добавлена`,
+              title: `Глава ${ch} добавлена`,
+              text: `Отправлена на модерацию или добавлена`,
               type: 'success',
             })
+            this.$store.commit('create/SET_REMOVE_CHAPTER', id)
+            await this.$store.dispatch('post/FETCH_CHAPTERS', { id: this.id, sort: 'desc', page: 1 })
           } else {
             this.$notify({
               text: `Во время загрузки главы ${ch} произошла ошибка`,

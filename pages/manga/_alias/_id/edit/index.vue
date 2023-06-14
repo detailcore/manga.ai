@@ -327,6 +327,7 @@ export default {
       let res = await editRemoveAllChapter(this.chapter.id)
 
       if(res.status === 'ok') {
+        await this.$store.dispatch('post/FETCH_CHAPTERS', { id: this.id, sort: 'desc', page: 1 })
         this.$notify({
           text: res.msg,
           type: 'success',

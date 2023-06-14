@@ -127,9 +127,9 @@
             <span class="item" v-show="data.status_of_translation">Перевод: {{ data.status_of_translation ? data.status_of_translation.name : '' }}</span>
           </div>
           <div class="line tags" v-show="data.genres.length > 0">
-            <div class="item" v-for="genre of data.genres" :key="genre.name"> {{ genre.name }} </div>
-            <div class="item" v-for="tag of data.tags" :key="tag.name"> {{ tag.name }} </div>
-            <div class="item" v-for="format of data.formats" :key="format.name"> {{ format.name }} </div>
+            <div class="item" v-for="(genre, index) of data.genres" :key="(genre.name+index+genre.id)"> {{ genre.name }} </div>
+            <div class="item" v-for="(tag, index) of data.tags" :key="(tag.name+index+tag.id)"> {{ tag.name }} </div>
+            <div class="item" v-for="(format, index) of data.formats" :key="(format.name+index+format.id)"> {{ format.name }} </div>
           </div>
         </div>
 
