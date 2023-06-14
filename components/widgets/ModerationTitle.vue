@@ -22,6 +22,7 @@
         ({{ year }})
       </Nuxt-link>
       <div class="line date"><b>Изменено</b>: {{ updateTime }}</div>
+      <WidgetsModerationReasons v-if="reasons.length != 0" :reasons="reasons" />
       <div class="line adult"> <b>Возрастное ограничение</b>: {{ adult }} </div>
       <div class="line adult"> <b>Жанры</b>: {{ genres }} </div>
       <div class="line description"> <b>Описание</b>:  {{ description }} </div>
@@ -73,6 +74,9 @@ export default {
     },
     description() {
       return this.item.description ? this.item.description : 'Отсутствует'
+    },
+    reasons() {
+      return this.item.reasons?.length ? this.item.reasons : []
     },
     updateTime() {
       let time = this.item.updated_at

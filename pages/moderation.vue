@@ -1,5 +1,5 @@
 <template>
-  <div class="create container" v-if="isAdmin">
+  <div class="create container moderation-page" v-if="isAdmin">
     <div class="block__title">Модерация</div>
 
     <div class="panel">
@@ -179,6 +179,19 @@ export default {
       .menu-item {
         font-size: 0.85rem;
         font-weight: 200;
+      }
+    }
+  }
+
+  .moderation-page {
+    .reasons {
+      display: flex;
+      flex-direction: row;
+      .subtitle { font-weight: bold; margin: 0 6px; }
+      .content { width: 100%; }
+      .reason {
+        margin-bottom: 4px;
+        border: 1px dotted $orange_primary;
       }
     }
   }

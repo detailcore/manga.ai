@@ -25,6 +25,8 @@
       </div>
     </div>
 
+    <WidgetsModerationReasons v-if="reasons.length != 0" :reasons="reasons" />
+
     <WidgetsModerationStatus v-if="isOpenStatus" :id="item.id" />
 
   </div>
@@ -60,6 +62,9 @@ export default {
     },
     userName() {
       return this.item.user ? this.item.user.name : ''
+    },
+    reasons() {
+      return this.item.reasons?.length ? this.item.reasons : []
     },
     updateTime() {
       let time = this.item.updated_at

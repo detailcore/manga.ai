@@ -9,6 +9,9 @@
         <div class="btn" @click.prevent="editTitle">
           <mdi-Pencil />
         </div>
+        <div class="btn" v-if="$route.query.statuses == 5" @click.prevent="removeTeam">
+          <mdi-TrashCan />
+        </div>
       </div>
     </div>
 
@@ -16,6 +19,7 @@
       <Nuxt-link class="line title" :to="alias">
         Название: {{ item.name }}
       </Nuxt-link>
+      <WidgetsModerationReasons v-if="reasons.length != 0" :reasons="reasons" />
       <div class="line subtitle"><b>Альтернативное</b>: {{ item.name_alt }}</div>
       <div class="line"><b>Тайтлов</b>: {{ item.titles }}</div>
       <div class="line"><b>Глав</b>: {{ item.chapters }}</div>
@@ -33,7 +37,8 @@
 </template>
 
 <script>
-import { showDate } from '~/services/util'
+import { showDate, notify } from '~/services/util'
+import { teamForceRemove } from '~/services/api'
 
 export default {
   props: {
@@ -54,6 +59,9 @@ export default {
                           '/_nuxt/assets/images/one_pixel.jpg'}')`
       }
     },
+    reasons() {
+      return this.item.reasons?.length ? this.item.reasons : []
+    },
     alias() {
       return '/team/' + this.item.id
     },
@@ -71,6 +79,11 @@ export default {
   },
 
   methods: {
+    async removeTeam() {
+      this.$store.commit('moderation/SET_REMOVE_CONTENT', this.item.id)
+      const res = await teamForceRemove(this.item.id)
+      this.$notify(notify(res))
+    },
     openEditStatus(id) {
       if(id === this.item.id) {
         this.isOpenStatus = !this.isOpenStatus
