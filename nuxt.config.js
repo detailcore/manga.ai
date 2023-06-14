@@ -60,7 +60,7 @@ export default async () => ({
     // analyze: {
     //   analyzerMode: 'static'
     // },
-    extractCSS: false,
+    extractCSS: true,
     splitChunks: { // деление компонентов
       layouts: true,
       pages: true,
