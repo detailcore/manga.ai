@@ -11,8 +11,8 @@
           <Nuxt-link class="link" to="?page=roles">Роли</Nuxt-link>
           <Nuxt-link class="link" to="?page=privileges">Привилегий</Nuxt-link>
           <Nuxt-link class="link" to="?page=users">Пользователи</Nuxt-link>
-
           <Nuxt-link class="link" to="?page=complaints">Жалобы</Nuxt-link>
+
           <!-- <Nuxt-link class="link" to="?page=categories">Категории</Nuxt-link>
           <Nuxt-link class="link" to="?page=bookmarks">Закладки</Nuxt-link>
           <Nuxt-link class="link" to="?page=peoples">Люди</Nuxt-link>
@@ -33,7 +33,7 @@
           <LazyAdminPermissions />
         </div>
         <div class="" v-if="$route.query.page === 'complaints'">
-          В разработке!
+          <LazyAdminComplaints />
         </div>
       </div>
     </div>

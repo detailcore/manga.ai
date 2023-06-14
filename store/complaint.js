@@ -1,5 +1,5 @@
 import { complaintCreate } from '~/services/api'
-  
+
   export const state = () => ({
     complaint: {
       text: '',
@@ -16,7 +16,7 @@ import { complaintCreate } from '~/services/api'
       value: false,
     },
   })
-    
+
   export const mutations = {
     SET_COMPLAINT(state, payload) {
       state.complaint = payload
@@ -28,7 +28,7 @@ import { complaintCreate } from '~/services/api'
       state.oneId = payload
     },
   }
-  
+
   export const actions = {
     async FETCH_COMPLAINT({ commit }, params) {
       const res = await complaintCreate(params)
@@ -45,7 +45,7 @@ import { complaintCreate } from '~/services/api'
       commit('SET_COMPLAINT_OPEN', false)
     },
   }
-  
+
   export const getters = {
     GET_COMPLAINT_OPEN(state) {
       return state.complaintIsOpen

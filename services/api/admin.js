@@ -59,3 +59,14 @@ export async function setAdminUsersRole(data) {
 export async function getAdminUserSearch(query) {
   return await apiAny.get(`admin/users/${query}`)
 }
+
+
+//? Жалобы
+// Получить жалобу
+export async function complaintsGet(type='post') {
+  return await apiAny.get(`admin/complaint?type=${type}`)
+}
+// Удалить жалобу
+export async function complaintRemove(id) {
+  return await apiAny.delete(`admin/complaint/${id}`)
+}

@@ -9,6 +9,8 @@ import {
   deleteAdminPermissions,
   setPermissionsForRole,
   deletePermissionsForRole,
+  complaintsGet,
+  complaintRemove,
 } from '~/services/api'
 
 
@@ -20,6 +22,7 @@ export const state = () => ({
   roles: [],
   permissions: [],
   users: [],
+  complaints: [],
 })
 
 
@@ -43,6 +46,12 @@ export const mutations = {
   },
   SET_USER_ROLE(state, payload) {
     state.role.new = payload
+  },
+  SET_COMPLAINTS(state, payload) {
+    state.complaints = payload
+  },
+  SET_REMOVE_COMPLAINT(state, id) {
+    state.complaints.data = state.complaints.data.filter((item) => item.id !== id)
   },
 }
 
@@ -84,6 +93,14 @@ export const actions = {
   },
   async FETCH_REMOVE_PERMISSIONS_FOR_ROLE({ commit }, { id_role, id_permission }) {
     await deletePermissionsForRole(id_role, id_permission)
+  },
+  async FETCH_COMPLAINTS({ commit }, type) {
+    const res = await complaintsGet(type)
+    commit('SET_COMPLAINTS', res)
+  },
+  async FETCH_REMOVE_COMPLAINT({ commit }, id) {
+    commit('SET_REMOVE_COMPLAINT', id)
+    await complaintRemove(id)
   },
 }
 
