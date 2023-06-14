@@ -1,5 +1,6 @@
 <template>
   <div class="user_search">
+    <div class="block__title">Назначить роль</div>
 
     <div class="search">
       <input type="search" class="text"

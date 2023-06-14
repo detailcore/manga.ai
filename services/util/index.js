@@ -88,17 +88,33 @@ export function isCyrillic(text) {
  * @param  {Object}  { status: 'ok', msg: 'text' }
  * @return {Object}  { text: 'str', type: 'success' }
  */
-export function notify({ status, msg }) {
+export function notify({ status, title, msg, duration }) {
+  const result = {
+    type: 'warn',
+  }
+
+  msg ? result.text = msg : undefined
+  title ? result.title = title : undefined
+  duration ? result.duration = duration : undefined
+
   switch (status) {
     case 'ok':
-      return { text: msg, type: 'success' }
+      result.type = 'success'
+      break
+    case 'success':
+      result.type = 'success'
+      break
     case 'warn':
-      return { text: msg, type: 'warn' }
+      result.type = 'warn'
+      break
     case 'error':
-      return { text: msg, type: 'error' }
+      result.type = 'error'
+      break
     case 'failed':
-      return { text: msg, type: 'error' }
+      result.type = 'error'
+      break
   }
+  return result
 }
 
 
