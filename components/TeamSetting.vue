@@ -56,6 +56,18 @@
       <!-- <div class="cancel">Отмена</div> -->
     </div>
 
+    <div class="container">
+      <div class="value">
+        <div class="title orange">Удалить команду</div>
+        <div>После нажатия кнопки "удалить", команда будет отправлена модератору для удаления. Обязательно укажите причину удаления!</div>
+        <textarea class="remove_reason" placeholder="Укажите подробную причину удаления команды" v-model="removeReason"></textarea>
+        <div class="action">
+          <button v-if="team.deleted_at != null" class="save" @click="undoRemove" :disabled="disabled">Отменить удаление</button>
+          <button class="cancel" @click="removeTeamById" :disabled="disabled">Удалить</button>
+        </div>
+      </div>
+    </div>
+
     <notifications />
   </div>
 </template>
@@ -63,7 +75,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { notify } from '~/services/util'
-import { teamUpdate } from "~/services/api"
+import { teamUpdate, teamRemove, moderationCreateReason } from "~/services/api"
 
 export default {
   data() {
@@ -80,6 +92,7 @@ export default {
         link_discord: '',
       },
       maxText: 1536,
+      removeReason: '',
     }
   },
 
@@ -96,6 +109,49 @@ export default {
   },
 
   methods: {
+    async undoRemove() {
+      this.disabled = true
+      await this.$store.dispatch('team/FETCH_UNDO_REMOVE_TEAM', this.team.id)
+      if(this.team.deleted_at == null) {
+        this.$notify(notify({ status: 'ok', msg: 'Команда перемещена в черновики!', duration: 4000 }))
+      }
+      await moderationCreateReason({
+        type: 'team',
+        text: 'Удаление команды отменено!. Автоматическое сообщение.',
+        id_entry: this.team.id,
+        id_user: this.$store.state.auth.user.id,
+      })
+      this.disabled = false
+    },
+    async removeTeamById() {
+      if(this.removeReason.length > 20) {
+        this.disabled = true
+
+        const reason = await moderationCreateReason({
+          type: 'team',
+          text: this.removeReason,
+          id_entry: this.team.id,
+          id_user: this.$store.state.auth.user.id,
+        })
+        this.$notify(notify(reason))
+
+        const remove = await teamRemove(this.team.id)
+        this.$notify(notify(remove))
+        await this.$store.dispatch('team/FETCH_TEAM', this.team.id)
+
+        this.removeReason = ''
+        this.disabled = false
+
+      } else {
+        this.$notify({
+          title: "Ошибка!",
+          text: "Подробней опишите причину удаления команды.",
+          type: "error",
+          duration: 5000,
+        })
+      }
+    },
+
     async saveAndUpload() {
       this.disabled = true
       let form = new FormData()
@@ -177,6 +233,12 @@ export default {
     textarea {
       height: 305px;
     }
+    .orange {
+      color: $orange_primary;
+    }
+    .remove_reason {
+      height: auto;
+    }
   }
   .action {
     height: 40px;
@@ -191,7 +253,8 @@ export default {
       border-radius: 6px;
       border: thin solid rgba(255, 255, 255, 0.12);
     }
-      button.save {
+      button.save,
+      button.cancel {
         color: #ffffff;
         background-color: #121212;
       }

@@ -1,5 +1,6 @@
-import { 
+import {
   teamGetById,
+  teamRestore,
   teamPostsGetById,
 } from '~/services/api'
 
@@ -7,7 +8,7 @@ export const state = () => ({
   team: [],
   teamPosts: {},
 })
-  
+
 export const mutations = {
   SET_TEAM(state, payload) {
     state.team = payload
@@ -26,9 +27,16 @@ export const mutations = {
   SET_TEAM_POSTS(state, payload) {
     state.teamPosts = payload
   },
+  SET_UNDO_REMOVE(state, payload) {
+    if(payload) state.team.deleted_at = null
+  },
 }
 
 export const actions = {
+  async FETCH_UNDO_REMOVE_TEAM({ commit }, id) {
+    const res = await teamRestore(id)
+    commit('SET_UNDO_REMOVE', res)
+  },
   async FETCH_TEAM({ commit }, params) {
     try {
       const res = await teamGetById(params)

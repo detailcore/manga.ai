@@ -43,6 +43,8 @@
         </div>
       </div>
       <div class="content_team__inner">
+        <div class="deleted" v-if="team.deleted_at != null">Внимание! Данная команда отправлена на удаление и в ближайшее время будет удалена (через 7 дней после запроса). Все упоминания о команде будут удалены, за исключением глав. <br>Для отмены, нажмите "отменить удаление" в настройках команды!</div>
+
         <!-- <div class="nav-line">
           <div class="item">Информация</div>
           <div class="item">Обновления</div>
@@ -324,6 +326,14 @@ export default {
         justify-content: space-between;
       }
     }
+  }
+  .deleted {
+    font-size: 1.2rem;
+    font-weight: 200;
+    color: $orange_primary;
+    border: 1px dashed $orange_primary;
+    padding: 8px;
+    margin: 6px;
   }
 }
 </style>
